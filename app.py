@@ -9,7 +9,7 @@ from pydantic_models import *
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
-MIN_LEN_PASSWORD = 8
+MIN_LEN_PASSWORD = 7
 MAX_LEN_EMAIL = 30
 MIN_LEN_EMAIL = 10
 MAX_LEN_NAME_GAME = 10
@@ -42,21 +42,31 @@ async def user_register(user_to_reg: UserTemp):
     if len(user_to_reg.username) > MAX_LEN_ALIAS or \
             len(user_to_reg.username) < MIN_LEN_ALIAS or \
             len(user_to_reg.password) > MAX_LEN_PASSWORD or \
-            len(user_to_reg.password) < MIN_LEN_PASSWORD or \
-            any(char.isupper() for char in user_to_reg.password) == False or \
-            any(char.islower() for char in user_to_reg.password) == False or \
-            any(char.isdigit() for char in user_to_reg.password) == False or \
+            len(user_to_reg.password) <= MIN_LEN_PASSWORD or \
             len(user_to_reg.email) > MAX_LEN_EMAIL or \
             len(user_to_reg.email) < MIN_LEN_EMAIL :
         raise invalid_fields
+    elif any(char.isupper() for char in user_to_reg.password) == False or \
+            any(char.islower() for char in user_to_reg.password) == False or \
+            any(char.isdigit() for char in user_to_reg.password) == False  :
+        raise HTTPException(
+            status_code=404,
+            detail="password must have at least one uppercase, one lowercase and one number"
+        )
     elif email_exists(user_to_reg.email):
         raise HTTPException(
             status_code=404,
             detail="existing user"
         )
+    elif user_exists(user_to_reg.username):
+        raise HTTPException(
+            status_code=404,
+            detail="existing username"
+        )
+
     else:
         create_user(user_to_reg.username, user_to_reg.email, get_password_hash(user_to_reg.password))
-        return {"email": user_to_reg.email}
+        return {"detail": "User created successfully"}
 
 #login
 @app.post("/token", response_model=Token)
