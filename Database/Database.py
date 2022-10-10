@@ -5,8 +5,7 @@ import random
 
 db = pony.orm.Database()
 
-db.bind('mysql', host='127.0.0.1', user='root', passwd='', db='PyRobots')
-
+db.bind(provider='sqlite', filename='db.pyrobots', create_db=True)
 
 class User(db.Entity):
     user_name = Required(str, unique=True)
