@@ -34,6 +34,7 @@ export default function App() {
 
   return (
     <div className="App">
+<<<<<<< HEAD
       <Navbar token={token} navigate={navigate} />
       <Grid container>
         {token && (
@@ -50,6 +51,13 @@ export default function App() {
           />
         </Grid>
       </Grid>
+=======
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+>>>>>>> d7190be (Implemented verification)
     </div>
   );
 }
