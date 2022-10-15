@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from typing import Union
 
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
@@ -29,11 +30,14 @@ async def match_creation(
     max_players: int,
     gamesPerMatch: int,
     rounds: int,
-    robot,
-    creator,
-    password: Optional[str] = ''
+    robot: int,
+    creator: int,
+    password: Union[str, None] = None
     ):
 
+    if (password == None):
+        password = ''
+    
     create_match(
         name, 
         password, 

@@ -2,7 +2,7 @@ from pony.orm import *
 
 db = pony.orm.Database()
 
-db.bind('mysql', host='127.0.0.1', user='root', passwd='', db='PyRobots')
+db.bind(provider='sqlite', filename="db.pyrobots", create_db=True)
 
 class User(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -31,7 +31,7 @@ db.generate_mapping(create_tables=True)
 @db_session
 def create_match(match_name, password, game_quantity, round_quantity, min_players, max_players, creator_id):
     new_match  = Match(name=match_name, password=password, game_quantity=game_quantity, round_quantity=round_quantity,  min_players=min_players, max_players=max_players, creator=creator_id)
-    new_match.participants.add(creator_id)
+    new_match.participants.add(User[creator_id])
 
 """
 @db_session
