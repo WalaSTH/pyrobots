@@ -10,9 +10,6 @@ client = TestClient(app)
 
 #Creation new user
 
-
-
-
 def test_user_register():
     user_to_reg = {
         "username": get_random_string_lower(5),
@@ -20,7 +17,7 @@ def test_user_register():
         "email": get_email(),
     }
     response = client.post("/user/signup", json=user_to_reg)
-    assert response.status_code == 201
+    assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
 
 #Creation new user with invalid username
@@ -69,7 +66,7 @@ def test_password_short_size():
     user_to_reg = {
         "username": get_random_string_lower(5),
         "password": get_random_string_goodps(3),
-        "email": get_email()
+        "email": get_email(),
     }
     response = client.post("/user/signup", json=user_to_reg)
     assert response.status_code == 404

@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from segurity_functions import  *
+from segurity_functions import *
 from pydantic_models import *
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
@@ -18,7 +18,8 @@ MIN_LEN_NAME_GAME = 3
 
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
-tags_metadata = [{"name": "users", "description": "Operations with users"}]
+tags_metadata = [{"name": "Users", "description": "Operations with users"},
+                 {"name": "Token", "description": "Token login"},]
 
 app = FastAPI(
     title = "PyRobots"
@@ -33,8 +34,10 @@ app.add_middleware(
 )
 
 #registro de usuario
-@app.post("/user/signup", tags=["users"], status_code=201)
+@app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(user_to_reg: UserTemp):
+    """USER REGISTER FUNCTION"""
+
     invalid_fields = HTTPException(
         status_code=404,
         detail="field size is invalid"
@@ -69,7 +72,7 @@ async def user_register(user_to_reg: UserTemp):
         return {"detail": "User created successfully"}
 
 #login
-@app.post("/token", response_model=Token)
+@app.post("/token",tags=["Token"], response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
