@@ -12,16 +12,22 @@ class User(db.Entity):
     email = Required(str, unique=True)
     password = Required(str)
     verified = Required(bool)
+    photo = Optional(str)
 
 db.generate_mapping(create_tables=True)
 
 # --- user functions ---
 @db_session
 def create_user(user_name, email, password):
-        User(user_name=user_name, email=email, password=password, verified=False)
+        User(user_name=user_name, email=email, password=password, verified=False, photo="")
 @db_session
 def get_user(user_name):
     return User.get(user_name=user_name)
+
+@db_session
+def upload_photo(user_name, photo):
+    user = get_user(user_name)
+    user.photo = photo
 
 @db_session
 def email_exists(email_address):
