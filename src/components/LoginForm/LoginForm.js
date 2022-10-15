@@ -1,4 +1,4 @@
-import { React } from "react";
+import React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
