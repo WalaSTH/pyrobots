@@ -4,21 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from segurity_functions import  *
-from pydantic_models import *
-MAX_LEN_ALIAS = 9
-MIN_LEN_ALIAS = 3
-MAX_LEN_PASSWORD = 16
-MIN_LEN_PASSWORD = 8
-MAX_LEN_EMAIL = 30
-MIN_LEN_EMAIL = 10
-MAX_LEN_NAME_GAME = 10
-MIN_LEN_NAME_GAME = 3
-
 
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
-tags_metadata = [{"name": "users", "description": "Operations with users"}]
+tags_metadata = [{"name": "matches", "description": "Operations with matches"}]
 
 app = FastAPI(
     title = "PyRobots"
@@ -31,3 +20,27 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+#match creation
+@app.post("/match/create", tags=["Matches"], status_code=200)
+async def match_creation(
+    name: str,
+    min_players: int,
+    max_players: int,
+    gamesPerMatch: int,
+    rounds: int,
+    robot,
+    creator,
+    password: Optional[str] = ''
+    ):
+
+    create_match(
+        name, 
+        password, 
+        gamesPerMatch, 
+        rounds, 
+        min_players, 
+        max_players,
+        creator
+    )
+    return {"detail": "Match created successfully"}
