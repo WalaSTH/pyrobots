@@ -76,3 +76,7 @@ export default function Login({ handleLogin }) {
     </Box>
   );
 }
+
+Login.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+};
