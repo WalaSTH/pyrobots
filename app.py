@@ -30,7 +30,7 @@ async def match_creation(
     max_players: int,
     gamesPerMatch: int,
     rounds: int,
-    robot: int,
+    robot_id: int,
     creator: int,
     password: Union[str, None] = None
     ):
@@ -38,6 +38,12 @@ async def match_creation(
     if (password == None):
         password = ''
     
+    if (Robot[robot_id].owner != User[creator]):
+        raise HTTPException (
+            status_code=400,
+            detail='That robot does not belong to that user.'
+        )
+
     create_match(
         name, 
         password, 
@@ -45,6 +51,7 @@ async def match_creation(
         rounds, 
         min_players, 
         max_players,
-        creator
+        creator,
+        robot_id
     )
     return {"detail": "Match created successfully"}
