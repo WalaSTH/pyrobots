@@ -11,8 +11,6 @@ import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import Textfield from "../FormsUI/Textfield";
 import Button from "../FormsUI/Button";
-import PropTypes from "prop-types";
-import axios from "axios";
 
 const INITIAL_FORM_STATE = {
   email: "",
@@ -31,39 +29,11 @@ const FORM_VALIDATION = Yup.object().shape({
     .required("Required"),
 });
 
-async function loginUser(credentials) {
-  return axios.post("http://localhost:8080/login", credentials);
-  // return fetch("http://localhost:8080/login", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(credentials),
-  // });
-}
-
-export default function LoginForm({ setToken }) {
+export default function LoginForm({ handleSubmit }) {
   // Pass the useFormik() hook initial form values and a submit function that will
 
   // be called when the form is submitted
   const theme = createTheme();
-
-  const handleSubmit = async (e) => {
-    const fetchedData = await loginUser({
-      e,
-    });
-    // console.log(fetchedData);
-    // if (fetchedData.status === 200) {
-    //   console.log("to2 sali0 bn");
-    //   setToken(fetchedData.data);
-    //   return;
-    // }
-    // if (fetchedData.status === 400) {
-    //   console.log("salio re mal bro");
-    //   return;
-    // }
-    setToken(fetchedData);
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -157,7 +127,3 @@ export default function LoginForm({ setToken }) {
     </ThemeProvider>
   );
 }
-
-LoginForm.propTypes = {
-  setToken: PropTypes.func.isRequired,
-};

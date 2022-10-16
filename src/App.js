@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./screens/Home/Home";
 import Login from "./screens/Login/Login";
 import { useNavigate } from "react-router-dom";
@@ -7,27 +7,39 @@ import Navbar from "./components/Navbar/Navbar";
 
 export default function App() {
   const navigate = useNavigate();
-  const [token, setToken] = useState();
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const manageToken = (t) => {
-    localStorage.setItem("token", t);
-    setToken(t);
+  const handleLogin = (t) => {
+    localStorage.setItem("token", t.token);
+    setToken(t.token);
     navigate("/");
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
+  // const handleLogout = (e) => {
+  //   localStorage.removeItem("token");
+  //   setToken(null);
+  //   navigate("/");
+  // };
+
+  const privateRoute = (token, component) => {
+    if (token) {
+      return component;
+    } else {
+      return <Navigate to="/" />;
     }
-  }, []);
+  };
 
   return (
     <div className="App">
       <Navbar />
       <Routes>
-        <Route exact path="/" element={<Home setToken={setToken} />} />
-        <Route exact path="/login" element={<Login setToken={manageToken} />} />
+        <Route exact path="/" element={<Home />} />
+        <Route
+          exact
+          path="/login"
+          element={<Login handleLogin={handleLogin} />}
+        />
+        <Route exact path="/register" element={privateRoute(token, Login)} />
       </Routes>
     </div>
   );
