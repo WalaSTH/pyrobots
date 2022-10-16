@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import TextField from "../FormsUI/TextField";
 import FileUpload from "../FormsUI/FileUpload";
 import SubmitButton from "../FormsUI/Button";
-import { useRef } from "react";
 
 const INITIAL_FORM_STATE = {
   name: "",
@@ -14,11 +13,25 @@ const INITIAL_FORM_STATE = {
 
 const FORM_VALIDATION = Yup.object().shape({
   name: Yup.string()
-    .required("Robot name is required")
-    .min(2, "Too short")
-    .max(20, "Too long"),
-  code: Yup.mixed().required("Source code is required"),
-  avatar: Yup.mixed(),
+    .required("A name is required")
+    .min(2, "Name is too short")
+    .max(20, "Name is too long"),
+  code: Yup.mixed()
+    .required("Source code is required")
+    .test(
+      "fileType",
+      "File is not supported",
+      (value) => value && [".py", "text/x-python"].includes(value.type)
+    ),
+  avatar: Yup.mixed()
+    .notRequired()
+    .test(
+      "fileType",
+      "File is not supported",
+      (value) =>
+        !value ||
+        (value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
+    ),
 });
 
 export default function NewRobotForm() {
@@ -60,11 +73,19 @@ export default function NewRobotForm() {
                 </Grid>
 
                 <Grid item xs={12} sx={{ textAlign: "center" }}>
-                  <FileUpload name="code" accept=".py" />
+                  <FileUpload
+                    name="code"
+                    title="Upload code"
+                    accept=".py,text/x-python"
+                  />
                 </Grid>
 
                 <Grid item xs={12} sx={{ textAlign: "center" }}>
-                  <FileUpload name="avatar" accept="image/*" />
+                  <FileUpload
+                    name="avatar"
+                    title="Upload avatar"
+                    accept="image/jpeg,image/png,image/jpg"
+                  />
                 </Grid>
 
                 <Grid item xs={12} sx={{ textAlign: "center" }}>

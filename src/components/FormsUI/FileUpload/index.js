@@ -1,31 +1,37 @@
-import { Label } from "@mui/icons-material";
-import { Input, Container } from "@mui/material";
-import { ErrorMessage, useField, useFormikContext } from "formik";
+import { FormControl, FormHelperText, Button } from "@mui/material";
+import { useField, useFormikContext } from "formik";
 import React from "react";
 
-export default function FileUpload({ name, fileRef, options, ...otherProps }) {
+export default function FileUpload({ name, title, options, ...otherProps }) {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(name);
 
   function handleChange(event) {
-    const { value } = event.target;
-    setFieldValue(name, value);
+    setFieldValue(name, event.target.files[0]);
   }
 
   const configInput = {
-    ...field,
     ...otherProps,
-    fullWidth: true,
     onChange: handleChange,
+    hidden: true,
+  };
+
+  const configButton = {
+    fullWidth: true,
+    color: "primary",
+    variant: "outlined",
   };
 
   return (
-    <Container>
-      {/* <Label htmlFor={name}>Choose file</Label> */}
-      <Input type="file" {...configInput} />
+    <FormControl>
+      <input id={name} name={name} type="file" {...configInput} />
+      <Button component="label" htmlFor={name} {...configButton}>
+        {title}
+      </Button>
+      {field.value ? <FormHelperText>{field.value.name}</FormHelperText> : null}
       {meta.touched && meta.error ? (
-        <div style={{ color: "red" }}>{meta.error}</div>
+        <FormHelperText error={true}>{meta.error}</FormHelperText>
       ) : null}
-    </Container>
+    </FormControl>
   );
 }
