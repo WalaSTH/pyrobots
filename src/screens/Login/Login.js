@@ -7,8 +7,16 @@ export default function Login({ setToken }) {
       console.log("Algo salio mal");
       return;
     }
-    if (res.status === 400) {
-      console.log("salio re mal bro");
+    if (res.status === 405) {
+      alert("Email not found");
+      return;
+    }
+    if (res.status === 406) {
+      alert("Password do not match");
+      return;
+    }
+    if (res.status === 402) {
+      alert("Fallo en la seguridad");
       return;
     }
     setToken(res.data);
