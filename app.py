@@ -27,10 +27,14 @@ app.add_middleware(
 async def match_listing():
     match_list = Match.select()[:]
     res_list = []
-    
+
     for m in match_list:
         res_list.append((m.name, m.current_players))
 
-    for m in res_list: print(m)
+    if (res_list == []):
+        raise HTTPException(
+            status_code=404,
+            detail="No matches available."
+        )
 
     return {"Matches": res_list}
