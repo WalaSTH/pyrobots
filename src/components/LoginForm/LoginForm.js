@@ -11,6 +11,8 @@ import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import Textfield from "../FormsUI/Textfield";
 import Button from "../FormsUI/Button";
+import PropTypes from "prop-types";
+import axios from "axios";
 
 const initialFormState = {
   username: "",
@@ -30,6 +32,13 @@ const formValidation = Yup.object().shape({
 
 export default function LoginForm({ handleSubmit }) {
   const theme = createTheme();
+
+  const handleSubmit = async (e) => {
+    const fetchedData = await loginUser({
+      e,
+    });
+    setToken(fetchedData);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -105,3 +114,7 @@ export default function LoginForm({ handleSubmit }) {
     </ThemeProvider>
   );
 }
+
+LoginForm.propTypes = {
+  setToken: PropTypes.func.isRequired,
+};

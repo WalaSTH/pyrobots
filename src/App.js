@@ -1,20 +1,20 @@
-import { Grid } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "./screens/Home/Home";
+import Login from "./screens/Login/Login";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Routes from "./routes";
 import Navbar from "./components/Navbar/Navbar";
 import Leftbar from "./components/Leftbar/Leftbar";
 
 export default function App() {
   const navigate = useNavigate();
-
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user_id, setUserID] = useState(localStorage.getItem("userID"));
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const handleLogin = (t) => {
     localStorage.setItem("token", t.access_token);
-    localStorage.setItem("userID", t.id);
+    localStorage.setItem("userID", t.userid);
     localStorage.setItem("username", t.username);
     setToken(t.access_token);
     setUserID(t.id);
@@ -34,7 +34,6 @@ export default function App() {
 
   return (
     <div className="App">
-<<<<<<< HEAD
       <Navbar token={token} navigate={navigate} />
       <Grid container>
         {token && (
@@ -51,13 +50,6 @@ export default function App() {
           />
         </Grid>
       </Grid>
-=======
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
->>>>>>> d7190be (Implemented verification)
     </div>
   );
 }
