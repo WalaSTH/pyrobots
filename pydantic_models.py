@@ -25,7 +25,7 @@ class TokenData(BaseModel):
 class User(BaseModel):
     username: str
     email: Optional[str] = None
-    
+
 class TempMatch(BaseModel):
     name: str
     min_players: int
