@@ -1,4 +1,3 @@
-from starlette.middleware.cors import CORSMiddleware
 import random
 import string
 

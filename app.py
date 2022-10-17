@@ -4,8 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi import Depends, HTTPException, status, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
+
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
@@ -28,11 +30,13 @@ description = """
     * Create a new user
     * Login
     * Upload a photo
+    * Create a match
     """
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
 tags_metadata = [{"name": "Users", "description": "Operations with users"},
-                 {"name": "Token", "description": "Token login"},]
+                 {"name": "Token", "description": "Token login"},
+                 {"name": "matches", "description": "Operations with matches"}]
 
 app = FastAPI(
     title="PyRobots",
@@ -46,6 +50,56 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+#match creation
+@app.post("/match/create", tags=["Matches"], status_code=200)
+def match_creation(match_data: TempMatch):
+
+    if (match_data.robot_id > check_robot_quantity() or match_data.robot_id <= 0):
+        raise HTTPException (
+            status_code=404,
+            detail="No robot with such ID"
+        )
+
+    if (match_data.creator > check_user_quantity() or match_data.creator <= 0):
+        raise HTTPException (
+            status_code=404,
+            detail="No user with such ID"
+        )
+
+    if (match_data.password == None):
+        match_data.password = ''
+
+    if (check_robot_ownership(match_data.robot_id, match_data.creator)):
+        raise HTTPException (
+            status_code=409,
+            detail=f"Robot {match_data.robot_id} does not belong to you"
+        )
+
+    if (check_match_name_exists(match_data.name)):
+        raise HTTPException (
+            status_code=409,
+            detail="A match with this name already exists"
+        )
+
+    if not create_match_field_validation(match_data):
+        raise HTTPException (
+            status_code=409,
+            detail="One or more fields are not valid"
+        )
+
+    match_id = create_match(
+        match_data.name,
+        match_data.password,
+        match_data.games_per_match,
+        match_data.rounds,
+        match_data.min_players,
+        match_data.max_players,
+        match_data.creator,
+        match_data.robot_id
+    )
+
+    return {"detail": "Match created successfully", "id": match_id}
 
 #registro de usuario
 @app.post("/user/signup", tags=["Users"],status_code=200)
