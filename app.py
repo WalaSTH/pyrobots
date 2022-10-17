@@ -25,16 +25,12 @@ app.add_middleware(
 #match creation
 @app.get("/match/available", tags=["Matches"], status_code=200)
 async def match_listing():
-    match_list = Match.select()[:]
-    res_list = []
-
-    for m in match_list:
-        res_list.append((m.name, m.current_players, (m.creator).user_name))
+    res_list = get_match_list()
 
     if (res_list == []):
         raise HTTPException(
             status_code=404,
-            detail="No matches available."
+            detail="No matches available"
         )
 
     return {"Matches": res_list}

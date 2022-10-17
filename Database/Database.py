@@ -37,3 +37,13 @@ class Match(db.Entity):
 
 db.generate_mapping(create_tables=True)
 
+@db_session
+def get_match_list():
+    match_list = Match.select()[:]
+    res_list = []
+
+    for m in match_list:
+        if not m.started:
+            res_list.append((m.name, m.current_players, (m.creator).user_name))
+
+    return res_list
