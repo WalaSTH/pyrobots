@@ -12,7 +12,7 @@ class User(db.Entity):
     email = Required(str, unique=True)
     password = Required(str)
     verified = Required(bool)
-    photo = Optional(str)
+    photo = Optional(bytes)
 
 db.generate_mapping(create_tables=True)
 
@@ -30,7 +30,7 @@ def get_user_by_email(email):
 
 
 @db_session
-def upload_photo(user_name, photo):
+def upload_photo_db(user_name, photo):
     user = get_user(user_name)
     user.photo = photo
 @db_session

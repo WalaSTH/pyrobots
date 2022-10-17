@@ -96,7 +96,7 @@ async def upload_photo(user: User = Depends(), photo: UploadFile = File(decripti
             detail="user does not exist"
         )
     else:
-        upload_photo(user.username, photo.file.read())
+        upload_photo_db(user.username, photo.file.read())
         return {"detail": photo.filename + " uploaded successfully"}
 
 
