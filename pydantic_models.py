@@ -10,7 +10,6 @@ class UserTemp(BaseModel):
     username: str
     password: str
     email: EmailStr
-    photo: Optional[str] = None
 
 
 class Token(BaseModel):

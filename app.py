@@ -103,7 +103,7 @@ def match_creation(match_data: TempMatch):
 
 #registro de usuario
 @app.post("/user/signup", tags=["Users"],status_code=200)
-async def user_register(user_to_reg: UserTemp = Depends()):
+async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[UploadFile] = None):
     """USER REGISTER FUNCTION"""
 
     invalid_fields = HTTPException(
@@ -119,7 +119,7 @@ async def user_register(user_to_reg: UserTemp = Depends()):
         raise invalid_fields
     elif any(char.isupper() for char in user_to_reg.password) == False or \
             any(char.islower() for char in user_to_reg.password) == False or \
-            any(char.isdigit() for char in user_to_reg.password) == False  :
+            any(char.isdigit() for char in user_to_reg.password) == False:
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,
             detail="password must have at least one uppercase, one lowercase and one number"
@@ -134,9 +134,12 @@ async def user_register(user_to_reg: UserTemp = Depends()):
             status_code= status.HTTP_401_UNAUTHORIZED,
             detail="existing username"
         )
-
     else:
         create_user(user_to_reg.username, user_to_reg.email, get_password_hash(user_to_reg.password))
+        if photo != None:
+            upload_photo_db(user_to_reg.username, photo.file.read())
+        else:
+            upload_photo_db(user_to_reg.username, None)
         return {"detail": "User created successfully"}
 
 
