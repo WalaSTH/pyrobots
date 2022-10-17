@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./screens/Home/Home";
 import Login from "./screens/Login/Login";
@@ -28,6 +28,12 @@ export default function App() {
       return <Navigate to="/" />;
     }
   };
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token]);
 
   return (
     <div className="App">

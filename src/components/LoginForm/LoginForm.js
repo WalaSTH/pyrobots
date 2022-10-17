@@ -68,6 +68,7 @@ export default function LoginForm({ handleSubmit }) {
                   component="h1"
                   variant="h5"
                   sx={{ color: "black", marginBottom: "20px" }}
+                  data-testid="typography-signin"
                 >
                   Sign in
                 </Typography>
@@ -76,6 +77,7 @@ export default function LoginForm({ handleSubmit }) {
                     <Textfield
                       name="username"
                       label="Username"
+                      // inputProp={{ "data-testid": "account-username" }}
                       // margin="normal"
                       // fullWidth
                       // id="email"
@@ -92,6 +94,7 @@ export default function LoginForm({ handleSubmit }) {
                       name="password"
                       label="Password"
                       type="password"
+                      // inputProp={{ "data-testid": "account-password" }}
                       // margin="normal"
                       // fullWidth
                       // id="password"
@@ -115,7 +118,7 @@ export default function LoginForm({ handleSubmit }) {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Link href="#" variant="body2">
+                    <Link href="/register" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>
