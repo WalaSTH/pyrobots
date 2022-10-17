@@ -1,9 +1,9 @@
 import * as React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import App from "./components/LoginForm/LoginForm";
 
 test("renders login form", () => {
-  render(<App />);
+  const component = render(<App />);
 });
 
 // // import "@testing-library/jest-dom/extend-expect";
