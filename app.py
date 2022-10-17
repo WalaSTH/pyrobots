@@ -112,6 +112,7 @@ async def user_delete(user_name: str):
     """
     if not user_exists(user_name):
         raise HTTPException(status_code=404, detail="user doesn't exist")
+
     else:
         delete_user(user_name)
         return {"user successfully deleted"}

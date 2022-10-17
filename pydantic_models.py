@@ -19,4 +19,3 @@ class TokenData(BaseModel):
 class User(BaseModel):
     username: str
     email: Optional[str] = None
-    photo: Optional[str] = None
