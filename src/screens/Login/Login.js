@@ -5,13 +5,13 @@ import axios from "axios";
 
 export default function Login({ handleLogin }) {
   function handleResponse(res) {
-    if (res.status === 201) {
-      console.log(res);
-      handleLogin(res.data);
+    if (res.status === 422) {
+      console.log("Bad request");
       return;
     }
-    if (res.status === 405) {
-      alert("Email not found");
+    if (res.status === 200) {
+      console.log("All good");
+      handleLogin(res.data);
       return;
     }
     if (res.status === 406) {
@@ -25,10 +25,16 @@ export default function Login({ handleLogin }) {
   }
 
   async function loginUser(credentials) {
-    return axios.post(
-      "https://634ab9a333bb42dca409da46.mockapi.io/api/login/",
-      credentials
-    );
+    const params = new URLSearchParams();
+    params.append("username", credentials.e.username);
+    params.append("password", credentials.e.password);
+    // const obj = {
+    //   username: credentials.e.username,
+    //   password: credentials.e.password,
+    // };
+    // const json_object = JSON.stringify(obj);
+    // console.log(json_object);
+    return axios.post("http://127.0.0.1:8000/token", params);
   }
 
   const handleSubmit = async (e) => {

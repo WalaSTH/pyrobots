@@ -10,16 +10,16 @@ export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   const handleLogin = (t) => {
-    localStorage.setItem("token", t.token);
-    setToken(t.token);
+    localStorage.setItem("token", t.access_token);
+    setToken(t.access_token);
     navigate("/");
   };
 
-  // const handleLogout = (e) => {
-  //   localStorage.removeItem("token");
-  //   setToken(null);
-  //   navigate("/");
-  // };
+  const handleLogout = (e) => {
+    localStorage.removeItem("token");
+    setToken(null);
+    navigate("/");
+  };
 
   const privateRoute = (token, component) => {
     if (token) {
@@ -33,7 +33,7 @@ export default function App() {
     <div className="App">
       <Navbar />
       <Routes>
-        <Route exact path="/" element={<Home />} />
+        <Route exact path="/" element={<Home handleLogout={handleLogout} />} />
         <Route
           exact
           path="/login"

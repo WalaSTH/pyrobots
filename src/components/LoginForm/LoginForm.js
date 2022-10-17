@@ -13,12 +13,13 @@ import Textfield from "../FormsUI/Textfield";
 import Button from "../FormsUI/Button";
 
 const INITIAL_FORM_STATE = {
-  email: "",
+  username: "",
   password: "",
 };
 
 const FORM_VALIDATION = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
+  username: Yup.string().required(),
+  //email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
     .test("len", "Must be more than 8 characters", (val) => {
       if (val) return val.length >= 8;
@@ -73,8 +74,8 @@ export default function LoginForm({ handleSubmit }) {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Textfield
-                      name="email"
-                      label="Email"
+                      name="username"
+                      label="Username"
                       // margin="normal"
                       // fullWidth
                       // id="email"
