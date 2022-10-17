@@ -1,24 +1,17 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from segurity_functions import  *
-from pydantic_models import *
-MAX_LEN_ALIAS = 9
-MIN_LEN_ALIAS = 3
-MAX_LEN_PASSWORD = 16
-MIN_LEN_PASSWORD = 8
-MAX_LEN_EMAIL = 30
-MIN_LEN_EMAIL = 10
-MAX_LEN_NAME_GAME = 10
-MIN_LEN_NAME_GAME = 3
 
+from pydantic_models import *
+#from fastapi.responses import FileResponse
+#from fastapi import Depends
+#from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+#from segurity_functions import  *
+#from pydantic_models import *
 
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
-tags_metadata = [{"name": "users", "description": "Operations with users"}]
+#tags_metadata = [{"name": "users", "description": "Operations with users"}]
 
 app = FastAPI(
     title = "PyRobots"
@@ -31,3 +24,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/robot/create", tags=["Robots"], status_code = 200)
+def robot_create(temp_robot: TempRobot):
+    if (temp_robot.creator > check_user_quantity() or temp_robot.creator < 1):
+        raise HTTPException (
+            status_code= status.HTTP_404_NOT_FOUND,
+            detail="There is no user with such ID."
+        )
+    if (temp_robot.avatar == None):
+        temp_robot.avatar = ''
+    create_robot(temp_robot.robot_name, temp_robot.code, temp_robot.avatar, temp_robot.creator)
+    return{"detail":"Robot created succesfully."}
