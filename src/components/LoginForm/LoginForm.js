@@ -77,6 +77,7 @@ export default function LoginForm({ handleSubmit }) {
                     <Textfield
                       name="username"
                       label="Username"
+                      data-testid="username-input"
                       // inputProp={{ "data-testid": "account-username" }}
                       // margin="normal"
                       // fullWidth
@@ -94,6 +95,7 @@ export default function LoginForm({ handleSubmit }) {
                       name="password"
                       label="Password"
                       type="password"
+                      data-testid="password-input"
                       // inputProp={{ "data-testid": "account-password" }}
                       // margin="normal"
                       // fullWidth
