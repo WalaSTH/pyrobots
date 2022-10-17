@@ -90,3 +90,10 @@ def test_upload_photo():
     assert response.json() == {"detail": "{} uploaded successfully".format(filename)}
     delete_user(username)
 
+def test_upload_photo_invalid_username():
+    username = (get_random_string_lower(5))
+    photo = open("Test/test.jpg", "rb")
+    filename = "test.jpg"
+    response = client.post("/user/upload_photo", files={"photo": photo}, params={"username": username})
+    assert response.status_code == 401
+    assert response.json() == {"detail": "user does not exist"}
