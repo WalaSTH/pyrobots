@@ -32,6 +32,12 @@ export default function App() {
     navigate("/");
   };
 
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token]);
+
   return (
     <div className="App">
       <Navbar token={token} navigate={navigate} />
