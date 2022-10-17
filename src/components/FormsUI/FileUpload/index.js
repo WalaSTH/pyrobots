@@ -2,7 +2,7 @@ import { FormControl, FormHelperText, Button } from "@mui/material";
 import { useField, useFormikContext } from "formik";
 import React from "react";
 
-export default function FileUpload({ name, title, options, ...otherProps }) {
+export default function FileUpload({ name, title, startIcon, ...otherProps }) {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(name);
 
@@ -17,6 +17,7 @@ export default function FileUpload({ name, title, options, ...otherProps }) {
   };
 
   const configButton = {
+    startIcon: startIcon,
     variant: "outlined",
     fullWidth: true,
   };
