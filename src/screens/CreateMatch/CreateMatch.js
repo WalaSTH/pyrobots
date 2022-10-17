@@ -1,12 +1,11 @@
-import { Formik, Form } from "formik";
-import { Grid, Container, Box, Typography, Card } from "@mui/material";
-import * as Yup from "yup";
-import Textfield from "../../components/FormsUI/Textfield";
-import Button from "../../components/FormsUI/Button";
-import Snackbar from "../../components/FormsUI/Snackbar";
-import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+import CreateMatchForm from "../../components/FormsUI/CreateMatchForm";
+import { Container, Box } from "@mui/material";
 import { useState } from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import Snackbar from "../../components/FormsUI/Snackbar";
+// import { useNavigate } from "react-router-dom";
 
 const initial_form_state = {
   matchName: "",
@@ -21,8 +20,20 @@ const initial_form_state = {
 };
 
 const form_validation = Yup.object().shape({
-  matchName: Yup.string().max(64).required("Required"),
-  password: Yup.string().notRequired(),
+  matchName: Yup.string()
+    .max(250)
+    .matches(
+      "^[A-Za-z0-9 ]*$",
+      "Match name can only contains letters, numbers or spaces"
+    )
+    .required("Required"),
+  password: Yup.string()
+    .matches(
+      "^[A-Za-z0-9 ]*$",
+      "Password can only contains letters, numbers or spaces"
+    )
+    .max(64)
+    .notRequired(),
   minPlayers: Yup.number()
     .integer()
     .typeError("Insert a number")
@@ -50,7 +61,13 @@ const form_validation = Yup.object().shape({
     .positive()
     .max(10000)
     .required("Required"),
-  robotName: Yup.string().required("Required"),
+  robotName: Yup.string()
+    .matches(
+      "^[A-Za-z0-9 ]*$",
+      "Robot name can only contains letters, numbers or spaces"
+    )
+    .max(64)
+    .required("Required"),
 });
 
 export default function CreateGame() {
@@ -116,84 +133,7 @@ export default function CreateGame() {
             }
           }}
         >
-          <Form>
-            <Card
-              variant="outlined"
-              sx={{ marginTop: 3, padding: 3, borderRadius: 3 }}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sx={{ textAlign: "center" }}>
-                  <Typography sx={{ fontSize: 18, fontWeight: 500 }}>
-                    Create Match
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Textfield
-                    name="matchName"
-                    label="Name of the match"
-                    autoComplete="off"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Textfield
-                    name="password"
-                    label="Password (Optional)"
-                    type="password"
-                    autoComplete="off"
-                  />
-                </Grid>
-
-                <Grid item xs={6} textAlign="center">
-                  <Textfield
-                    name="minPlayers"
-                    label="Min players"
-                    autoComplete="off"
-                  />
-                </Grid>
-
-                <Grid item xs={6} textAlign="center">
-                  <Textfield
-                    name="maxPlayers"
-                    label="Max players"
-                    autoComplete="off"
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Textfield
-                    name="numberOfGames"
-                    label="Games"
-                    placeholder="200"
-                    autoComplete="off"
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Textfield
-                    name="numberOfRounds"
-                    label="Rounds"
-                    placeholder="10000"
-                    autoComplete="off"
-                  />
-                </Grid>
-
-                <Grid item xs={12} textAlign="center">
-                  <Typography>Choose your robot!</Typography>
-                  <Textfield
-                    name="robotName"
-                    label="Robot Name"
-                    autoComplete="off"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Button>Create match</Button>
-                </Grid>
-              </Grid>
-            </Card>
-          </Form>
+          <CreateMatchForm />
         </Formik>
         {open && (
           <Snackbar
