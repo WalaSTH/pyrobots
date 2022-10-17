@@ -108,7 +108,9 @@ export default function LoginForm({ handleSubmit }) {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Button type="submit">Login</Button>
+                    <Button type="submit" data-testid="login-button">
+                      Login
+                    </Button>
                     {/* <Button
                     type="submit"
                     fullWidth
