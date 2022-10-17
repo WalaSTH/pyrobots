@@ -29,7 +29,7 @@ def test_user_register_invalid_username():
         "email": "test@test.com"
     }
     response = client.post("/user/signup", params=user_to_reg)
-    assert response.status_code == 404
+    assert response.status_code == 401
     assert response.json() == {"detail": "field size is invalid"}
 
 #Creation new user with invalid password
@@ -40,7 +40,7 @@ def test_user_register_invalid_password_all_lower():
         "email": "test@test.com"
     }
     response = client.post("/user/signup", params=user_to_reg)
-    assert response.status_code == 404
+    assert response.status_code == 401
     assert response.json() == {"detail": "password must have at least one uppercase, one lowercase and one number"}
 
 def test_user_register_invalid_password_all_upper():
@@ -50,7 +50,7 @@ def test_user_register_invalid_password_all_upper():
         "email": "test@test.com"
     }
     response = client.post("/user/signup", params=user_to_reg)
-    assert response.status_code == 404
+    assert response.status_code == 401
     assert response.json() == {"detail": "password must have at least one uppercase, one lowercase and one number"}
 
 def test_user_register_invalid_password_all_number():
@@ -60,7 +60,7 @@ def test_user_register_invalid_password_all_number():
         "email": "test@test.com"
     }
     response = client.post("/user/signup", params=user_to_reg)
-    assert response.status_code == 404
+    assert response.status_code == 401
     assert response.json() == {"detail": "password must have at least one uppercase, one lowercase and one number"}
 
 def test_password_short_size():
@@ -70,7 +70,7 @@ def test_password_short_size():
         "email": (get_email()),
     }
     response = client.post("/user/signup", params=user_to_reg)
-    assert response.status_code == 404
+    assert response.status_code == 401
     assert response.json() == {"detail": "field size is invalid"}
 
 def test_upload_photo():
