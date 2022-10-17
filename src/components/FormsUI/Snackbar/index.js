@@ -12,7 +12,7 @@ export default function SnackbarWrapper({
     open: open,
     severity: severity,
     onClose: handleClose,
-    autoHideDuration: "4000",
+    autoHideDuration: 4000,
   };
 
   const configAlert = {
