@@ -28,6 +28,7 @@ class Match(db.Entity):
     started = Required(bool)
     game_quantity = Required(int)
     round_quantity = Required(int)
+    current_players = Required(int)
     min_players = Required(int)
     max_players = Required(int)
     creator = Required(User, reverse='owned_matches')
@@ -38,7 +39,7 @@ db.generate_mapping(create_tables=True)
 
 @db_session
 def create_match(match_name, password, game_quantity, round_quantity, min_players, max_players, creator_id, robot_id):
-    new_match  = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity,  min_players=min_players, max_players=max_players, creator=creator_id)
+    new_match  = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity, current_players=1, min_players=min_players, max_players=max_players, creator=creator_id)
     new_match.participants.add(User[creator_id])
     new_match.fighters.add(Robot[robot_id])
 
