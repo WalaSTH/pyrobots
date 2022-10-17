@@ -1,17 +1,12 @@
 from fastapi import FastAPI, HTTPException, status
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic_models import TempRobot
 
-from pydantic_models import *
-#from fastapi.responses import FileResponse
-#from fastapi import Depends
-#from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-#from segurity_functions import  *
-#from pydantic_models import *
 
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
-#tags_metadata = [{"name": "users", "description": "Operations with users"}]
+tags_metadata = [{"name": "Robots", "description": "Manage Robot"}]
 
 app = FastAPI(
     title = "PyRobots"

@@ -1,7 +1,5 @@
 from pony.orm import *
 
-from pony.orm import *
-
 db = pony.orm.Database()
 
 db.bind(provider='sqlite', filename="db.pyrobots", create_db=True)
