@@ -29,7 +29,7 @@ async def match_listing():
     res_list = []
 
     for m in match_list:
-        res_list.append((m.name, m.current_players))
+        res_list.append((m.name, m.current_players, (m.creator).user_name))
 
     if (res_list == []):
         raise HTTPException(
