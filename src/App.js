@@ -25,7 +25,7 @@ export default function App() {
   const handleLogout = (e) => {
     localStorage.removeItem("token");
     localStorage.removeItem("userID");
-    localStorage.removeItem("userID");
+    localStorage.removeItem("username");
     setToken(null);
     setUserID(null);
     setUsername(null);
