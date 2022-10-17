@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 #match creation
-@app.post("/match/create", tags=["Matches"], status_code=201)
+@app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
 
     if (match_data.robot_id > check_robot_quantity()):
@@ -42,13 +42,13 @@ def match_creation(match_data: TempMatch):
     if (check_robot_ownership(match_data.robot_id, match_data.creator)):
         raise HTTPException (
             status_code=409,
-            detail=f'Robot {match_data.robot_id} does not belong to that user'
+            detail=f"Robot {match_data.robot_id} does not belong to you"
         )
 
     if (check_match_name_exists(match_data.name)):
         raise HTTPException (
             status_code=409,
-            detail='A match with this name already exists'
+            detail="A match with this name already exists"
         )
 
     match_id = create_match(
@@ -62,4 +62,4 @@ def match_creation(match_data: TempMatch):
         match_data.robot_id
     )
 
-    return {"detail": "Match created successfully.", "id": match_id}
+    return {"detail": "Match created successfully", "id": match_id}

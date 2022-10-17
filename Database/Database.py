@@ -53,6 +53,10 @@ def check_robot_quantity():
     return Robot.select().count()
 
 @db_session
+def check_match_quantity():
+    return Match.select().count()
+
+@db_session
 def check_robot_ownership(robot_id, creator):
     return Robot[robot_id].owner != User[creator]
 
@@ -60,3 +64,6 @@ def check_robot_ownership(robot_id, creator):
 def check_match_name_exists(match_name):
     return Match.exists(lambda m: m.name == match_name and m.started == False)
 
+@db_session
+def get_robot_owner_id(rob_id):
+    return Robot[rob_id].owner.id
