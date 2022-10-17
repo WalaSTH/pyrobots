@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from segurity_functions import *
 from pydantic_models import *
@@ -16,13 +16,27 @@ MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
 
 
+description = """ 
+    PyRobots 🤖
+    
+    This is a game where you can create your own robot and fight against other robots.
+    
+    ## The FUN is guaranteed! 🎉
+    
+    ## Functionalities 🛠
+    
+    * Create a new user
+    * Login
+    * Upload a photo
+    """
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
 tags_metadata = [{"name": "Users", "description": "Operations with users"},
                  {"name": "Token", "description": "Token login"},]
 
 app = FastAPI(
-    title = "PyRobots"
+    title="PyRobots",
+    description=description,
 )
 
 app.add_middleware(
@@ -34,7 +48,7 @@ app.add_middleware(
 )
 
 #registro de usuario
-@app.post("/user/signup", tags=["Users"], status_code=200)
+@app.post("/user/signup", tags=["Users"],status_code=200)
 async def user_register(user_to_reg: UserTemp = Depends()):
     """USER REGISTER FUNCTION"""
 
@@ -74,7 +88,7 @@ async def user_register(user_to_reg: UserTemp = Depends()):
 
 #Upload image
 @app.post("/user/upload_photo", tags=["Users"], status_code=200)
-async def upload_photo(user: UserTemp):
+async def upload_photo(user: User = Depends(), photo: UploadFile = File(decription="Upload a photo")):
     """UPLOAD PHOTO FUNCTION"""
     if not user_exists(user.username):
         raise HTTPException(
@@ -82,8 +96,8 @@ async def upload_photo(user: UserTemp):
             detail="user does not exist"
         )
     else:
-        upload_photo(user.username, user.photo)
-        return {"detail": "Photo uploaded successfully"}
+        upload_photo(user.username, photo.file.read())
+        return {"detail": photo.filename + " uploaded successfully"}
 
 
 @app.delete("/user/delete_user", tags=["Users"])

@@ -72,3 +72,18 @@ def test_password_short_size():
     response = client.post("/user/signup", params=user_to_reg)
     assert response.status_code == 404
     assert response.json() == {"detail": "field size is invalid"}
+
+def test_upload_photo():
+    username = (get_random_string_lower(5))
+    user_to_reg={
+        "username": username,
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+    }
+    response = client.post("/user/signup", params=user_to_reg)
+    assert response.status_code == 200
+    assert response.json() == {"detail": "User created successfully"}
+    photo = open("Test/test.jpg", "rb")
+    response = client.post("/user/photo", params={"username": username, "photo": photo})
+    assert response.status_code == 200
+    assert response.json() == {"detail": "Photo uploaded successfully"}

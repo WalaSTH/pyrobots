@@ -53,3 +53,16 @@ def user_is_verified(user_name):
 def delete_user(user_name):
     user = get_user(user_name)
     User.delete(user)
+
+@db_session
+def get_user_photo(user_name):
+    return User.get(user_name=user_name).photo
+
+@db_session
+def user_have_photo(user_name):
+    return User.get(user_name=user_name).photo != ""
+
+@db_session
+def delete_user_photo(user_name):
+    user = get_user(user_name)
+    user.photo = ""
