@@ -35,6 +35,18 @@ async def match_creation(
     password: Union[str, None] = None
     ):
 
+    if (robot_id > Robot.select().count()):
+        raise HTTPException (
+            status_code=404,
+            detail="No robot with such ID."
+        )
+
+    if (creator > User.select().count()):
+        raise HTTPException (
+            status_code=404,
+            detail="No user with such ID."
+        )
+
     if (password == None):
         password = ''
     
