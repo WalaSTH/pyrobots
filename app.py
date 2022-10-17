@@ -35,7 +35,7 @@ app.add_middleware(
 
 #registro de usuario
 @app.post("/user/signup", tags=["Users"], status_code=200)
-async def user_register(user_to_reg: UserTemp):
+async def user_register(user_to_reg: UserTemp = Depends()):
     """USER REGISTER FUNCTION"""
 
     invalid_fields = HTTPException(
@@ -71,6 +71,38 @@ async def user_register(user_to_reg: UserTemp):
         create_user(user_to_reg.username, user_to_reg.email, get_password_hash(user_to_reg.password))
         return {"detail": "User created successfully"}
 
+
+#Upload image
+@app.post("/user/upload_photo", tags=["Users"], status_code=200)
+async def upload_photo(user: UserTemp):
+    """UPLOAD PHOTO FUNCTION"""
+    if not user_exists(user.username):
+        raise HTTPException(
+            status_code=401,
+            detail="user does not exist"
+        )
+    else:
+        upload_photo(user.username, user.photo)
+        return {"detail": "Photo uploaded successfully"}
+
+
+@app.delete("/user/delete_user", tags=["Users"])
+async def user_delete(user_name: str):
+    """Deletes an user.
+    Args: \n
+        user_name (str): Name of the user to delete. \n
+    Raises: \n
+        HTTPException: The user does not exist. \n
+    Returns: \n
+        str: Verification text.
+    """
+    if not user_exists(user_name):
+        raise HTTPException(status_code=404, detail="user doesn't exist")
+    else:
+        delete_user(user_name)
+        return {"user successfully deleted"}
+
+
 #login
 @app.post("/token",tags=["Token"], response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -88,11 +120,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/users/me/")
+@app.get("/user/me/")
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return {"username": current_user.user_name}
 
 
-@app.get("/users/me/items/")
+@app.get("/user/me/items/")
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]

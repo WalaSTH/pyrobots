@@ -4,6 +4,8 @@ class UserTemp(BaseModel):
     username: str
     password: str
     email: EmailStr
+    photo: Optional[str] = None
+
 
 class Token(BaseModel):
     access_token: str
@@ -17,3 +19,4 @@ class TokenData(BaseModel):
 class User(BaseModel):
     username: str
     email: Optional[str] = None
+    photo: Optional[str] = None

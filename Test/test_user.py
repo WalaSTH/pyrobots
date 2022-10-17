@@ -9,25 +9,30 @@ import string
 client = TestClient(app)
 
 #Creation new user
+user_to_reg = {
 
-def test_user_register():
-    user_to_reg = {
-        "username": get_random_string_lower(5),
-        "password": get_random_string_goodps(8),
-        "email": get_email(),
     }
     response = client.post("/user/signup", json=user_to_reg)
+def test_user_register():
+    response = client.post("/user/signup",
+                              headers={"Content-Type": "application/json"},
+                                json={
+                                    "username": get_random_string_lower(5),
+                                    "password": get_random_string_goodps(8),
+                                    "email": get_email()})
     assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
 
 #Creation new user with invalid username
 def test_user_register_invalid_username():
-    user_to_reg = {
-        "username": get_random_string_lower(2),
-        "password": "1234aA",
-        "email": "test@test.com"
-    }
-    response = client.post("/user/signup", json=user_to_reg)
+    response = client.post("/user/signup",
+                                headers={"Content-Type": "application/json"},
+                                    json={
+                                        "username": get_random_string_lower(2),
+                                        "password": "1234aA",
+                                        "email": "test@test.com"
+                                    }
+                                )
     assert response.status_code == 404
     assert response.json() == {"detail": "field size is invalid"}
 

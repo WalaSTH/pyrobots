@@ -25,10 +25,14 @@ def get_user(user_name):
     return User.get(user_name=user_name)
 
 @db_session
+def get_user_by_email(email):
+    return User.get(email=email)
+
+
+@db_session
 def upload_photo(user_name, photo):
     user = get_user(user_name)
     user.photo = photo
-
 @db_session
 def email_exists(email_address):
     return User.exists(email=email_address)
@@ -44,3 +48,8 @@ def user_exists(user_name):
 @db_session
 def user_is_verified(user_name):
     return User.get(user_name=user_name).verified
+
+@db_session
+def delete_user(user_name):
+    user = get_user(user_name)
+    User.delete(user)
