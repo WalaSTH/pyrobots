@@ -42,6 +42,7 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
     new_match  = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity, current_players=1, min_players=min_players, max_players=max_players, creator=creator_id)
     new_match.participants.add(User[creator_id])
     new_match.fighters.add(Robot[robot_id])
+    return Match.select().count()
 
 @db_session
 def check_user_quantity():
