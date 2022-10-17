@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
+from field_validations import create_match_field_validation
 from pydantic_models import *
 
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
@@ -24,13 +25,13 @@ app.add_middleware(
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
 
-    if (match_data.robot_id > check_robot_quantity()):
+    if (match_data.robot_id > check_robot_quantity() or match_data.robot_id <= 0):
         raise HTTPException (
             status_code=404,
             detail="No robot with such ID"
         )
 
-    if (match_data.creator > check_user_quantity()):
+    if (match_data.creator > check_user_quantity() or match_data.creator <= 0):
         raise HTTPException (
             status_code=404,
             detail="No user with such ID"
@@ -49,6 +50,12 @@ def match_creation(match_data: TempMatch):
         raise HTTPException (
             status_code=409,
             detail="A match with this name already exists"
+        )
+
+    if not create_match_field_validation(match_data):
+        raise HTTPException (
+            status_code=409,
+            detail="One or more fields are not valid"
         )
 
     match_id = create_match(
