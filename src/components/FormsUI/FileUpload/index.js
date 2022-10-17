@@ -17,18 +17,21 @@ export default function FileUpload({ name, title, options, ...otherProps }) {
   };
 
   const configButton = {
-    fullWidth: true,
-    color: "primary",
     variant: "outlined",
+    fullWidth: true,
   };
 
   return (
-    <FormControl>
+    <FormControl fullWidth={true}>
       <input id={name} name={name} type="file" {...configInput} />
-      <Button component="label" htmlFor={name} {...configButton}>
+      <Button
+        component="label"
+        htmlFor={name}
+        {...configButton}
+        color={meta.touched && meta.error ? "error" : "primary"}
+      >
         {title}
       </Button>
-      {field.value ? <FormHelperText>{field.value.name}</FormHelperText> : null}
       {meta.touched && meta.error ? (
         <FormHelperText error={true}>{meta.error}</FormHelperText>
       ) : null}

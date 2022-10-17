@@ -3,7 +3,7 @@ import NewRobotForm from "../../components/NewRobotForm";
 
 export default function NewRobot() {
   return (
-    <Container>
+    <Container className="new-robot">
       <NewRobotForm />
     </Container>
   );

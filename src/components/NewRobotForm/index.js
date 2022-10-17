@@ -1,19 +1,29 @@
-import { Box, Container, Grid, Typography, Card } from "@mui/material";
-import { Form, Formik } from "formik";
+import {
+  TextField as TField,
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Card,
+  Avatar,
+} from "@mui/material";
+import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import TextField from "../FormsUI/TextField";
 import FileUpload from "../FormsUI/FileUpload";
 import SubmitButton from "../FormsUI/Button";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { useState } from "react";
 
 const INITIAL_FORM_STATE = {
   name: "",
-  code: "",
-  avatar: "",
+  code: undefined,
+  avatar: undefined,
 };
 
 const FORM_VALIDATION = Yup.object().shape({
   name: Yup.string()
-    .required("A name is required")
+    .required("Name is required")
     .min(2, "Name is too short")
     .max(20, "Name is too long"),
   code: Yup.mixed()
@@ -35,6 +45,9 @@ const FORM_VALIDATION = Yup.object().shape({
 });
 
 export default function NewRobotForm() {
+  const [codeData, setCodeData] = useState("");
+  const [avatarData, setAvatarData] = useState("");
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -48,8 +61,13 @@ export default function NewRobotForm() {
         <Formik
           initialValues={{ ...INITIAL_FORM_STATE }}
           validationSchema={FORM_VALIDATION}
-          onSubmit={(values) => {
-            console.log(values);
+          onSubmit={(name, ...values) => {
+            const result = {
+              name: name,
+              code: codeData,
+              avatar: avatarData,
+            };
+            alert(JSON.stringify(result, null, 4));
           }}
         >
           <Form>
@@ -57,11 +75,62 @@ export default function NewRobotForm() {
               variant="outlined"
               sx={{ marginTop: 3, padding: 3, borderRadius: 3 }}
             >
-              <Grid container spacing={2}>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
                 <Grid item xs={12} sx={{ textAlign: "center" }}>
                   <Typography component="h1" variant="h5">
                     New Robot
                   </Typography>
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Field children name="avatar">
+                    {({ field, meta }) => {
+                      const fileReader = new FileReader();
+                      fileReader.onloadend = () => {
+                        setAvatarData(fileReader.result);
+                      };
+                      if (field.value) {
+                        fileReader.readAsDataURL(field.value);
+                      }
+                      return (
+                        <Avatar
+                          src={
+                            !meta.touched || (meta.touched && meta.error)
+                              ? null
+                              : avatarData
+                          }
+                          alt="Avatar"
+                          sx={{
+                            textAlign: "center",
+                            width: "100px",
+                            height: "100px",
+                          }}
+                        >
+                          <SmartToyIcon
+                            sx={{
+                              width: "50px",
+                              height: "50px",
+                            }}
+                          />
+                        </Avatar>
+                      );
+                    }}
+                  </Field>
                 </Grid>
 
                 <Grid item xs={12} sx={{ textAlign: "center" }}>
@@ -69,6 +138,7 @@ export default function NewRobotForm() {
                     name="name"
                     label="Robot Name"
                     autoComplete="off"
+                    required
                   />
                 </Grid>
 
@@ -78,9 +148,37 @@ export default function NewRobotForm() {
                     title="Upload code"
                     accept=".py,text/x-python"
                   />
+
+                  <Field className="code-field" name="code">
+                    {({ field }) => {
+                      const fileReader = new FileReader();
+                      fileReader.onloadend = () => {
+                        setCodeData(fileReader.result);
+                      };
+                      if (field.value) {
+                        fileReader.readAsText(field.value);
+                        return (
+                          <TField
+                            margin="dense"
+                            variant="filled"
+                            label={field.value.name}
+                            value={codeData}
+                            disabled={true}
+                            multiline
+                            maxRows={5}
+                            fullWidth={true}
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          />
+                        );
+                      }
+                      return null;
+                    }}
+                  </Field>
                 </Grid>
 
-                <Grid item xs={12} sx={{ textAlign: "center" }}>
+                <Grid item xs={12}>
                   <FileUpload
                     name="avatar"
                     title="Upload avatar"
@@ -88,7 +186,7 @@ export default function NewRobotForm() {
                   />
                 </Grid>
 
-                <Grid item xs={12} sx={{ textAlign: "center" }}>
+                <Grid item xs={12}>
                   <SubmitButton> Create robot </SubmitButton>
                 </Grid>
               </Grid>

@@ -15,6 +15,7 @@ export default function ButtonWrapper({ children, ...otherProps }) {
     onClick: handleSubmit,
     fullWidth: true,
     color: "primary",
+    size: "large",
   };
 
   return <Button {...configButton}> {children} </Button>;
