@@ -20,7 +20,7 @@ def test_user_register():
     response = client.post("/user/signup", params=user_to_reg)
     assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
-
+    delete_user(user_to_reg["username"])
 #Creation new user with invalid username
 def test_user_register_invalid_username():
     user_to_reg = {
@@ -88,3 +88,5 @@ def test_upload_photo():
     response = client.post("/user/upload_photo", files={"photo": photo}, params={"username": username})
     assert response.status_code == 200
     assert response.json() == {"detail": "{} uploaded successfully".format(filename)}
+    delete_user(username)
+
