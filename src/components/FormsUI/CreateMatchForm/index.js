@@ -20,7 +20,7 @@ export default function CreateMatchForm() {
 
             <Grid item xs={12}>
               <Textfield
-                name="matchName"
+                name="name"
                 label="Name of the match"
                 autoComplete="off"
               />
@@ -37,23 +37,25 @@ export default function CreateMatchForm() {
 
             <Grid item xs={6} textAlign="center">
               <Textfield
-                name="minPlayers"
+                name="min_players"
                 label="Min players"
+                placeholder="2"
                 autoComplete="off"
               />
             </Grid>
 
             <Grid item xs={6} textAlign="center">
               <Textfield
-                name="maxPlayers"
+                name="max_players"
                 label="Max players"
+                placeholder="4"
                 autoComplete="off"
               />
             </Grid>
 
             <Grid item xs={6}>
               <Textfield
-                name="numberOfGames"
+                name="games_per_match"
                 label="Games"
                 placeholder="200"
                 autoComplete="off"
@@ -62,7 +64,7 @@ export default function CreateMatchForm() {
 
             <Grid item xs={6}>
               <Textfield
-                name="numberOfRounds"
+                name="rounds"
                 label="Rounds"
                 placeholder="10000"
                 autoComplete="off"
@@ -71,11 +73,7 @@ export default function CreateMatchForm() {
 
             <Grid item xs={12} textAlign="center">
               <Typography>Choose your robot!</Typography>
-              <Textfield
-                name="robotName"
-                label="Robot Name"
-                autoComplete="off"
-              />
+              <Textfield name="robot_id" label="Robot ID" autoComplete="off" />
             </Grid>
 
             <Grid item xs={12}>

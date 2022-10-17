@@ -7,20 +7,19 @@ import axios from "axios";
 import Snackbar from "../../components/FormsUI/Snackbar";
 // import { useNavigate } from "react-router-dom";
 
-const initial_form_state = {
-  matchName: "",
+const initialFormState = {
+  name: "",
   password: "",
-  minPlayers: "2",
-  maxPlayers: "4",
-  numberOfGames: "",
-  numberOfRounds: "",
-  creator: "1", //TODO: Get creator id from backend
-  robot_id: "1", //TODO: Get robot id from backend
-  robotName: "",
+  min_players: "",
+  max_players: "",
+  games_per_match: "",
+  rounds: "",
+  creator: "2", //TODO: Get creator id from backend
+  robot_id: "", //TODO: Get robot id from backend
 };
 
-const form_validation = Yup.object().shape({
-  matchName: Yup.string()
+const formValidation = Yup.object().shape({
+  name: Yup.string()
     .max(250)
     .matches(
       "^[A-Za-z0-9 ]*$",
@@ -34,40 +33,34 @@ const form_validation = Yup.object().shape({
     )
     .max(64)
     .notRequired(),
-  minPlayers: Yup.number()
+  min_players: Yup.number()
     .integer()
     .typeError("Insert a number")
     .positive()
     .min(2)
     .max(4)
     .required("Required"),
-  maxPlayers: Yup.number()
+  max_players: Yup.number()
     .integer()
     .typeError("Insert a number")
     .positive()
     .min(2)
     .max(4)
-    .moreThan(Yup.ref("minPlayers"))
+    .moreThan(Yup.ref("min_players"))
     .required("Required"),
-  numberOfGames: Yup.number()
+  games_per_match: Yup.number()
     .integer()
     .typeError("Insert a number")
     .positive()
     .max(200)
     .required("Required"),
-  numberOfRounds: Yup.number()
+  rounds: Yup.number()
     .integer()
     .typeError("Insert a number")
     .positive()
     .max(10000)
     .required("Required"),
-  robotName: Yup.string()
-    .matches(
-      "^[A-Za-z0-9 ]*$",
-      "Robot name can only contains letters, numbers or spaces"
-    )
-    .max(64)
-    .required("Required"),
+  robot_id: Yup.number().integer().positive().required("Required"),
 });
 
 export default function CreateGame() {
@@ -97,40 +90,24 @@ export default function CreateGame() {
       >
         <Formik
           initialValues={{
-            ...initial_form_state,
+            ...initialFormState,
           }}
-          validationSchema={form_validation}
+          validationSchema={formValidation}
           onSubmit={async (values) => {
-            const params = new URLSearchParams();
-            params.append("name", values.matchName);
-            params.append("min_players", values.minPlayers);
-            params.append("max_players", values.maxPlayers);
-            params.append("gamesPerMatch", values.numberOfGames);
-            params.append("rounds", values.numberOfRounds);
-            params.append("robot_id", 1);
-            params.append("creator", 2);
-            params.append("password", values.password);
-
-            const response = await axios.post(
-              "https://634ab9a333bb42dca409da46.mockapi.io/api/matches",
-              params
-            );
-            if (response.status === 201) {
-              console.log(response.status);
-              setOpen(true);
-              setSeverity("success");
-              setBody("Match Created!");
-            } else if (response.status === 400) {
-              console.log(response.status);
-              setOpen(true);
-              setSeverity("error");
-              setBody("Selected robot doesnt belong to the user");
-            } else if (response.status === 401) {
-              console.log(response.status);
-              setOpen(true);
-              setSeverity("error");
-              setBody("A match with the same name already exists");
-            }
+            await axios
+              .post("http://127.0.0.1:8000/match/create", values)
+              .then(function (response) {
+                console.log(response.status);
+                setOpen(true);
+                setSeverity("success");
+                setBody(response.data["detail"]);
+              })
+              .catch(function (error) {
+                setOpen(true);
+                setSeverity("error");
+                setBody(error.response.data["detail"]);
+                console.log(error.response.status);
+              });
           }}
         >
           <CreateMatchForm />
