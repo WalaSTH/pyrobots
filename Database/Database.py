@@ -43,6 +43,18 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
     new_match.participants.add(User[creator_id])
     new_match.fighters.add(Robot[robot_id])
 
+@db_session
+def check_user_quantity():
+    return User.select().count()
+
+@db_session
+def check_robot_quantity():
+    return Robot.select().count()
+
+@db_session
+def check_robot_ownership(robot_id, creator):
+    return Robot[robot_id].owner != User[creator]
+
 """
 @db_session
 def join_match(match_id, user_id):

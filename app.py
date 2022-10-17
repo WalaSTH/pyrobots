@@ -35,13 +35,13 @@ async def match_creation(
     password: Union[str, None] = None
     ):
 
-    if (robot_id > Robot.select().count()):
+    if (robot_id > check_robot_quantity()):
         raise HTTPException (
             status_code=404,
             detail="No robot with such ID."
         )
 
-    if (creator > User.select().count()):
+    if (creator > check_user_quantity()):
         raise HTTPException (
             status_code=404,
             detail="No user with such ID."
@@ -50,7 +50,7 @@ async def match_creation(
     if (password == None):
         password = ''
     
-    if (Robot[robot_id].owner != User[creator]):
+    if (check_robot_ownership(robot_id, creator)):
         raise HTTPException (
             status_code=400,
             detail='That robot does not belong to that user.'
