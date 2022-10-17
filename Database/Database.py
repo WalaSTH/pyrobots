@@ -5,7 +5,7 @@ db = pony.orm.Database()
 
 db.bind(provider='sqlite', filename='db.pyrobots', create_db=True)
 class User(db.Entity):
-    id = PrimaryKey(int, auto=True)id = PrimaryKey(int, auto=True)
+    id = PrimaryKey(int, auto=True)
     user_name = Required(str, unique=True)
     email = Required(str, unique=True)
     password = Required(str)
