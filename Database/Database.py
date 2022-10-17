@@ -19,7 +19,7 @@ db.generate_mapping(create_tables=True)
 # --- user functions ---
 @db_session
 def create_user(user_name, email, password):
-        User(user_name=user_name, email=email, password=password, verified=False, photo="")
+        User(user_name=user_name, email=email, password=password, verified=False, photo=None)
 @db_session
 def get_user(user_name):
     return User.get(user_name=user_name)

@@ -84,6 +84,7 @@ def test_upload_photo():
     assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
     photo = open("Test/test.jpg", "rb")
-    response = client.post("/user/photo", params={"username": username, "photo": photo})
+    filename = "test.jpg"
+    response = client.post("/user/upload_photo", files={"photo": photo}, params={"username": username})
     assert response.status_code == 200
-    assert response.json() == {"detail": "Photo uploaded successfully"}
+    assert response.json() == {"detail": "{} uploaded successfully".format(filename)}
