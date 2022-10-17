@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi import Depends, HTTPException, status, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from segurity_functions import *
+from security_functions import *
 from pydantic_models import *
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
