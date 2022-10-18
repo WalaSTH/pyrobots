@@ -1,9 +1,10 @@
-import { useState } from "react";
 import { Avatar } from "@mui/material";
-const PreviewImage = ({ file }) => {
+import { useState } from "react";
+
+const PreviewImage = ({ photo }) => {
   const [preview, setPreview] = useState();
   const reader = new FileReader();
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(photo);
   reader.onload = () => {
     setPreview(reader.result);
   };
@@ -17,7 +18,6 @@ const PreviewImage = ({ file }) => {
         width="100%"
         height="100%"
       />
-      ;
     </Avatar>
   );
 };
