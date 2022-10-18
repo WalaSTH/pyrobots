@@ -3,7 +3,6 @@ import Snackbar from "../../components/FormsUI/Snackbar";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import "./LoginStyle.css";
 import axios from "axios";
 
 export default function Login({ handleLogin }) {
@@ -11,7 +10,7 @@ export default function Login({ handleLogin }) {
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
 
-  const handleClose = (event, reason) => {
+  const handleClose = (reason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -26,17 +25,14 @@ export default function Login({ handleLogin }) {
     return axios
       .post("http://127.0.0.1:8000/token", params)
       .then((res) => {
-        console.log(res);
         const status = res.status;
         const data = res.data;
         if (status === 200) {
-          console.log("All good");
           handleLogin(data);
           return;
         }
       })
       .catch((error) => {
-        console.log(error);
         if (error === 422) {
           setBody("Bad request");
           return;
@@ -51,12 +47,11 @@ export default function Login({ handleLogin }) {
         }
         setOpen(true);
         setSeverity("error");
-        console.log(error);
       });
   }
 
   const handleSubmit = async (e) => {
-    const fetchedData = await loginUser({
+    await loginUser({
       e,
     });
   };

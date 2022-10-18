@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "./screens/Login/Login";
 import { useNavigate } from "react-router-dom";
