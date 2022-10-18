@@ -51,26 +51,25 @@ describe("<LoginForm", () => {
     expect(passwordInput.value).toBe("Diego123_");
   });
 
-  // it("validates handleSubmit after correct parameters", async () => {
-  //   const mockHandler = jest.fn();
-  //   render(<LoginForm handleSubmit={mockHandler} />);
+  it("validates handleSubmit after correct parameters", async () => {
+    const mockHandler = jest.fn();
+    render(<LoginForm handleSubmit={mockHandler} />);
 
-  //   const usernameInput = screen
-  //     .getByTestId("username-input")
-  //     .querySelector("input");
-  //   const passwordInput = screen
-  //     .getByTestId("password-input")
-  //     .querySelector("input");
+    const usernameInput = screen
+      .getByTestId("username-input")
+      .querySelector("input");
+    const passwordInput = screen
+      .getByTestId("password-input")
+      .querySelector("input");
 
-  //   await userEvent.type(usernameInput, "diego");
-  //   await userEvent.type(passwordInput, "Diego123_");
+    await userEvent.type(usernameInput, "diego");
+    await userEvent.type(passwordInput, "Diego123_");
 
-  //   const button = screen.getByTestId("login-button");
-  //   console.log(await fireEvent.click(button));
+    const button = screen.getByTestId("login-button");
+    button.click();
 
-  //   expect(mockHandler.mock.calls).toHaveBeenCalledWith({
-  //     username: "diego",
-  //     password: "Diego123_",
-  //   });
-  // });
+    await waitFor(() => {
+      expect(mockHandler).toHaveBeenCalledTimes(1);
+    });
+  });
 });
