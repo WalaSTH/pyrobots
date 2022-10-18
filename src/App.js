@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./screens/Login/Login";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
