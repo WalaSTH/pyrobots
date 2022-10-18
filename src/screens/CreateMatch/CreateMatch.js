@@ -5,7 +5,6 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Snackbar from "../../components/FormsUI/Snackbar";
-// import { useNavigate } from "react-router-dom";
 
 const initialFormState = {
   name: "",
@@ -14,13 +13,13 @@ const initialFormState = {
   max_players: "",
   games_per_match: "",
   rounds: "",
-  creator: "2", //TODO: Get creator id from backend
-  robot_id: "", //TODO: Get robot id from backend
+  robot_id: "",
+  creator: 0,
 };
 
 const formValidation = Yup.object().shape({
   name: Yup.string()
-    .max(250)
+    .max(250, "Name cant contain more than 250 characters")
     .matches(
       "^[A-Za-z0-9 ]*$",
       "Match name can only contains letters, numbers or spaces"
@@ -31,7 +30,7 @@ const formValidation = Yup.object().shape({
       "^[A-Za-z0-9 ]*$",
       "Password can only contains letters, numbers or spaces"
     )
-    .max(64)
+    .max(64, "Password cant contain more than 64 characters")
     .notRequired(),
   min_players: Yup.number()
     .integer()
@@ -63,14 +62,12 @@ const formValidation = Yup.object().shape({
   robot_id: Yup.number().integer().positive().required("Required"),
 });
 
-export default function CreateGame() {
-  // const navigate = useNavigate(); TODO: Redirect to lobby
-
+export default function CreateGame({ userID }) {
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
 
-  const handleClose = (event, reason) => {
+  const handleClose = (reason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -95,7 +92,16 @@ export default function CreateGame() {
           validationSchema={formValidation}
           onSubmit={async (values) => {
             await axios
-              .post("http://127.0.0.1:8000/match/create", values)
+              .post("http://127.0.0.1:8000/match/create", {
+                name: values.name,
+                password: values.password,
+                min_players: values.min_players,
+                max_players: values.max_players,
+                games_per_match: values.games_per_match,
+                rounds: values.rounds,
+                robot_id: values.robot_id,
+                creator: userID,
+              })
               .then(function (response) {
                 console.log(response.status);
                 setOpen(true);
@@ -103,10 +109,13 @@ export default function CreateGame() {
                 setBody(response.data["detail"]);
               })
               .catch(function (error) {
-                setOpen(true);
                 setSeverity("error");
-                setBody(error.response.data["detail"]);
-                console.log(error.response.status);
+                if (error.response) {
+                  setBody(error.response.data["detail"]);
+                } else {
+                  setBody("Unkown error");
+                }
+                setOpen(true);
               });
           }}
         >
