@@ -14,12 +14,6 @@ describe("<LoginForm", () => {
     screen.getByText(/Sign in/i);
     screen.getByLabelText(/Username/i);
     screen.getByLabelText(/Password/i);
-    // const siT = component.getByText("Sign in");
-    // const us = component.getByLabelText("Username");
-    // const pswd = component.getByLabelText("Password");
-    // expect(siT).toBeDefined();
-    // expect(us).toBeDefined();
-    // expect(pswd).toBeDefined();
   });
 
   it("click button calls event handler", async () => {

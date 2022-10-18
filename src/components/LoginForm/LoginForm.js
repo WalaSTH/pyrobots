@@ -12,14 +12,13 @@ import { Formik, Form } from "formik";
 import Textfield from "../FormsUI/Textfield";
 import Button from "../FormsUI/Button";
 
-const INITIAL_FORM_STATE = {
+const initialFormState = {
   username: "",
   password: "",
 };
 
-const FORM_VALIDATION = Yup.object().shape({
+const formValidation = Yup.object().shape({
   username: Yup.string().required(),
-  //email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
@@ -29,9 +28,6 @@ const FORM_VALIDATION = Yup.object().shape({
 });
 
 export default function LoginForm({ handleSubmit }) {
-  // Pass the useFormik() hook initial form values and a submit function that will
-
-  // be called when the form is submitted
   const theme = createTheme();
 
   return (
@@ -48,8 +44,8 @@ export default function LoginForm({ handleSubmit }) {
           }}
         >
           <Formik
-            initialValues={{ ...INITIAL_FORM_STATE }}
-            validationSchema={FORM_VALIDATION}
+            initialValues={{ ...initialFormState }}
+            validationSchema={formValidation}
             onSubmit={handleSubmit}
           >
             <Form>
@@ -76,15 +72,6 @@ export default function LoginForm({ handleSubmit }) {
                       name="username"
                       label="Username"
                       data-testid="username-input"
-                      // inputProp={{ "data-testid": "account-username" }}
-                      // margin="normal"
-                      // fullWidth
-                      // id="email"
-                      // type="email"
-                      // onChange={formik.handleChange}
-                      // value={formik.values.email}
-                      // autoComplete="email"
-                      // autoFocus
                     />
                   </Grid>
 
@@ -94,14 +81,6 @@ export default function LoginForm({ handleSubmit }) {
                       label="Password"
                       type="password"
                       data-testid="password-input"
-                      // inputProp={{ "data-testid": "account-password" }}
-                      // margin="normal"
-                      // fullWidth
-                      // id="password"
-                      // type="password"
-                      // onChange={formik.handleChange}
-                      // value={formik.values.password}
-                      // autoComplete="current-password"
                     />
                   </Grid>
 
@@ -109,14 +88,6 @@ export default function LoginForm({ handleSubmit }) {
                     <Button type="submit" data-testid="login-button">
                       Login
                     </Button>
-                    {/* <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                  >
-                    Sign In
-                  </Button> */}
                   </Grid>
 
                   <Grid item xs={12}>
