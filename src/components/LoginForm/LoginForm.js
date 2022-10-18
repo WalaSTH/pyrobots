@@ -31,13 +31,6 @@ const formValidation = Yup.object().shape({
 export default function LoginForm({ handleSubmit }) {
   const theme = createTheme();
 
-  const handleSubmit = async (e) => {
-    const fetchedData = await loginUser({
-      e,
-    });
-    setToken(fetchedData);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

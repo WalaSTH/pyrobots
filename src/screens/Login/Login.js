@@ -33,7 +33,7 @@ export default function Login({ handleLogin }) {
       })
       .catch((error) => {
         if (error.response.status === 401) {
-          setBody("Email or password invalid");
+          setBody("Username or password invalid");
         } else if (error.response.status === 422) {
           setBody("Bad request");
         } else if (error.response.status === 406) {
