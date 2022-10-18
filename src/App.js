@@ -7,6 +7,7 @@ import Leftbar from "./components/Leftbar/Leftbar";
 
 export default function App() {
   const navigate = useNavigate();
+
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user_id, setUserID] = useState(localStorage.getItem("userID"));
   const [username, setUsername] = useState(localStorage.getItem("username"));
@@ -30,13 +31,6 @@ export default function App() {
     setUsername(null);
     navigate("/");
   };
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
 
   return (
     <div className="App">
