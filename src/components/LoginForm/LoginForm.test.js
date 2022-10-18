@@ -5,8 +5,12 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import LoginForm from "./LoginForm";
 
 describe("<LoginForm", () => {
-  test("component rendering", () => {
-    const utils = render(<LoginForm />);
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("component rendering", () => {
+    render(<LoginForm />);
     screen.getByText(/Sign in/i);
     screen.getByLabelText(/Username/i);
     screen.getByLabelText(/Password/i);
@@ -18,17 +22,18 @@ describe("<LoginForm", () => {
     // expect(pswd).toBeDefined();
   });
 
-  test("click button calls event handler", async () => {
+  it("click button calls event handler", async () => {
     const mockHandler = jest.fn();
     render(<LoginForm handleSubmit={mockHandler} />);
 
-    const button = screen.getByText("Login");
-    fireEvent.click(button);
+    const button = screen.getByTestId("login-button");
+    await fireEvent.click(button);
 
     expect(mockHandler.mock.calls).toHaveLength(0);
   });
 
-  test("validates username and password field to be not empty after write", async () => {
+  test("validates username and password field to be not empty after write", async () => {});
+  it("asdasdas", async () => {
     const mockHandler = jest.fn();
     render(<LoginForm handleSubmit={mockHandler} />);
 
@@ -46,7 +51,7 @@ describe("<LoginForm", () => {
     expect(passwordInput.value).toBe("Diego123_");
   });
 
-  // test("validates handleSubmit after correct parameters", async () => {
+  // it("validates handleSubmit after correct parameters", async () => {
   //   const mockHandler = jest.fn();
   //   render(<LoginForm handleSubmit={mockHandler} />);
 
@@ -61,8 +66,11 @@ describe("<LoginForm", () => {
   //   await userEvent.type(passwordInput, "Diego123_");
 
   //   const button = screen.getByTestId("login-button");
-  //   fireEvent.click(button);
+  //   console.log(await fireEvent.click(button));
 
-  //   expect(mockHandler.mock.calls).toHaveLength(0);
+  //   expect(mockHandler.mock.calls).toHaveBeenCalledWith({
+  //     username: "diego",
+  //     password: "Diego123_",
+  //   });
   // });
 });
