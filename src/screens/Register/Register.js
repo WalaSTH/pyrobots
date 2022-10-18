@@ -8,21 +8,43 @@ import PreviewImage from "../../components/PreviewImage/PreviewImage";
 import axios from "axios";
 
 const initialValues = {
-  file: null,
+  photo: null,
   username: "",
   email: "",
   password: "",
+  passwordConfirmation: "",
 };
 
 const formValidation = Yup.object().shape({
   username: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string().required("Required"),
+  password: Yup.string()
+    .required("Please enter a password")
+    .min(8, "Password too short")
+    .test("isValidPass", " is not valid", (value) => {
+      const hasUpperCase = /[A-Z]/.test(value);
+      const hasLowerCase = /[a-z]/.test(value);
+      const hasNumber = /[0-9]/.test(value);
+      const hasSymbole = /[!@#%&]/.test(value);
+      let validConditions = 0;
+      const numberOfMustBeValidConditions = 3;
+      const conditions = [hasLowerCase, hasUpperCase, hasNumber, hasSymbole];
+      conditions.forEach((condition) => (condition ? validConditions++ : null));
+      if (validConditions >= numberOfMustBeValidConditions) {
+        return true;
+      }
+      return false;
+    }),
+  passwordConfirmation: Yup.string().oneOf(
+    [Yup.ref("password"), null],
+    "Passwords must match"
+  ),
 });
 
-export default function CreateGame() {
-  const fileRef = useRef(null);
-  const url = "https://634ab9a333bb42dca409da46.mockapi.io/api/Register";
+export default function RegisterForm() {
+  const photoRef = useRef(null);
+
+  const url = "http://127.0.0.1:8000/user/signup";
 
   return (
     <Container component="main" maxWidth="xs">
@@ -40,8 +62,19 @@ export default function CreateGame() {
           }}
           validationSchema={formValidation}
           onSubmit={async (values) => {
-            const response = await axios.post(url, values);
-            console.log(values);
+            const fd = new FormData();
+            fd.append("photo", values.photo);
+            const response = await axios.post(url, fd, {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "multipart/form-data",
+              },
+              params: {
+                username: values.username,
+                password: values.password,
+                email: values.email,
+              },
+            });
             return response;
           }}
         >
@@ -57,30 +90,30 @@ export default function CreateGame() {
                       Registrarse
                     </Typography>
                   </Grid>
-
                   <Grid item>
                     <input
-                      ref={fileRef}
-                      hidden
+                      ref={photoRef}
                       id="inputAvatar"
-                      name="file"
+                      hidden
+                      name="photo"
                       type="file"
                       onChange={(e) => {
-                        setFieldValue("file", e.target.files[0]);
+                        setFieldValue("photo", e.target.files[0]);
                       }}
                     />
                   </Grid>
 
                   <Grid>
                     <Grid item xs={12}>
-                      {values.file && <PreviewImage file={values.file} />}
+                      {values.photo && <PreviewImage photo={values.photo} />}
                     </Grid>
                   </Grid>
 
                   <Grid item xs={12}>
                     <Button
+                      fullWidth={true}
                       onClick={() => {
-                        fileRef.current.click();
+                        photoRef.current.click();
                       }}
                     >
                       Upload Avatar
@@ -96,7 +129,19 @@ export default function CreateGame() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Textfield name="password" label="Password" />
+                    <Textfield
+                      name="password"
+                      label="Password"
+                      type="password"
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Textfield
+                      name="passwordConfirmation"
+                      label="Password"
+                      type="password"
+                    />
                   </Grid>
 
                   <Grid item xs={12}>
