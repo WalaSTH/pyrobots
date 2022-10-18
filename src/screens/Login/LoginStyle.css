@@ -1,0 +1,8 @@
+.divLogin {
+  width: 100vw;
+  height: 100vh;
+  background-color: #343434;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
