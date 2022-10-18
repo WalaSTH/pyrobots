@@ -132,7 +132,7 @@ export default function NewRobotForm({ onSubmit }) {
               }}
             >
               <TextField
-                data-testid="robotName"
+                data-testid="robotNameInput"
                 name="name"
                 label="Robot Name"
                 autoComplete="off"
@@ -161,7 +161,7 @@ export default function NewRobotForm({ onSubmit }) {
               <FilePreview name="code" />
 
               <FileUpload
-                data-testid="robotCode"
+                data-testid="robotCodeInput"
                 accept=".py"
                 name="code"
                 buttonProps={{ startIcon: <FileUploadIcon /> }}
@@ -179,7 +179,9 @@ export default function NewRobotForm({ onSubmit }) {
                 alignItems: "center",
               }}
             >
-              <SubmitButton>Create robot</SubmitButton>
+              <SubmitButton data-testid="submitButton">
+                Create robot
+              </SubmitButton>
             </Grid>
           </Grid>
         </Form>

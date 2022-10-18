@@ -9,7 +9,7 @@ export default function FileUpload({
   ...otherProps
 }) {
   const { setFieldValue } = useFormikContext();
-  const [field, meta] = useField(name);
+  const [, meta] = useField(name);
   const isError = meta.touched && meta.error;
 
   function handleChange(e) {

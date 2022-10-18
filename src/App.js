@@ -7,7 +7,7 @@ export default function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="newrobot" element={<NewRobot />} />
+        <Route path="newrobot" element={<NewRobot userID={1} />} />
       </Routes>
     </div>
   );
