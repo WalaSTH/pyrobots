@@ -3,6 +3,7 @@ import Login from "./screens/Login/Login";
 import MainPage from "./screens/MainPage/MainPage";
 import NewRobot from "./screens/NewRobot";
 import Register from "./screens/Register/Register";
+import CreateMatch from "./screens/CreateMatch/CreateMatch";
 
 export default function RoutesWrapper({
   token,
@@ -36,7 +37,11 @@ export default function RoutesWrapper({
         path="/create-robot"
         element={privateRoute(token, <NewRobot userID={userID} />)}
       />
-      <Route exact path="/create-match" element={privateRoute(token, <></>)} />
+      <Route
+        exact
+        path="/create-match"
+        element={privateRoute(token, <CreateMatch userID={userID} />)}
+      />
       <Route
         exact
         path="/create-simulation"

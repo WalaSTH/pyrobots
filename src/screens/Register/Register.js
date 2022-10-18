@@ -91,7 +91,7 @@ export default function RegisterForm() {
                 <Grid container spacing={2} sx={{ justifyContent: "center" }}>
                   <Grid item xs={12} sx={{ textAlign: "center" }}>
                     <Typography sx={{ fontSize: 18, fontWeight: 500 }}>
-                      Registrarse
+                      Register
                     </Typography>
                   </Grid>
                   <Grid item>
