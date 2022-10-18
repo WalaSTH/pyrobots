@@ -17,7 +17,7 @@ def test_user_register():
         "password": (get_random_string_goodps(8)),
         "email": (get_email()),
     }
-    response = client.post("/user/signup", params=user_to_reg)
+    response = client.post("/user/signup", params=user_to_reg, files={"photo": None})
     assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
     delete_user(user_to_reg["username"])
