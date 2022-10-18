@@ -57,8 +57,8 @@ export default function Login({ handleLogin }) {
   return (
     <Box
       sx={{
-        width: "100vw",
-        height: "100vh",
+        width: "100%",
+        height: "100%",
         backgroundColor: "#efefef",
         display: "flex",
         justifyContent: "center",

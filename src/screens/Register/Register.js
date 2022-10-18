@@ -3,9 +3,10 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Textfield from "../../components/Textfield/Textfield";
 import ButtonForm from "../../components/Button/ButtonForm";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import PreviewImage from "../../components/PreviewImage/PreviewImage";
 import axios from "axios";
+import Snackbar from "../../components/Snackbar/Snackbar";
 
 const initialValues = {
   photo: null,
@@ -42,29 +43,56 @@ const formValidation = Yup.object().shape({
 });
 
 const url = "http://127.0.0.1:8000/user/signup";
-const handleSendData = async (values) => {
-  let fd = null;
-  const config = {
-    params: {
-      username: values.username,
-      password: values.password,
-      email: values.email,
-    },
-  };
-  if (values.photo) {
-    fd = new FormData();
-    fd.append("photo", values.photo);
-    config.headers = {
-      Accept: "application/json",
-      "Content-Type": "multipart/form-data",
-    };
-  }
-  return await axios.post(url, fd, config);
-};
 
 export default function RegisterForm() {
+  const [open, setOpen] = useState(false);
+  const [body, setBody] = useState("");
+  const [severity, setSeverity] = useState("");
+
+  const handleClose = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const photoRef = useRef(null);
 
+  const handleSendData = async (values) => {
+    let fd = null;
+    const config = {
+      params: {
+        username: values.username,
+        password: values.password,
+        email: values.email,
+      },
+    };
+    if (values.photo) {
+      fd = new FormData();
+      fd.append("photo", values.photo);
+      config.headers = {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+      };
+    }
+    return await axios
+      .post(url, fd, config)
+      .then(function (response) {
+        setOpen(true);
+        setSeverity("success");
+        setBody(response.data["detail"]);
+      })
+      .catch(function (error) {
+        setSeverity("error");
+        if (error.response) {
+          setBody(error.response.data["detail"]);
+        } else {
+          setBody("Unknown error");
+        }
+        setOpen(true);
+      });
+  };
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -156,6 +184,14 @@ export default function RegisterForm() {
             </Form>
           )}
         </Formik>
+        {open && (
+          <Snackbar
+            open={open}
+            body={body}
+            severity={severity}
+            handleClose={handleClose}
+          />
+        )}
       </Box>
     </Container>
   );

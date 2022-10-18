@@ -37,11 +37,11 @@ export default function LoginForm({ handleSubmit }) {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             marginBottom: "350px",
+            marginTop: "150px",
           }}
         >
           <Formik

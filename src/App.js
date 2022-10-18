@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar";
 import Leftbar from "./components/Leftbar/Leftbar";
 
 export default function App() {
-  const id = 1;
   const navigate = useNavigate();
 
   const [token, setToken] = useState(localStorage.getItem("token"));

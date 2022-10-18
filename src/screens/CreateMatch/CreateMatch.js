@@ -103,7 +103,6 @@ export default function CreateGame({ userID }) {
                 creator: userID,
               })
               .then(function (response) {
-                console.log(response.status);
                 setOpen(true);
                 setSeverity("success");
                 setBody(response.data["detail"]);
@@ -111,9 +110,9 @@ export default function CreateGame({ userID }) {
               .catch(function (error) {
                 setSeverity("error");
                 if (error.response) {
-                  setBody(error.response.data["detail"]);
+                  setBody("Error");
                 } else {
-                  setBody("Unkown error");
+                  setBody("Unknown error");
                 }
                 setOpen(true);
               });
