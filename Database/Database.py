@@ -10,18 +10,18 @@ class User(db.Entity):
     email = Required(str, unique=True)
     password = Required(str)
     verified = Required(bool)
+    photo = Optional(bytes)
     owned_matches = Set('Match', reverse='creator')
     ongoing_matches = Set('Match', reverse='participants')
     owned_robots = Set('Robot', reverse='owner')
-    photo = Optional(str)
 
 class Robot(db.Entity):
     id = PrimaryKey(int, auto=True)
     robot_name = Required(str)
     owner = Required(User, reverse='owned_robots')
     fights = Set('Match', reverse='fighters')
-    code = Required(str)
-    avatar = Optional(str)
+    code = Required(bytes)
+    avatar = Optional(bytes)
 
 class Match(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -40,9 +40,12 @@ class Match(db.Entity):
 db.generate_mapping(create_tables=True)
 
 @db_session
-def create_robot(robot_name, code, avatar, creator):
-    new_robot = Robot(robot_name = robot_name, owner = creator, code = code, avatar = avatar)
-
+def create_robot(robot_name,creator, code, avatar):
+    new_robot = Robot(robot_name = robot_name,code = code.file.read(),  owner = creator)
+    if avatar != None: 
+        new_robot.avatar = avatar.file.read()
+    else:
+        new_robot.avatar = None
 @db_session
 def check_user_quantity():
     return User.select().count()
