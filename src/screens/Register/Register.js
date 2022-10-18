@@ -1,5 +1,5 @@
 import { Grid, Container, Typography, Box, Card, Button } from "@mui/material";
-import { Formik, Form } from "formik";
+import { Formik, Form, validateYupSchema } from "formik";
 import * as Yup from "yup";
 import Textfield from "../../components/Textfield/Textfield";
 import ButtonForm from "../../components/Button/ButtonForm";
@@ -41,10 +41,37 @@ const formValidation = Yup.object().shape({
   ),
 });
 
+const url = "http://127.0.0.1:8000/user/signup";
+const hanldeSendData = async (values) => {
+  if (values.photo) {
+    const fd = new FormData();
+    fd.append("photo", values.photo);
+    const response = await axios.post(url, fd, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+      },
+      params: {
+        username: values.username,
+        password: values.password,
+        email: values.email,
+      },
+    });
+    return response;
+  } else {
+    const response = await axios.post(url, null, {
+      params: {
+        username: values.username,
+        password: values.password,
+        email: values.email,
+      },
+    });
+    return response;
+  }
+};
+
 export default function RegisterForm() {
   const photoRef = useRef(null);
-
-  const url = "http://127.0.0.1:8000/user/signup";
 
   return (
     <Container component="main" maxWidth="xs">
@@ -61,22 +88,7 @@ export default function RegisterForm() {
             ...initialValues,
           }}
           validationSchema={formValidation}
-          onSubmit={async (values) => {
-            const fd = new FormData();
-            fd.append("photo", values.photo);
-            const response = await axios.post(url, fd, {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "multipart/form-data",
-              },
-              params: {
-                username: values.username,
-                password: values.password,
-                email: values.email,
-              },
-            });
-            return response;
-          }}
+          onSubmit={(values) => hanldeSendData(values)}
         >
           {({ values, setFieldValue }) => (
             <Form>
