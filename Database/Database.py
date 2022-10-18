@@ -2,8 +2,8 @@ from pony.orm import *
 
 db = pony.orm.Database()
 
-
 db.bind(provider='sqlite', filename='db.pyrobots', create_db=True)
+
 class User(db.Entity):
     id = PrimaryKey(int, auto=True)
     user_name = Required(str, unique=True)
@@ -14,13 +14,15 @@ class User(db.Entity):
     owned_matches = Set('Match', reverse='creator')
     ongoing_matches = Set('Match', reverse='participants')
     owned_robots = Set('Robot', reverse='owner')
-    
 
 class Robot(db.Entity):
     id = PrimaryKey(int, auto=True)
     robot_name = Required(str)
     owner = Required(User, reverse='owned_robots')
     fights = Set('Match', reverse='fighters')
+    code = Required(bytes)
+    avatar = Optional(bytes)
+
 
 class Match(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -38,7 +40,21 @@ class Match(db.Entity):
 
 db.generate_mapping(create_tables=True)
 
+# --- Robot functions ---
+
 @db_session
+
+def create_robot(robot_name,creator, code, avatar):
+    new_robot = Robot(robot_name = robot_name,code = code.file.read(),  owner = creator)
+    if avatar != None: 
+        new_robot.avatar = avatar.file.read()
+    else:
+        new_robot.avatar = None
+        
+@db_session
+def check_user_quantity():
+    return User.select().count()
+
 def create_match(match_name, password, game_quantity, round_quantity, min_players, max_players, creator_id, robot_id):
     new_match  = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity, current_players=1, min_players=min_players, max_players=max_players, creator=creator_id)
     new_match.participants.add(User[creator_id])
@@ -73,6 +89,7 @@ def get_robot_owner_id(rob_id):
 @db_session
 def create_user(user_name, email, password):
         User(user_name=user_name, email=email, password=password, verified=False, photo=None)
+
 @db_session
 def get_user(user_name):
     return User.get(user_name=user_name)

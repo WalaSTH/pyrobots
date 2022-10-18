@@ -1,8 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
+from typing import Union, Optional 
 from fastapi.responses import FileResponse
-from fastapi import Depends, HTTPException, status, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
 from security_functions import *
@@ -16,6 +16,7 @@ MAX_LEN_EMAIL = 30
 MIN_LEN_EMAIL = 10
 MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
+
 
 
 description = """ 
@@ -36,7 +37,8 @@ origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", 
 
 tags_metadata = [{"name": "Users", "description": "Operations with users"},
                  {"name": "Token", "description": "Token login"},
-                 {"name": "matches", "description": "Operations with matches"}]
+                 {"name": "matches", "description": "Operations with matches"},
+                 {"name": "Robots", "description": "Manage Robot"}]
 
 app = FastAPI(
     title="PyRobots",
@@ -50,6 +52,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.post("/robot/create", tags=["Robots"], status_code = 200)
+async def robot_upload(temp_robot: TempRobot = Depends()):
+    if not (temp_robot.robot_name.replace(' ','').isalnum()):
+        raise HTTPException (
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail="Invalid robot name."
+        )
+    if (temp_robot.creator > check_user_quantity() or temp_robot.creator < 1):
+        raise HTTPException (
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail="There is no user with such ID."
+        )
+    create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
+    return {"detail":"Robot created succesfully."}
 
 #match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
@@ -200,3 +218,4 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @app.get("/user/me/items/")
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
+
