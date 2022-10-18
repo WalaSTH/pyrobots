@@ -22,19 +22,6 @@ def test_user_register():
     assert response.json() == {"detail": "User created successfully"}
     delete_user(user_to_reg["username"])
 
-def test_user_register_with_photo():
-    username = (get_random_string_lower(5))
-    user_to_reg={
-        "username": username,
-        "password": (get_random_string_goodps(8)),
-        "email": (get_email()),
-    }
-    photo = open("Test/test.jpg", "rb")
-    filename = "test.jpg"
-    response = client.post("/user/signup", params=user_to_reg, files={"photo": photo})
-    assert response.status_code == 200
-    assert response.json() == {"detail": "User created successfully"}
-    delete_user(username)
 
 #Creation new user with invalid username
 def test_user_register_invalid_username():
