@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import MainPage from "./components/MainPage/MainPage";
+import MainPage from "./screens/MainPage/MainPage";
 
-export default function RoutesWrapper({ token, navigate, handleLogin }) {
+export default function RoutesWrapper({ token, navigate }) {
   const privateRoute = (token, component) => {
     if (token) {
       return component;
@@ -14,13 +14,7 @@ export default function RoutesWrapper({ token, navigate, handleLogin }) {
     <Routes>
       <Route
         path="/"
-        element={
-          <MainPage
-            token={token}
-            navigate={navigate}
-            handleLogin={handleLogin}
-          />
-        }
+        element={<MainPage token={token} navigate={navigate} />}
       />
       <Route exact path="/register" element={<></>} />
       <Route exact path="/login" element={<></>} />
