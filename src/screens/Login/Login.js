@@ -1,7 +1,6 @@
 import LoginForm from "../../components/LoginForm/LoginForm";
 import Snackbar from "../../components/FormsUI/Snackbar";
 import Box from "@mui/material/Box";
-import PropTypes from "prop-types";
 import { useState } from "react";
 import axios from "axios";
 
@@ -22,7 +21,7 @@ export default function Login({ handleLogin }) {
     const params = new URLSearchParams();
     params.append("username", credentials.e.username);
     params.append("password", credentials.e.password);
-    return axios
+    return await axios
       .post("http://127.0.0.1:8000/token", params)
       .then((res) => {
         const status = res.status;
@@ -33,17 +32,16 @@ export default function Login({ handleLogin }) {
         }
       })
       .catch((error) => {
-        if (error === 422) {
+        if (error.response.status === 401) {
+          setBody("Email or password invalid");
+        } else if (error.response.status === 422) {
           setBody("Bad request");
-          return;
-        }
-        if (error === 406) {
+        } else if (error.response.status === 406) {
           setBody("Password do not match");
-          return;
-        }
-        if (error === 402) {
+        } else if (error.response.status === 402) {
           setBody("Security failure");
-          return;
+        } else {
+          setBody("Unknown error");
         }
         setOpen(true);
         setSeverity("error");
@@ -78,7 +76,3 @@ export default function Login({ handleLogin }) {
     </Box>
   );
 }
-
-Login.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-};

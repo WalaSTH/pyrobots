@@ -1,7 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./screens/Login/Login";
 import MainPage from "./screens/MainPage/MainPage";
 
-export default function RoutesWrapper({ token, navigate }) {
+export default function RoutesWrapper({
+  token,
+  setToken,
+  navigate,
+  handleLogin,
+}) {
   const privateRoute = (token, component) => {
     if (token) {
       return component;
@@ -17,7 +23,11 @@ export default function RoutesWrapper({ token, navigate }) {
         element={<MainPage token={token} navigate={navigate} />}
       />
       <Route exact path="/register" element={<></>} />
-      <Route exact path="/login" element={<></>} />
+      <Route
+        exact
+        path="/login"
+        element={<Login handleLogin={handleLogin} />}
+      />
       <Route exact path="/create-robot" element={privateRoute(token, <></>)} />
       <Route exact path="/create-match" element={privateRoute(token, <></>)} />
       <Route
