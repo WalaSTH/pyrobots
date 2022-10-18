@@ -3,22 +3,20 @@ import { useField } from "formik";
 import { useState } from "react";
 
 export default function FilePreview({ name, ...otherProps }) {
-  const [fileData, setFileData] = useState("");
-
   const [field, meta] = useField(name);
   const file = field.value;
   const isError = !file || !meta.touched || meta.error;
   const label = isError ? "" : file.name;
 
+  const [fileData, setFileData] = useState("");
   const reader = new FileReader();
   if (!isError) {
     reader.onloadend = () => {
       setFileData(reader.result);
     };
-    reader.readAsText(file);
+    reader.readAsBinaryString(file);
   }
 
-  // const { values } = useFormikContext();
   const configFilePreview = {
     ...field,
     ...otherProps,

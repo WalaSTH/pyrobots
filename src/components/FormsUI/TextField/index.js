@@ -10,6 +10,7 @@ export default function TextFieldWrapper({ name, ...otherProps }) {
     ...otherProps,
     fullWidth: true,
     variant: "outlined",
+    margin: "dense",
   };
 
   if (meta && meta.touched && meta.error) {

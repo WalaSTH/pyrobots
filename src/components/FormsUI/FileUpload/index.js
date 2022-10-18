@@ -1,7 +1,6 @@
 // import { FormControl, FormHelperText, Button } from "@mui/material";
 import { Button, FormHelperText } from "@mui/material";
 import { useField, useFormikContext } from "formik";
-// import { Fragment, useEffect } from "react";
 
 export default function FileUpload({
   name,
@@ -14,16 +13,7 @@ export default function FileUpload({
   const isError = meta.touched && meta.error;
 
   function handleChange(e) {
-    const reader = new FileReader();
-    const targetFile = e.target.files[0];
-
-    if (targetFile) {
-      reader.onloadend = () => {
-        setFieldValue(`${name}.data`, reader.result);
-      };
-      reader.readAsDataURL(targetFile);
-      setFieldValue(`${name}.file`, targetFile);
-    }
+    setFieldValue(name, e.target.files[0]);
   }
 
   const configInput = {
@@ -46,13 +36,9 @@ export default function FileUpload({
   return (
     <>
       <input {...configInput} />
-      <Button htmlFor={name} {...configButton}>
-        {children}
-      </Button>
+      <Button {...configButton}>{children}</Button>
       {isError ? (
-        <FormHelperText error={true} sx={{ textAlign: "center" }}>
-          {meta.error.file}
-        </FormHelperText>
+        <FormHelperText error={true}>{meta.error}</FormHelperText>
       ) : null}
     </>
   );
