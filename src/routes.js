@@ -1,13 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./screens/Login/Login";
-import MainPage from "./screens/MainPage/MainPage";
+import MainPage from "./components/MainPage/MainPage";
 
-export default function RoutesWrapper({
-  token,
-  setToken,
-  navigate,
-  handleLogin,
-}) {
+export default function RoutesWrapper({ token, navigate, handleLogin }) {
   const privateRoute = (token, component) => {
     if (token) {
       return component;
