@@ -56,8 +56,8 @@ describe("<LoginForm", () => {
       .getByTestId("password-input")
       .querySelector("input");
 
-    await userEvent.type(usernameInput, "diego");
-    await userEvent.type(passwordInput, "Diego123_");
+    //   await userEvent.type(usernameInput, "diego");
+    //   await userEvent.type(passwordInput, "Diego123_");
 
     const button = screen.getByTestId("login-button");
     button.click();
