@@ -5,38 +5,30 @@ import { useNavigate } from "react-router-dom";
 
 export default function App() {
   const navigate = useNavigate();
+
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [payload, setPayload] = useState(localStorage.getItem("payload"));
+  const [user_id, setUserID] = useState(localStorage.getItem("userID"));
+  const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const handleLogin = (t) => {
-    setToken(t.access_token);
-    setPayload({ ...payload, userid: t.userid, username: t.username });
     localStorage.setItem("token", t.access_token);
-    localStorage.setItem("username", payload.username);
-    console.log(payload);
+    localStorage.setItem("userID", t.id);
+    localStorage.setItem("username", t.username);
+    setToken(t.access_token);
+    setUserID(t.id);
+    setUsername(t.username);
     navigate("/");
   };
 
-  // const handleLogout = (e) => {
-  //   localStorage.removeItem("token");
-  //   setToken(null);
-  //   navigate("/");
-  // };
-
-  // const privateRoute = (token, component) => {
-  //   if (token) {
-  //     return component;
-  //   } else {
-  //     return <Navigate to="/" />;
-  //   }
-  // };
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  const handleLogout = (e) => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userID");
+    localStorage.removeItem("userID");
+    setToken(null);
+    setUserID(null);
+    setUsername(null);
+    navigate("/");
+  };
 
   return (
     <div className="App">

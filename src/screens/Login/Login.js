@@ -1,5 +1,6 @@
 import LoginForm from "../../components/LoginForm/LoginForm";
 import Snackbar from "../../components/FormsUI/Snackbar";
+import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import "./LoginStyle.css";
@@ -59,24 +60,24 @@ export default function Login({ handleLogin }) {
           handleLogin(data);
           return;
         }
-        if (status === 422) {
-          console.log("Bad request");
-          return;
-        }
-        if (status === 406) {
-          alert("Password do not match");
-          return;
-        }
-        if (status === 402) {
-          alert("Fallo en la seguridad");
-          return;
-        }
       })
       .catch((error) => {
+        console.log(error);
+        if (error === 422) {
+          setBody("Bad request");
+          return;
+        }
+        if (error === 406) {
+          setBody("Password do not match");
+          return;
+        }
+        if (error === 402) {
+          setBody("Security failure");
+          return;
+        }
         setOpen(true);
         setSeverity("error");
         console.log(error);
-        setBody("Something went wrong");
       });
   }
 
@@ -87,7 +88,16 @@ export default function Login({ handleLogin }) {
     //handleResponse(fetchedData);
   };
   return (
-    <div className="divLogin">
+    <Box
+      sx={{
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "#efefef",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <LoginForm handleSubmit={handleSubmit} />
       {open && (
         <Snackbar
@@ -97,7 +107,7 @@ export default function Login({ handleLogin }) {
           handleClose={handleClose}
         />
       )}
-    </div>
+    </Box>
   );
 }
 

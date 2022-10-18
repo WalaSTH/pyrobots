@@ -21,12 +21,10 @@ const FORM_VALIDATION = Yup.object().shape({
   username: Yup.string().required(),
   //email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
-    .test("len", "Must be more than 8 characters", (val) => {
-      if (val) return val.length >= 8;
-    })
-    .test("includes", "Must contain a underscore", (val) => {
-      if (val) return val.includes("_");
-    })
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+      "Must Contain 8 Characters, one Uppercase, one Lowercase and one Number"
+    )
     .required("Required"),
 });
 
