@@ -10,13 +10,13 @@ export default function App() {
 
   const [token, setToken] = useState(null);
 
-  const handleLogin = () => {
+  function handleLogin() {
     setToken(1);
-  };
+  }
 
-  const handleLogout = () => {
+  function handleLogout() {
     setToken(null);
-  };
+  }
 
   return (
     <div className="App">
