@@ -43,18 +43,18 @@ db.generate_mapping(create_tables=True)
 # --- Robot functions ---
 
 @db_session
-
 def create_robot(robot_name,creator, code, avatar):
     new_robot = Robot(robot_name = robot_name,code = code.file.read(),  owner = creator)
     if avatar != None: 
         new_robot.avatar = avatar.file.read()
     else:
         new_robot.avatar = None
-        
+
 @db_session
 def check_user_quantity():
     return User.select().count()
 
+@db_session
 def create_match(match_name, password, game_quantity, round_quantity, min_players, max_players, creator_id, robot_id):
     new_match  = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity, current_players=1, min_players=min_players, max_players=max_players, creator=creator_id)
     new_match.participants.add(User[creator_id])
