@@ -30,8 +30,10 @@ const FORM_VALIDATION = Yup.object().shape({
     .required("A name is required")
     .min(2, "Too short!")
     .max(20, "Too long!")
-    .test("isAlphanumeric", "Invalid character", (value) =>
-      value.match(/^[0-9a-z]+$/i)
+    .test(
+      "isAlphanumeric",
+      "Invalid character",
+      (value) => value && value.match(/^[0-9a-z]+$/i)
     ),
   code: Yup.mixed()
     .required("No file selected")
@@ -56,8 +58,8 @@ export default function NewRobotForm({ onSubmit }) {
     <Formik
       initialValues={{ ...INITIAL_FORM_STATE }}
       initialTouched={{
-        code: { file: true },
-        avatar: { data: true },
+        code: true,
+        avatar: true,
       }}
       validationSchema={FORM_VALIDATION}
       onSubmit={onSubmit}
