@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Routes from "./routes";
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/Navbar";
 import Leftbar from "./components/Leftbar/Leftbar";
 
 export default function App() {
