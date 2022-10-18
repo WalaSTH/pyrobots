@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./screens/Home/Home";
 import Login from "./screens/Login/Login";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
 
 export default function App() {
   const navigate = useNavigate();
@@ -33,19 +31,18 @@ export default function App() {
     if (!token) {
       navigate("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (
     <div className="App">
       <Navbar />
       <Routes>
-        <Route exact path="/" element={<Home handleLogout={handleLogout} />} />
         <Route
           exact
           path="/login"
           element={<Login handleLogin={handleLogin} />}
         />
-        <Route exact path="/register" element={privateRoute(token, Login)} />
       </Routes>
     </div>
   );
