@@ -32,18 +32,17 @@ export default function Login({ handleLogin }) {
         }
       })
       .catch((error) => {
-        if (error && error.response) {
-          if (error.response.status === 401) {
-            setBody("Username or password invalid");
-          } else if (error.response.status === 422) {
-            setBody("Bad request");
-          } else if (error.response.status === 406) {
-            setBody("Password do not match");
-          } else if (error.response.status === 402) {
-            setBody("Security failure");
-          } else {
-            setBody("Unknown error");
-          }
+        if (!error || !error.response) setBody("No connection to server");
+        else if (error.response.status === 401) {
+          setBody("Username or password invalid");
+        } else if (error.response.status === 422) {
+          setBody("Bad request");
+        } else if (error.response.status === 406) {
+          setBody("Password do not match");
+        } else if (error.response.status === 402) {
+          setBody("Security failure");
+        } else {
+          setBody("Unknown error");
         }
         setOpen(true);
         setSeverity("error");
