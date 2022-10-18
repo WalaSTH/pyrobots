@@ -2,8 +2,8 @@ from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic_models import TempRobot
-from typing import Union
-from typing import Optional
+from typing import Union, Optional 
+
 
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
@@ -34,5 +34,4 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
             detail="There is no user with such ID."
         )
     create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
-    return{"detail":"Robot created succesfully."}
-    
+    return {"detail":"Robot created succesfully."}
