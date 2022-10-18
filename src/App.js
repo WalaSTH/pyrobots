@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./screens/Login/Login";
 import { useNavigate } from "react-router-dom";
 
 export default function App() {
   const navigate = useNavigate();
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [payload, setPayload] = useState(localStorage.getItem("payload"));
 
   const handleLogin = (t) => {
-    localStorage.setItem("token", t.access_token);
     setToken(t.access_token);
+    setPayload({ ...payload, userid: t.userid, username: t.username });
+    localStorage.setItem("token", t.access_token);
+    localStorage.setItem("username", payload.username);
+    console.log(payload);
     navigate("/");
   };
 
-  const handleLogout = (e) => {
-    localStorage.removeItem("token");
-    setToken(null);
-    navigate("/");
-  };
+  // const handleLogout = (e) => {
+  //   localStorage.removeItem("token");
+  //   setToken(null);
+  //   navigate("/");
+  // };
 
-  const privateRoute = (token, component) => {
-    if (token) {
-      return component;
-    } else {
-      return <Navigate to="/" />;
-    }
-  };
+  // const privateRoute = (token, component) => {
+  //   if (token) {
+  //     return component;
+  //   } else {
+  //     return <Navigate to="/" />;
+  //   }
+  // };
 
   useEffect(() => {
     if (!token) {
@@ -36,7 +40,6 @@ export default function App() {
 
   return (
     <div className="App">
-      <Navbar />
       <Routes>
         <Route
           exact
