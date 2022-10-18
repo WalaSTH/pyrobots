@@ -4,7 +4,7 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import FormatListBulletedTwoToneIcon from "@mui/icons-material/FormatListBulletedTwoTone";
 
-export default function MainPage({ token, navigate, handleLogin }) {
+export default function MainPage({ token, navigate }) {
   return (
     <Container
       sx={{
@@ -29,8 +29,7 @@ export default function MainPage({ token, navigate, handleLogin }) {
               textShadow: "0px 0px 60px #050113",
             }}
           >
-            {" "}
-            Py Robots{" "}
+            Py Robots
           </Typography>
           <Typography
             sx={{
@@ -50,7 +49,7 @@ export default function MainPage({ token, navigate, handleLogin }) {
                 variant="contained"
                 startIcon={<LoginIcon />}
                 sx={{ marginRight: "10px" }}
-                onClick={handleLogin}
+                onClick={() => navigate("/login")}
               >
                 Login
               </Button>
