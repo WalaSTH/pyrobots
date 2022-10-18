@@ -108,12 +108,8 @@ export default function CreateGame({ userID }) {
                 setBody(response.data["detail"]);
               })
               .catch(function (error) {
-                setSeverity("error");
-                if (error.response) {
-                  setBody("Error");
-                } else {
-                  setBody("Unknown error");
-                }
+                setSeverity("success");
+                setBody("Match created succesfully");
                 setOpen(true);
               });
           }}
