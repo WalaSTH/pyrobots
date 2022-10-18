@@ -29,7 +29,7 @@ def test_match_creation():
 #Creation new user with invalid username
 def test_match_unexistant_robot():
     
-    rob_id = random.randint(1,check_robot_quantity()) + 1
+    rob_id = check_robot_quantity() + 1
     match_to_create = {
         "name": get_random_string_goodps(8),
         "min_players": 2,
@@ -65,8 +65,11 @@ def test_match_unexistant_user():
     assert response.json() == {"detail": "No user with such ID"}
 
 def test_match_robot_does_not_belong_to_user():
-        
+
     rob_id = random.randint(1,check_robot_quantity())
+    u_id = 1
+    while u_id == get_robot_owner_id(rob_id):
+        u_id+= 1
     match_to_create = {
         "name": get_random_string_goodps(8),
         "min_players": 2,
@@ -74,7 +77,7 @@ def test_match_robot_does_not_belong_to_user():
         "games_per_match": random.randint(1, MAX_GAMES_PER_MATCH),
         "rounds": random.randint(1,MAX_ROUNDS_PER_GAME),
         "robot_id": rob_id,
-        "creator": 1 if get_robot_owner_id(rob_id) else 2,
+        "creator": u_id,
         "password": get_random_string_goodps(8)
     }
 

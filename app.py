@@ -28,10 +28,11 @@ description = """
     
     ## Functionalities 🛠
     
-    * Create a new user
-    * Login
-    * Upload a photo
     * Create a match
+    * Create a new user
+    * Create a robot
+    * Login
+    * Upload a photo    
     """
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
