@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import Login from "./screens/Login/Login";
+import { Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Routes from "./routes";
+import Navbar from "./components/Navbar/Navbar";
+import Leftbar from "./components/Leftbar/Leftbar";
 
 export default function App() {
   const navigate = useNavigate();
@@ -32,13 +34,22 @@ export default function App() {
 
   return (
     <div className="App">
-      <Routes>
-        <Route
-          exact
-          path="/login"
-          element={<Login handleLogin={handleLogin} />}
-        />
-      </Routes>
+      <Navbar token={token} navigate={navigate} />
+      <Grid container>
+        {token && (
+          <Grid item xs={2} order={1}>
+            <Leftbar navigate={navigate} handleLogout={handleLogout} />
+          </Grid>
+        )}
+        <Grid item xs={token ? 10 : 12} order={2}>
+          <Routes
+            token={token}
+            setToken={setToken}
+            navigate={navigate}
+            handleLogin={handleLogin}
+          />
+        </Grid>
+      </Grid>
     </div>
   );
 }
