@@ -18,12 +18,13 @@ const initialFormState = {
 };
 
 const formValidation = Yup.object().shape({
-  username: Yup.string().required(),
+  username: Yup.string().max(250).required(),
   password: Yup.string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
       "Must Contain 8 Characters, one Uppercase, one Lowercase and one Number"
     )
+    .max(250)
     .required("Required"),
 });
 
