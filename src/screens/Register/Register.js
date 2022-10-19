@@ -177,7 +177,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <ButtonForm>Crear partida</ButtonForm>
+                    <ButtonForm>Register</ButtonForm>
                   </Grid>
                 </Grid>
               </Card>

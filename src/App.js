@@ -9,12 +9,12 @@ export default function App() {
   const navigate = useNavigate();
 
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user_id, setUserID] = useState(localStorage.getItem("userID"));
+  const [UserID, setUserID] = useState(localStorage.getItem("UserID"));
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const handleLogin = (t) => {
     localStorage.setItem("token", t.access_token);
-    localStorage.setItem("userID", t.userid);
+    localStorage.setItem("UserID", t.id);
     localStorage.setItem("username", t.username);
     setToken(t.access_token);
     setUserID(t.id);
@@ -24,7 +24,7 @@ export default function App() {
 
   const handleLogout = (e) => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userID");
+    localStorage.removeItem("UserID");
     localStorage.removeItem("username");
     setToken(null);
     setUserID(null);
@@ -47,7 +47,7 @@ export default function App() {
             setToken={setToken}
             navigate={navigate}
             handleLogin={handleLogin}
-            userID={user_id}
+            UserID={UserID}
           />
         </Grid>
       </Grid>
