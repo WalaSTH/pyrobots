@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#match creation
+#match listing
 @app.get("/match/available", tags=["Matches"], status_code=200)
 async def match_listing():
     res_list = get_match_list()
