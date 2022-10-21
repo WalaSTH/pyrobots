@@ -49,6 +49,18 @@ def create_robot(robot_name,creator, code, avatar):
         new_robot.avatar = avatar.file.read()
     else:
         new_robot.avatar = None
+    return new_robot.id
+
+@db_session
+def get_robot_list(owner_id):
+    robot_list = Robot.select()[:]
+    res_list = []
+
+    for r in robot_list:
+        if (r.owner).id == owner_id:
+            res_list.append((r.id, r.robot_name, (r.owner).user_name))
+
+    return res_list
 
 @db_session
 def check_user_quantity():
