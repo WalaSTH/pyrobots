@@ -21,31 +21,31 @@ import {
 
 const INITIAL_FORM_STATE = {
   name: "",
-  code: null,
-  avatar: null,
+  code: "",
+  avatar: "",
 };
 
 const FORM_VALIDATION = Yup.object().shape({
   name: Yup.string()
     .required("A name is required")
-    .min(2, "Too short!")
-    .max(20, "Too long!")
+    .min(2, "Must be at least 2 characters long")
+    .max(20, "Must be at most 20 characters long")
     .test(
-      "isAlphanumeric",
-      "Invalid character",
-      (value) => value && value.match(/^[0-9a-z]+$/i)
+      "nameValidCharacters",
+      "Invalid characters",
+      (value) => value && value.match(/^[0-9 -_a-z]+$/i)
     ),
   code: Yup.mixed()
     .required("No file selected")
     .test(
-      "codeFormat",
+      "codeFileFormat",
       "Unsopported file format",
       (value) => value && ["text/x-python"].includes(value.type)
     ),
   avatar: Yup.mixed()
     .notRequired()
     .test(
-      "avatarFormat",
+      "avatarFileFormat",
       "Unsopported file format",
       (value) =>
         !value ||
