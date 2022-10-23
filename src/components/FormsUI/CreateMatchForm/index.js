@@ -87,7 +87,7 @@ export default function CreateMatchForm({ UserID }) {
       .catch(function (error) {
         setSeverity("error");
         if (error.response) {
-          setBody("Error al crear la partida");
+          setBody(error.response.data["detail"]);
         } else {
           setBody("Unknown error");
         }
