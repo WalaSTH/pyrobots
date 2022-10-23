@@ -31,19 +31,35 @@ const formValidation = Yup.object().shape({
     .required("A name is required")
     .min(2, "Must be at least 2 characters long")
     .max(20, "Must be at most 20 characters long")
+<<<<<<< HEAD
     .matches(/^[0-9a-z ]+$/i, "Invalid characters"),
+=======
+    .test(
+      "nameValidCharacters",
+      "Invalid characters",
+      (value) => value && value.match(/^[0-9 -_a-z]+$/i)
+    ),
+>>>>>>> 564596f (Fix submission of avatar and code files)
   code: Yup.mixed()
     .required("No file selected")
     .test(
       "codeFileFormat",
+<<<<<<< HEAD
       "Unsupported file format",
+=======
+      "Unsopported file format",
+>>>>>>> 564596f (Fix submission of avatar and code files)
       (value) => value && ["text/x-python"].includes(value.type)
     ),
   avatar: Yup.mixed()
     .notRequired()
     .test(
       "avatarFileFormat",
+<<<<<<< HEAD
       "Unsupported file format",
+=======
+      "Unsopported file format",
+>>>>>>> 564596f (Fix submission of avatar and code files)
       (value) =>
         !value ||
         (value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
