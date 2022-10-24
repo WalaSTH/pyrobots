@@ -6,7 +6,7 @@ import { Form, Formik } from "formik";
 import AvatarPreview from "../FormsUI/AvatarPreview";
 import FilePreview from "../FormsUI/FilePreview";
 import FileUpload from "../FormsUI/FileUpload";
-import SubmitButton from "../FormsUI/SubmitButton";
+import SubmitFormButton from "../FormsUI/SubmitFormButton";
 import TextField from "../FormsUI/Textfield";
 
 // MUI components
@@ -179,9 +179,9 @@ export default function NewRobotForm({ onSubmit }) {
                 alignItems: "center",
               }}
             >
-              <SubmitButton data-testid="submitButton">
+              <SubmitFormButton data-testid="submitButton" SubmitFormButton>
                 Create robot
-              </SubmitButton>
+              </SubmitFormButton>
             </Grid>
           </Grid>
         </Form>

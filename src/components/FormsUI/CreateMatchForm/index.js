@@ -1,7 +1,7 @@
 import { Form } from "formik";
 import { Card, Grid, Typography } from "@mui/material";
 import Textfield from "../Textfield";
-import Button from "../Button";
+import SubmitFormButton from "../SubmitFormButton";
 
 export default function CreateMatchForm() {
   return (
@@ -77,12 +77,11 @@ export default function CreateMatchForm() {
             </Grid>
 
             <Grid item xs={12}>
-              <Button>Create match</Button>
+              <SubmitFormButton>Create match</SubmitFormButton>
             </Grid>
           </Grid>
         </Card>
       </Form>
-      ;
     </>
   );
 }

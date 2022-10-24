@@ -2,7 +2,7 @@ import { Grid, Container, Typography, Box, Card, Button } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Textfield from "../../components/Textfield/Textfield";
-import ButtonForm from "../../components/Button/ButtonForm";
+import SubmitFormButton from "../../components/FormsUI/SubmitFormButton";
 import { useRef, useState } from "react";
 import PreviewImage from "../../components/PreviewImage/PreviewImage";
 import axios from "axios";
@@ -177,7 +177,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <ButtonForm>Crear partida</ButtonForm>
+                    <SubmitFormButton>Crear partida</SubmitFormButton>
                   </Grid>
                 </Grid>
               </Card>
