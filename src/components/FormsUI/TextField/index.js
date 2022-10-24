@@ -6,10 +6,9 @@ export default function TextFieldWrapper({ name, ...otherProps }) {
 
   const configTextField = {
     ...field,
-    ...otherProps,
     fullWidth: true,
     variant: "outlined",
-    margin: "dense",
+    ...otherProps,
   };
 
   if (meta && meta.touched && meta.error) {

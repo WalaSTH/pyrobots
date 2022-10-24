@@ -18,10 +18,10 @@ export default function AvatarPreview({ name, children, ...otherProps }) {
 
   const configAvatarPreview = {
     ...field,
-    ...otherProps,
     src: avatarPreview,
     alt: "Avatar preview",
     color: "secondary",
+    ...otherProps,
   };
 
   return <Avatar {...configAvatarPreview}>{children}</Avatar>;
