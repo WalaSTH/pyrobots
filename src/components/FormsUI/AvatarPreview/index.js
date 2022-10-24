@@ -25,5 +25,5 @@ export default function AvatarPreview({ name, children, ...otherProps }) {
     ...otherProps,
   };
 
-  return <Avatar {...configAvatarPreview}>{children}</Avatar>;
+  return <Avatar {...configAvatarPreview}> {children} </Avatar>;
 }
