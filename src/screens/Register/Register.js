@@ -1,7 +1,7 @@
 import { Grid, Container, Typography, Box, Card, Button } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Textfield from "../../components/Textfield/Textfield";
+import TextField from "../../components/FormsUI/TextField";
 import SubmitFormButton from "../../components/FormsUI/SubmitFormButton";
 import { useRef, useState } from "react";
 import PreviewImage from "../../components/PreviewImage/PreviewImage";
@@ -153,19 +153,15 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Textfield
-                      name="username"
-                      label="Name"
-                      autoComplete="off"
-                    />
+                    <TextField name="username" label="Name" />
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Textfield name="email" label="Email" autoComplete="off" />
+                    <TextField name="email" label="Email" />
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Textfield
+                    <TextField
                       name="password"
                       label="Password"
                       type="password"
@@ -173,7 +169,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Textfield
+                    <TextField
                       name="passwordConfirmation"
                       label="Password"
                       type="password"

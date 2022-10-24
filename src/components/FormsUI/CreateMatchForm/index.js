@@ -1,5 +1,6 @@
-import { Card, Grid, Typography, Box } from "@mui/material";
-import Textfield from "../Textfield";
+import { Form } from "formik";
+import { Card, Grid, Typography } from "@mui/material";
+import TextField from "../TextField";
 import SubmitFormButton from "../SubmitFormButton";
 
   return (
@@ -30,67 +31,63 @@ import SubmitFormButton from "../SubmitFormButton";
                 </Typography>
               </Grid>
 
-              <Grid item xs={12}>
-                <Textfield
-                  name="name"
-                  label="Name of the match"
-                  autoComplete="off"
-                />
-              </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="name"
+                label="Name of the match"
+                autoComplete="off"
+              />
+            </Grid>
 
-              <Grid item xs={12}>
-                <Textfield
-                  name="password"
-                  label="Password (Optional)"
-                  type="password"
-                  autoComplete="off"
-                />
-              </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="password"
+                label="Password (Optional)"
+                type="password"
+                autoComplete="off"
+              />
+            </Grid>
 
-              <Grid item xs={6} textAlign="center">
-                <Textfield
-                  name="min_players"
-                  label="Min players"
-                  placeholder="2"
-                  autoComplete="off"
-                />
-              </Grid>
+            <Grid item xs={6} textAlign="center">
+              <TextField
+                name="min_players"
+                label="Min players"
+                placeholder="2"
+                autoComplete="off"
+              />
+            </Grid>
 
-              <Grid item xs={6} textAlign="center">
-                <Textfield
-                  name="max_players"
-                  label="Max players"
-                  placeholder="4"
-                  autoComplete="off"
-                />
-              </Grid>
+            <Grid item xs={6} textAlign="center">
+              <TextField
+                name="max_players"
+                label="Max players"
+                placeholder="4"
+                autoComplete="off"
+              />
+            </Grid>
 
-              <Grid item xs={6}>
-                <Textfield
-                  name="games_per_match"
-                  label="Games"
-                  placeholder="200"
-                  autoComplete="off"
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <TextField
+                name="games_per_match"
+                label="Games"
+                placeholder="200"
+                autoComplete="off"
+              />
+            </Grid>
 
-              <Grid item xs={6}>
-                <Textfield
-                  name="rounds"
-                  label="Rounds"
-                  placeholder="10000"
-                  autoComplete="off"
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <TextField
+                name="rounds"
+                label="Rounds"
+                placeholder="10000"
+                autoComplete="off"
+              />
+            </Grid>
 
-              <Grid item xs={12} textAlign="center">
-                <Typography>Choose your robot!</Typography>
-                <Textfield
-                  name="robot_id"
-                  label="Robot ID"
-                  autoComplete="off"
-                />
-              </Grid>
+            <Grid item xs={12} textAlign="center">
+              <Typography>Choose your robot!</Typography>
+              <TextField name="robot_id" label="Robot ID" autoComplete="off" />
+            </Grid>
 
             <Grid item xs={12}>
               <SubmitFormButton>Create match</SubmitFormButton>
