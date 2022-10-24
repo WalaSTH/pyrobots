@@ -6,7 +6,7 @@ import SubmitFormButton from "../../components/FormsUI/SubmitFormButton";
 import { useRef, useState } from "react";
 import PreviewImage from "../../components/PreviewImage/PreviewImage";
 import axios from "axios";
-import Snackbar from "../../components/Snackbar/Snackbar";
+import Snackbar from "../../components/FormsUI/Snackbar";
 
 const initialValues = {
   photo: null,
