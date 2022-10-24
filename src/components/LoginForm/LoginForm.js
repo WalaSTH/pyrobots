@@ -48,18 +48,31 @@ export default function LoginForm({ handleSubmit }) {
                 variant="h5"
                 data-testid="typography-signin"
               >
-                Sign in
-              </Typography>
-            </Grid>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  sx={{ color: "black", marginBottom: "20px" }}
+                  data-testid="typography-signin"
+                >
+                  Sign in
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      name="username"
+                      label="Username"
+                      data-testid="username-input"
+                    />
+                  </Grid>
 
-            <Grid item xs={12}>
-              <Textfield
-                name="username"
-                label="Username"
-                autoComplete="off"
-                data-testid="username-input"
-              />
-            </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      name="password"
+                      label="Password"
+                      type="password"
+                      data-testid="password-input"
+                    />
+                  </Grid>
 
             <Grid item xs={12}>
               <SubmitFormButton data-testid="login-button">

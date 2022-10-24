@@ -153,15 +153,11 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Textfield
-                      name="username"
-                      label="Name"
-                      autoComplete="off"
-                    />
+                    <TextField name="username" label="Name" />
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Textfield name="email" label="Email" autoComplete="off" />
+                    <TextField name="email" label="Email" />
                   </Grid>
 
                   <Grid item xs={12}>
