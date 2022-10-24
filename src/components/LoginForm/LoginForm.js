@@ -62,13 +62,9 @@ export default function LoginForm({ handleSubmit }) {
             </Grid>
 
             <Grid item xs={12}>
-              <Textfield
-                name="password"
-                label="Password"
-                type="password"
-                autoComplete="off"
-                data-testid="password-input"
-              />
+              <SubmitFormButton data-testid="login-button">
+                Login
+              </SubmitFormButton>
             </Grid>
 
             <Grid item xs={12}>
