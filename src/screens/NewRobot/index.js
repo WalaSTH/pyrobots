@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 import axios from "axios";
 import NewRobotForm from "../../components/NewRobotForm";
 
-export default function NewRobot({ userID }) {
+export default function NewRobot({ UserID }) {
   // Connection with endpoint
   async function handleSubmit(values) {
     const formData = new FormData();
@@ -22,7 +22,7 @@ export default function NewRobot({ userID }) {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        params: { robot_name: values.name, creator: userID },
+        params: { robot_name: values.name, creator: UserID },
       })
       .then(function (response) {
         console.log("Success" + response.data);
@@ -47,7 +47,7 @@ export default function NewRobot({ userID }) {
       component="main"
       maxWidth="xs"
       sx={{
-        marginTop: 10,
+        marginTop: 20,
       }}
     >
       <NewRobotForm onSubmit={handleSubmit} />

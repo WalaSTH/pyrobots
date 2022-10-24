@@ -72,6 +72,7 @@ export default function LoginForm({ handleSubmit }) {
                     <Textfield
                       name="username"
                       label="Username"
+                      autoComplete="off"
                       data-testid="username-input"
                     />
                   </Grid>
