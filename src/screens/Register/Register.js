@@ -153,11 +153,15 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <TextField name="username" label="Name" />
+                    <TextField
+                      name="username"
+                      label="Name"
+                      autoComplete="off"
+                    />
                   </Grid>
 
                   <Grid item xs={6}>
-                    <TextField name="email" label="Email" />
+                    <TextField name="email" label="Email" autoComplete="off" />
                   </Grid>
 
                   <Grid item xs={12}>
@@ -177,7 +181,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <SubmitFormButton>Crear partida</SubmitFormButton>
+                    <SubmitFormButton>Register</SubmitFormButton>
                   </Grid>
                 </Grid>
               </Card>

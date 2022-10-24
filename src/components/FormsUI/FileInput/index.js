@@ -1,4 +1,4 @@
-import { useField, useFormikContext } from "formik";
+import { useFormikContext } from "formik";
 
 export default function FileUpload({ name, ...otherProps }) {
   const { setFieldValue } = useFormikContext();

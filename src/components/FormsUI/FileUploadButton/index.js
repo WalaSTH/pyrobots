@@ -1,5 +1,5 @@
 import { Button, FormHelperText } from "@mui/material";
-import { useField, useFormikContext } from "formik";
+import { useField } from "formik";
 
 export default function FileUpload({ name, children, ...otherProps }) {
   const [, meta] = useField(name);

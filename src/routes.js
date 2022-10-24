@@ -7,10 +7,9 @@ import CreateMatch from "./screens/CreateMatch/CreateMatch";
 
 export default function RoutesWrapper({
   token,
-  setToken,
   navigate,
   handleLogin,
-  userID,
+  UserID,
 }) {
   const privateRoute = (token, component) => {
     if (token) {
@@ -35,12 +34,12 @@ export default function RoutesWrapper({
       <Route
         exact
         path="/create-robot"
-        element={privateRoute(token, <NewRobot userID={userID} />)}
+        element={privateRoute(token, <NewRobot UserID={UserID} />)}
       />
       <Route
         exact
         path="/create-match"
-        element={privateRoute(token, <CreateMatch userID={userID} />)}
+        element={privateRoute(token, <CreateMatch UserID={UserID} />)}
       />
       <Route
         exact
