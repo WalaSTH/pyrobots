@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import Textfield from "../FormsUI/Textfield";
+import TextField from "../FormsUI/TextField";
 import SubmitFormButton from "../FormsUI/SubmitFormButton";
 
 const initialFormState = {
@@ -69,7 +69,7 @@ export default function LoginForm({ handleSubmit }) {
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Textfield
+                    <TextField
                       name="username"
                       label="Username"
                       data-testid="username-input"
@@ -77,7 +77,7 @@ export default function LoginForm({ handleSubmit }) {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Textfield
+                    <TextField
                       name="password"
                       label="Password"
                       type="password"

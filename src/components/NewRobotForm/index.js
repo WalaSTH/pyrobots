@@ -7,7 +7,7 @@ import AvatarPreview from "../FormsUI/AvatarPreview";
 import FilePreview from "../FormsUI/FilePreview";
 import FileUpload from "../FormsUI/FileUpload";
 import SubmitFormButton from "../FormsUI/SubmitFormButton";
-import TextField from "../FormsUI/Textfield";
+import TextField from "../FormsUI/TextField";
 
 // MUI components
 import { Card, Grid, Typography } from "@mui/material";

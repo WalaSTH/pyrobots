@@ -1,6 +1,6 @@
 import { Form } from "formik";
 import { Card, Grid, Typography } from "@mui/material";
-import Textfield from "../Textfield";
+import TextField from "../TextField";
 import SubmitFormButton from "../SubmitFormButton";
 
 export default function CreateMatchForm() {
@@ -19,7 +19,7 @@ export default function CreateMatchForm() {
             </Grid>
 
             <Grid item xs={12}>
-              <Textfield
+              <TextField
                 name="name"
                 label="Name of the match"
                 autoComplete="off"
@@ -27,7 +27,7 @@ export default function CreateMatchForm() {
             </Grid>
 
             <Grid item xs={12}>
-              <Textfield
+              <TextField
                 name="password"
                 label="Password (Optional)"
                 type="password"
@@ -36,7 +36,7 @@ export default function CreateMatchForm() {
             </Grid>
 
             <Grid item xs={6} textAlign="center">
-              <Textfield
+              <TextField
                 name="min_players"
                 label="Min players"
                 placeholder="2"
@@ -45,7 +45,7 @@ export default function CreateMatchForm() {
             </Grid>
 
             <Grid item xs={6} textAlign="center">
-              <Textfield
+              <TextField
                 name="max_players"
                 label="Max players"
                 placeholder="4"
@@ -54,7 +54,7 @@ export default function CreateMatchForm() {
             </Grid>
 
             <Grid item xs={6}>
-              <Textfield
+              <TextField
                 name="games_per_match"
                 label="Games"
                 placeholder="200"
@@ -63,7 +63,7 @@ export default function CreateMatchForm() {
             </Grid>
 
             <Grid item xs={6}>
-              <Textfield
+              <TextField
                 name="rounds"
                 label="Rounds"
                 placeholder="10000"
@@ -73,7 +73,7 @@ export default function CreateMatchForm() {
 
             <Grid item xs={12} textAlign="center">
               <Typography>Choose your robot!</Typography>
-              <Textfield name="robot_id" label="Robot ID" autoComplete="off" />
+              <TextField name="robot_id" label="Robot ID" autoComplete="off" />
             </Grid>
 
             <Grid item xs={12}>
