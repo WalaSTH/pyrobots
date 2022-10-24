@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import Textfield from "../FormsUI/Textfield";
-import Button from "../FormsUI/Button";
+import SubmitFormButton from "../FormsUI/SubmitFormButton";
 
 const initialFormState = {
   username: "",
@@ -87,9 +87,9 @@ export default function LoginForm({ handleSubmit }) {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Button type="submit" data-testid="login-button">
+                    <SubmitFormButton data-testid="login-button">
                       Login
-                    </Button>
+                    </SubmitFormButton>
                   </Grid>
 
                   <Grid item xs={12}>
