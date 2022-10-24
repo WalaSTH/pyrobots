@@ -5,7 +5,8 @@ import { Form, Formik } from "formik";
 // Custom components for form input with formik and MUI
 import AvatarPreview from "../FormsUI/AvatarPreview";
 import FilePreview from "../FormsUI/FilePreview";
-import FileUpload from "../FormsUI/FileUpload";
+import FileInput from "../FormsUI/FileInput";
+import FileUploadButton from "../FormsUI/FileUploadButton";
 import SubmitFormButton from "../FormsUI/SubmitFormButton";
 import TextField from "../FormsUI/TextField";
 
@@ -88,6 +89,8 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <Typography component="h1" variant="h5">
@@ -102,6 +105,8 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <AvatarPreview
@@ -129,24 +134,17 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <TextField
                 data-testid="robotNameInput"
                 name="name"
-                label="Robot Name"
+                label="Name"
                 autoComplete="off"
                 required
               />
-
-              <FileUpload
-                data-testid="robotAvatar"
-                accept="image/png,image/jpg,image/jpeg"
-                name="avatar"
-                buttonProps={{ startIcon: <AddAPhotoIcon /> }}
-              >
-                Upload avatar
-              </FileUpload>
             </Grid>
 
             <Grid
@@ -156,18 +154,21 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <FilePreview name="code" />
 
-              <FileUpload
-                data-testid="robotCodeInput"
-                accept=".py"
+              <FileInput
                 name="code"
-                buttonProps={{ startIcon: <FileUploadIcon /> }}
-              >
+                accept=".py"
+                data-testid="robotCodeInput"
+              />
+
+              <FileUploadButton name="code" startIcon={<FileUploadIcon />}>
                 Upload file
-              </FileUpload>
+              </FileUploadButton>
             </Grid>
 
             <Grid
@@ -177,9 +178,32 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
-              <SubmitFormButton data-testid="submitButton" SubmitFormButton>
+              <FileInput
+                name="avatar"
+                accept="image/png,image/jpg,image/jpeg"
+                data-testid="robotAvatar"
+              />
+
+              <FileUploadButton name="avatar" startIcon={<AddAPhotoIcon />}>
+                Upload avatar
+              </FileUploadButton>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: 0.5,
+              }}
+            >
+              <SubmitFormButton data-testid="submitButton">
                 Create robot
               </SubmitFormButton>
             </Grid>
