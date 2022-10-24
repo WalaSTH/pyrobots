@@ -13,7 +13,7 @@ describe("<LoginForm", () => {
     render(<LoginForm />);
     screen.getByText(/Sign in/i);
     screen.getByLabelText(/Username/i);
-    screen.getByLabelText(/Password/i);
+    screen.getByLabelText(/assword/i);
   });
 
   it("click button calls event handler", async () => {
