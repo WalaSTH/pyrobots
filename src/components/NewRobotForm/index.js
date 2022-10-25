@@ -31,47 +31,20 @@ const formValidation = Yup.object().shape({
     .required("A name is required")
     .min(2, "Must be at least 2 characters long")
     .max(20, "Must be at most 20 characters long")
-<<<<<<< HEAD
-<<<<<<< HEAD
     .matches(/^[0-9a-z ]+$/i, "Invalid characters"),
-=======
-    .test(
-      "nameValidCharacters",
-      "Invalid characters",
-      (value) => value && value.match(/^[0-9 -_a-z]+$/i)
-    ),
->>>>>>> 564596f (Fix submission of avatar and code files)
-=======
-    .matches(/^[0-9a-z ]+$/i, "Invalid characters"),
->>>>>>> 22b5894 (Fix typo and simplify validation)
+
   code: Yup.mixed()
     .required("No file selected")
     .test(
       "codeFileFormat",
-<<<<<<< HEAD
-<<<<<<< HEAD
       "Unsupported file format",
-=======
-      "Unsopported file format",
->>>>>>> 564596f (Fix submission of avatar and code files)
-=======
-      "Unsupported file format",
->>>>>>> 22b5894 (Fix typo and simplify validation)
       (value) => value && ["text/x-python"].includes(value.type)
     ),
   avatar: Yup.mixed()
     .notRequired()
     .test(
       "avatarFileFormat",
-<<<<<<< HEAD
-<<<<<<< HEAD
       "Unsupported file format",
-=======
-      "Unsopported file format",
->>>>>>> 564596f (Fix submission of avatar and code files)
-=======
-      "Unsupported file format",
->>>>>>> 22b5894 (Fix typo and simplify validation)
       (value) =>
         !value ||
         (value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
@@ -81,20 +54,12 @@ const formValidation = Yup.object().shape({
 export default function NewRobotForm({ onSubmit }) {
   return (
     <Formik
-<<<<<<< HEAD
       initialValues={{ ...initialFormState }}
-=======
-      initialValues={{ ...initial_form_state }}
->>>>>>> 22b5894 (Fix typo and simplify validation)
       initialTouched={{
         code: true,
         avatar: true,
       }}
-<<<<<<< HEAD
       validationSchema={formValidation}
-=======
-      validationSchema={form_validation}
->>>>>>> 22b5894 (Fix typo and simplify validation)
       onSubmit={onSubmit}
     >
       <Card
