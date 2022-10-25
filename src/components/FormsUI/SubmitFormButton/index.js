@@ -10,6 +10,7 @@ export default function ButtonWrapper({ children, ...otherProps }) {
     size: "large",
     fullWidth: true,
     onClick: submitForm,
+    type: "submit",
     ...otherProps,
   };
 
