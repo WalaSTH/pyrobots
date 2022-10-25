@@ -4,8 +4,9 @@ db = pony.orm.Database()
 
 
 db.bind(provider='sqlite', filename='db.pyrobots', create_db=True)
+
 class User(db.Entity):
-    id = PrimaryKey(int, auto=True)id = PrimaryKey(int, auto=True)
+    id = PrimaryKey(int, auto=True)
     user_name = Required(str, unique=True)
     email = Required(str, unique=True)
     password = Required(str)
@@ -14,7 +15,6 @@ class User(db.Entity):
     owned_matches = Set('Match', reverse='creator')
     ongoing_matches = Set('Match', reverse='participants')
     owned_robots = Set('Robot', reverse='owner')
-    
 
 class Robot(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -46,16 +46,24 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
     return new_match.id
 
 @db_session
-def check_user_quantity():
-    return User.select().count()
+def check_user_existance(user_id):
+    return User.select(lambda u: u.id == user_id).count() != 0
 
 @db_session
-def check_robot_quantity():
-    return Robot.select().count()
+def check_robot_existance(robot_id):
+    return Robot.select(lambda r: r.id == robot_id).count() != 0
 
 @db_session
-def check_match_quantity():
-    return Match.select().count()
+def get_last_match_id():
+    return max(m.id for m in Match)
+
+@db_session
+def get_last_robot_id():
+    return max(r.id for r in Robot)
+
+@db_session
+def get_last_user_id():
+    return max(u.id for u in User)
 
 @db_session
 def check_robot_ownership(robot_id, creator):

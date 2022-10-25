@@ -54,14 +54,14 @@ app.add_middleware(
 #match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
-
-    if (match_data.robot_id > check_robot_quantity() or match_data.robot_id <= 0):
+    print(get_last_robot_id())
+    if (match_data.robot_id > check_robot_existance(match_data.robot_id) or match_data.robot_id <= 0):
         raise HTTPException (
             status_code=404,
             detail="No robot with such ID"
         )
 
-    if (match_data.creator > check_user_quantity() or match_data.creator <= 0):
+    if (match_data.creator > check_user_existance(match_data.creator) or match_data.creator <= 0):
         raise HTTPException (
             status_code=404,
             detail="No user with such ID"
