@@ -32,7 +32,6 @@ const formValidation = Yup.object().shape({
     .min(2, "Must be at least 2 characters long")
     .max(20, "Must be at most 20 characters long")
     .matches(/^[0-9a-z ]+$/i, "Invalid characters"),
-
   code: Yup.mixed()
     .required("No file selected")
     .test(
