@@ -19,14 +19,7 @@ export default function NewRobot({ UserID }) {
   async function handleSubmit(values) {
     const formData = new FormData();
     formData.append("code", values.code);
-    if (values.avatar) {
-      formData.append("avatar", values.avatar);
-    } else {
-      const avatar = new File([], "null.png", {
-        type: "image/png",
-      });
-      formData.append("avatar", avatar);
-    }
+    formData.append("avatar", values.avatar);
 
     return axios
       .post("http://127.0.0.1:8000/robot/create", formData, {

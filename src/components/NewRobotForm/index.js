@@ -20,34 +20,30 @@ import {
   SmartToy as SmartToyIcon,
 } from "@mui/icons-material";
 
-const INITIAL_FORM_STATE = {
+const initialFormState = {
   name: "",
-  code: null,
-  avatar: null,
+  code: "",
+  avatar: "",
 };
 
-const FORM_VALIDATION = Yup.object().shape({
+const formValidation = Yup.object().shape({
   name: Yup.string()
     .required("A name is required")
-    .min(2, "Too short!")
-    .max(20, "Too long!")
-    .test(
-      "isAlphanumeric",
-      "Invalid character",
-      (value) => value && value.match(/^[0-9a-z]+$/i)
-    ),
+    .min(2, "Must be at least 2 characters long")
+    .max(20, "Must be at most 20 characters long")
+    .matches(/^[0-9a-z ]+$/i, "Invalid characters"),
   code: Yup.mixed()
     .required("No file selected")
     .test(
-      "codeFormat",
-      "Unsopported file format",
+      "codeFileFormat",
+      "Unsupported file format",
       (value) => value && ["text/x-python"].includes(value.type)
     ),
   avatar: Yup.mixed()
     .notRequired()
     .test(
-      "avatarFormat",
-      "Unsopported file format",
+      "avatarFileFormat",
+      "Unsupported file format",
       (value) =>
         !value ||
         (value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
@@ -57,12 +53,12 @@ const FORM_VALIDATION = Yup.object().shape({
 export default function NewRobotForm({ onSubmit }) {
   return (
     <Formik
-      initialValues={{ ...INITIAL_FORM_STATE }}
+      initialValues={{ ...initialFormState }}
       initialTouched={{
         code: true,
         avatar: true,
       }}
-      validationSchema={FORM_VALIDATION}
+      validationSchema={formValidation}
       onSubmit={onSubmit}
     >
       <Card
