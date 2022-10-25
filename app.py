@@ -34,6 +34,7 @@ description = """
     * Login
     * Upload a photo    
     """
+
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
 tags_metadata = [{"name": "Users", "description": "Operations with users"},
@@ -62,7 +63,7 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
             status_code = status.HTTP_400_BAD_REQUEST,
             detail="Invalid robot name."
         )
-    if (temp_robot.creator > check_user_quantity() or temp_robot.creator < 1):
+    if (temp_robot.creator > get_last_user_id() or temp_robot.creator < 1):
         raise HTTPException (
             status_code = status.HTTP_404_NOT_FOUND,
             detail="There is no user with such ID."
@@ -73,14 +74,14 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
 #match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
-    print(get_last_robot_id())
-    if (match_data.robot_id > check_robot_existance(match_data.robot_id) or match_data.robot_id <= 0):
+
+    if (not check_robot_existance(match_data.robot_id) or match_data.robot_id <= 0):
         raise HTTPException (
             status_code=404,
             detail="No robot with such ID"
         )
 
-    if (match_data.creator > check_user_existance(match_data.creator) or match_data.creator <= 0):
+    if (not check_user_existance(match_data.creator) or match_data.creator <= 0):
         raise HTTPException (
             status_code=404,
             detail="No user with such ID"

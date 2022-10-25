@@ -51,10 +51,6 @@ def create_robot(robot_name,creator, code, avatar):
         new_robot.avatar = None
 
 @db_session
-def check_user_quantity():
-    return User.select().count()
-
-@db_session
 def create_match(match_name, password, game_quantity, round_quantity, min_players, max_players, creator_id, robot_id):
     new_match  = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity, current_players=1, min_players=min_players, max_players=max_players, creator=creator_id)
     new_match.participants.add(User[creator_id])
@@ -63,23 +59,23 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
 
 @db_session
 def check_user_existance(user_id):
-    return User.select(lambda u: u.id == user_id).count() != 0
+    return User.exists(id = user_id)
 
 @db_session
 def check_robot_existance(robot_id):
-    return Robot.select(lambda r: r.id == robot_id).count() != 0
+    return Robot.exists(id = robot_id)
 
 @db_session
 def get_last_match_id():
-    return max(m.id for m in Match)
+    return int(max(m.id for m in Match) or 0)
 
 @db_session
 def get_last_robot_id():
-    return max(r.id for r in Robot)
+    return int(max(r.id for r in Robot) or 0)
 
 @db_session
 def get_last_user_id():
-    return max(u.id for u in User)
+    return int(max(u.id for u in User) or 0)
 
 @db_session
 def check_robot_ownership(robot_id, creator):
