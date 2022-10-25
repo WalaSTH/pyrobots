@@ -39,6 +39,7 @@ export default function NewRobot({ UserID }) {
         if (response.status === 200) {
           setSeverity("success");
           setBody("Succes!");
+          resetForm({});
         } else if (response.status === 400) {
           setSeverity("error");
           setBody("Invalid robot name");
