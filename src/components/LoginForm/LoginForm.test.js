@@ -1,7 +1,7 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import LoginForm from "./LoginForm";
 
 describe("<LoginForm", () => {
@@ -27,7 +27,7 @@ describe("<LoginForm", () => {
     expect(mockHandler.mock.calls).toHaveLength(0);
   });
 
-  it("check if button actually clicks on correct form input", async () => {
+  it("validates username and password field to be not empty after write", async () => {
     const mockHandler = jest.fn();
     render(<LoginForm handleSubmit={mockHandler} />);
 
@@ -38,6 +38,42 @@ describe("<LoginForm", () => {
     await user.type(passwordInput, "Diego123_");
 
     const button = screen.getByTestId("login-button");
+    await user.click(button);
+
+    expect(usernameInput.value).toBe("diego");
+    expect(passwordInput.value).toBe("Diego123_");
+    expect(mockHandler).toHaveBeenCalledTimes(2);
+  });
+
+  it("checks button click", async () => {
+    const mockHandler = jest.fn();
+    render(<LoginForm handleSubmit={mockHandler} />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const passwordInput = screen.getByLabelText("Password");
+
+    await userEvent.type(usernameInput, "diego");
+    await userEvent.type(passwordInput, "Diego123_");
+
+    const button = screen.queryByTestId("login-button");
+    await user.click(button);
+
+    expect(usernameInput.value).toBe("diego");
+    expect(passwordInput.value).toBe("Diego123_");
+    expect(mockHandler).toHaveBeenCalledTimes(2);
+  });
+
+  it("checks button click", async () => {
+    const mockHandler = jest.fn();
+    render(<LoginForm handleSubmit={mockHandler} />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const passwordInput = screen.getByLabelText("Password");
+
+    await userEvent.type(usernameInput, "diego");
+    await userEvent.type(passwordInput, "Diego123_");
+
+    const button = screen.queryByTestId("login-button");
     await user.click(button);
 
     expect(usernameInput.value).toBe("diego");

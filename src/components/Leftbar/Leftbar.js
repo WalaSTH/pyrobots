@@ -112,6 +112,7 @@ export default function Leftbar({ navigate, handleLogout }) {
         <Button
           startIcon={<LogoutIcon />}
           color="inherit"
+          data-testid="logout-button"
           onClick={handleLogout}
         >
           <Typography color="#FFF" textTransform={"none"}>
