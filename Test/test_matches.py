@@ -8,30 +8,34 @@ from pydantic_models import MAX_ROUNDS_PER_GAME, MAX_GAMES_PER_MATCH
 client = TestClient(app)
 
 # Auxiliar data.
-
-user1 = get_random_string_lower(5)
+user1 = "Dummy1"
+pwd = "Test1234"
 user_to_reg = {
     "username": user1,
-    "password": (get_random_string_goodps(8)),
+    "password": pwd,
     "email": (get_email()),
 }
-client.post("/user/signup", params=user_to_reg)
+u1_res = client.post("/user/signup", params=user_to_reg)
+print(u1_res.json())
+assert u1_res.status_code == 200
 
-user2 = get_random_string_lower(5)
+user2 = "Dummy2"
 user_to_reg = {
     "username": user2,
-    "password": (get_random_string_goodps(8)),
+    "password": pwd,
     "email": (get_email()),
 }
-client.post("/user/signup", params=user_to_reg)
+u2_res = client.post("/user/signup", params=user_to_reg)
+assert u2_res.status_code == 200
 
-
+rob_owner = get_last_user_id()
 new_robot_upl = {
-    "robot_name": (get_random_string_lower(5)),
-    "creator": 1
+    "robot_name": "DummyBot1",
+    "creator": rob_owner
 }
 code = open("Tests/files/dummybot.py", "rb")
-client.post("/robot/create", params = new_robot_upl, files={"code":code})
+rob_res = client.post("/robot/create", params = new_robot_upl, files={"code":code})
+assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
 
 # New match creation.
@@ -40,7 +44,7 @@ def test_match_creation():
     rob_id = 0
     while not check_robot_existance(rob_id):
         rob_id = random.randint(1,get_last_robot_id())
-    print(rob_id)
+
     match_to_create = {
         "name": get_random_string_goodps(8),
         "min_players": 2,
@@ -52,8 +56,10 @@ def test_match_creation():
         "password": get_random_string_goodps(8)
     }
     response = client.post("/match/create", json=match_to_create)
-    assert response.json() == {"detail": "Match created successfully", "id": get_last_match_id()}
+    new_match = get_last_match_id()
+    assert response.json() == {"detail": "Match created successfully", "id": new_match}
     assert response.status_code == 200
+    delete_match(new_match)
 
 # New match with unexistant robot.
 def test_match_unexistant_robot():
@@ -102,8 +108,9 @@ def test_match_robot_does_not_belong_to_user():
     rob_id = 0
     while not check_robot_existance(rob_id):
         rob_id = random.randint(1,get_last_robot_id())
+
     u_id = 1
-    while u_id == get_robot_owner_id(rob_id):
+    while u_id == get_robot_owner_id(rob_id) or not check_user_existance(u_id):
         u_id += 1
 
     match_to_create = {
@@ -141,6 +148,7 @@ def test_unstarted_match_already_exists():
 
     response = client.post("/match/create", json=match_to_create)
     response = client.post("/match/create", json=match_to_create)
+    delete_robot(robot1)
     delete_user(user1)
     delete_user(user2)
     assert response.json() == {"detail": "A match with this name already exists"}

@@ -40,8 +40,6 @@ class Match(db.Entity):
 
 db.generate_mapping(create_tables=True)
 
-# --- Robot functions ---
-
 @db_session
 def create_robot(robot_name,creator, code, avatar):
     new_robot = Robot(robot_name = robot_name,code = code.file.read(),  owner = creator)
@@ -56,6 +54,14 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
     new_match.participants.add(User[creator_id])
     new_match.fighters.add(Robot[robot_id])
     return new_match.id
+
+@db_session
+def delete_match(match_id):
+    Match[match_id].delete()
+
+@db_session
+def delete_robot(robot_id):
+    Robot[robot_id].delete()
 
 @db_session
 def check_user_existance(user_id):
@@ -96,7 +102,7 @@ def create_user(user_name, email, password):
 
 @db_session
 def get_user(user_name):
-    return User.get(user_name=user_name)
+    return User.get(user_name=user_name) or None
 
 @db_session
 def get_user_by_email(email):
