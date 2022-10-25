@@ -15,10 +15,12 @@ export default function AvatarPreview({ name, children, ...otherProps }) {
     };
     reader.readAsDataURL(file);
   }
+  const src = isError ? "" : avatarPreview;
 
   const configAvatarPreview = {
     ...field,
-    src: avatarPreview,
+    ...otherProps,
+    src: src,
     alt: "Avatar preview",
     color: "secondary",
     ...otherProps,
