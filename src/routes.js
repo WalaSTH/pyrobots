@@ -4,6 +4,7 @@ import MainPage from "./screens/MainPage/MainPage";
 import NewRobot from "./screens/NewRobot";
 import Register from "./screens/Register/Register";
 import CreateMatch from "./screens/CreateMatch/CreateMatch";
+import Board from "./screens/Board";
 
 export default function RoutesWrapper({
   token,
@@ -52,6 +53,7 @@ export default function RoutesWrapper({
         path="/browse-matches"
         element={privateRoute(token, <></>)}
       />
+      <Route exact path="/board" element={privateRoute(token, <Board />)} />
       <Route exact path="match-history" element={privateRoute(token, <></>)} />
       <Route exact path="settings" element={privateRoute(token, <></>)} />
     </Routes>
