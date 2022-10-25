@@ -23,7 +23,8 @@ export default function AvatarPreview({ name, children, ...otherProps }) {
     src: src,
     alt: "Avatar preview",
     color: "secondary",
+    ...otherProps,
   };
 
-  return <Avatar {...configAvatarPreview}>{children}</Avatar>;
+  return <Avatar {...configAvatarPreview}> {children} </Avatar>;
 }

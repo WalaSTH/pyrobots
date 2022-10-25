@@ -1,7 +1,7 @@
 import { Card, Grid, Typography, Box } from "@mui/material";
-import Textfield from "../Textfield";
-import Button from "../Button";
-import Snackbar from "../../Snackbar/Snackbar";
+import TextField from "../TextField";
+import SubmitFormButton from "../SubmitFormButton";
+import Snackbar from "../Snackbar";
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -124,7 +124,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={12}>
-                <Textfield
+                <TextField
                   name="name"
                   label="Name of the match"
                   autoComplete="off"
@@ -132,7 +132,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={12}>
-                <Textfield
+                <TextField
                   name="password"
                   label="Password (Optional)"
                   type="password"
@@ -141,7 +141,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={6} textAlign="center">
-                <Textfield
+                <TextField
                   name="min_players"
                   label="Min players"
                   placeholder="2"
@@ -150,7 +150,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={6} textAlign="center">
-                <Textfield
+                <TextField
                   name="max_players"
                   label="Max players"
                   placeholder="4"
@@ -159,7 +159,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={6}>
-                <Textfield
+                <TextField
                   name="games_per_match"
                   label="Games"
                   placeholder="200"
@@ -168,7 +168,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={6}>
-                <Textfield
+                <TextField
                   name="rounds"
                   label="Rounds"
                   placeholder="10000"
@@ -178,7 +178,7 @@ export default function CreateMatchForm({ UserID }) {
 
               <Grid item xs={12} textAlign="center">
                 <Typography>Choose your robot!</Typography>
-                <Textfield
+                <TextField
                   name="robot_id"
                   label="Robot ID"
                   autoComplete="off"
@@ -186,7 +186,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={12}>
-                <Button>Create match</Button>
+                <SubmitFormButton>Create match</SubmitFormButton>
               </Grid>
             </Grid>
           </Card>
