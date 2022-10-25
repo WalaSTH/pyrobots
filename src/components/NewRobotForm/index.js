@@ -19,13 +19,13 @@ import {
   SmartToy as SmartToyIcon,
 } from "@mui/icons-material";
 
-const initial_form_state = {
+const initialFormState = {
   name: "",
   code: "",
   avatar: "",
 };
 
-const form_validation = Yup.object().shape({
+const formValidation = Yup.object().shape({
   name: Yup.string()
     .required("A name is required")
     .min(2, "Must be at least 2 characters long")
@@ -52,12 +52,12 @@ const form_validation = Yup.object().shape({
 export default function NewRobotForm({ onSubmit }) {
   return (
     <Formik
-      initialValues={{ ...initial_form_state }}
+      initialValues={{ ...initialFormState }}
       initialTouched={{
         code: true,
         avatar: true,
       }}
-      validationSchema={form_validation}
+      validationSchema={formValidation}
       onSubmit={onSubmit}
     >
       <Card
