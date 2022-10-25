@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 // Custom components for form input with formik and MUI
 import AvatarPreview from "../FormsUI/AvatarPreview";
 import FilePreview from "../FormsUI/FilePreview";
-import FileInput from "../FormsUI/FileInput";
+import FileUploadInput from "../FormsUI/FileUploadInput";
 import FileUploadButton from "../FormsUI/FileUploadButton";
 import SubmitFormButton from "../FormsUI/SubmitFormButton";
 import TextField from "../FormsUI/TextField";
@@ -160,14 +160,14 @@ export default function NewRobotForm({ onSubmit }) {
             >
               <FilePreview name="code" />
 
-              <FileInput
+              <FileUploadInput
                 name="code"
                 accept=".py"
                 data-testid="robotCodeInput"
               />
 
               <FileUploadButton name="code" startIcon={<FileUploadIcon />}>
-                Upload file
+                Select file
               </FileUploadButton>
             </Grid>
 
@@ -182,14 +182,14 @@ export default function NewRobotForm({ onSubmit }) {
                 marginBottom: -0.5,
               }}
             >
-              <FileInput
+              <FileUploadInput
                 name="avatar"
                 accept="image/png,image/jpg,image/jpeg"
                 data-testid="robotAvatar"
               />
 
               <FileUploadButton name="avatar" startIcon={<AddAPhotoIcon />}>
-                Upload avatar
+                Select avatar
               </FileUploadButton>
             </Grid>
 

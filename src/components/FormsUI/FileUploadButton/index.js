@@ -1,7 +1,7 @@
 import { Button, FormHelperText } from "@mui/material";
 import { useField, useFormikContext } from "formik";
 
-export default function FileUpload({ name, children, ...otherProps }) {
+export default function FileUploadButton({ name, children, ...otherProps }) {
   const [, meta] = useField(name);
   const isError = meta.touched && meta.error;
 
