@@ -1,8 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
+from typing import Union, Optional 
 from fastapi.responses import FileResponse
-from fastapi import Depends, HTTPException, status, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
 from security_functions import *
@@ -18,6 +18,7 @@ MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
 
 
+
 description = """ 
     PyRobots 🤖
     
@@ -27,16 +28,18 @@ description = """
     
     ## Functionalities 🛠
     
-    * Create a new user
-    * Login
-    * Upload a photo
     * Create a match
+    * Create a new user
+    * Create a robot
+    * Login
+    * Upload a photo    
     """
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
 tags_metadata = [{"name": "Users", "description": "Operations with users"},
                  {"name": "Token", "description": "Token login"},
-                 {"name": "matches", "description": "Operations with matches"}]
+                 {"name": "matches", "description": "Operations with matches"},
+                 {"name": "Robots", "description": "Manage Robot"}]
 
 app = FastAPI(
     title="PyRobots",
@@ -50,6 +53,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.post("/robot/create", tags=["Robots"], status_code = 200)
+async def robot_upload(temp_robot: TempRobot = Depends()):
+    if not (temp_robot.robot_name.replace(' ','').isalnum()):
+        raise HTTPException (
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail="Invalid robot name."
+        )
+    if (temp_robot.creator > check_user_quantity() or temp_robot.creator < 1):
+        raise HTTPException (
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail="There is no user with such ID."
+        )
+    create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
+    return {"detail":"Robot created succesfully."}
 
 #match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
@@ -103,7 +122,7 @@ def match_creation(match_data: TempMatch):
 
 #registro de usuario
 @app.post("/user/signup", tags=["Users"],status_code=200)
-async def user_register(user_to_reg: UserTemp = Depends()):
+async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[UploadFile] = None):
     """USER REGISTER FUNCTION"""
 
     invalid_fields = HTTPException(
@@ -119,7 +138,7 @@ async def user_register(user_to_reg: UserTemp = Depends()):
         raise invalid_fields
     elif any(char.isupper() for char in user_to_reg.password) == False or \
             any(char.islower() for char in user_to_reg.password) == False or \
-            any(char.isdigit() for char in user_to_reg.password) == False  :
+            any(char.isdigit() for char in user_to_reg.password) == False:
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,
             detail="password must have at least one uppercase, one lowercase and one number"
@@ -134,9 +153,12 @@ async def user_register(user_to_reg: UserTemp = Depends()):
             status_code= status.HTTP_401_UNAUTHORIZED,
             detail="existing username"
         )
-
     else:
         create_user(user_to_reg.username, user_to_reg.email, get_password_hash(user_to_reg.password))
+        if photo != None:
+            upload_photo_db(user_to_reg.username, photo.file.read())
+        else:
+            upload_photo_db(user_to_reg.username, None)
         return {"detail": "User created successfully"}
 
 
@@ -186,7 +208,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "username": user.user_name,"id":user.id}
 
 
 @app.get("/user/me/")
@@ -197,3 +219,4 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @app.get("/user/me/items/")
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
+

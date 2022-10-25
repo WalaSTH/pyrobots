@@ -21,6 +21,8 @@ def test_user_register():
     assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
     delete_user(user_to_reg["username"])
+
+
 #Creation new user with invalid username
 def test_user_register_invalid_username():
     user_to_reg = {

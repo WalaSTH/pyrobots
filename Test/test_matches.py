@@ -3,6 +3,7 @@ from Database.Database import *
 from Test.auxiliar_functions import *
 from app import app
 import random
+from pydantic_models import MAX_ROUNDS_PER_GAME, MAX_GAMES_PER_MATCH
 
 client = TestClient(app)
 
@@ -17,8 +18,8 @@ def test_match_creation():
         "name": get_random_string_goodps(8),
         "min_players": 2,
         "max_players": 4,
-        "games_per_match": random.randint(20, 10000),
-        "rounds": random.randint(20,10000),
+        "games_per_match": random.randint(1, MAX_GAMES_PER_MATCH),
+        "rounds": random.randint(1,MAX_ROUNDS_PER_GAME),
         "robot_id": rob_id,
         "creator": get_robot_owner_id(rob_id),
         "password": get_random_string_goodps(8)
@@ -35,8 +36,8 @@ def test_match_unexistant_robot():
         "name": get_random_string_goodps(8),
         "min_players": 2,
         "max_players": 4,
-        "games_per_match": random.randint(20, 10000),
-        "rounds": random.randint(20,10000),
+        "games_per_match": random.randint(1, MAX_GAMES_PER_MATCH),
+        "rounds": random.randint(1,MAX_ROUNDS_PER_GAME),
         "robot_id": rob_id,
         "creator": get_robot_owner_id(rob_id - 1),
         "password": get_random_string_goodps(8)
@@ -57,8 +58,8 @@ def test_match_unexistant_user():
         "name": get_random_string_goodps(8),
         "min_players": 2,
         "max_players": 4,
-        "games_per_match": random.randint(20, 10000),
-        "rounds": random.randint(20,10000),
+        "games_per_match": random.randint(1, MAX_GAMES_PER_MATCH),
+        "rounds": random.randint(1,MAX_ROUNDS_PER_GAME),
         "robot_id": rob_id,
         "creator": get_last_user_id()+1,
         "password": get_random_string_goodps(8)
@@ -74,15 +75,18 @@ def test_match_robot_does_not_belong_to_user():
     rob_id = 0
     while not check_robot_existance(rob_id):
         rob_id = random.randint(1,get_last_robot_id())
+    u_id = 1
+    while u_id == get_robot_owner_id(rob_id):
+        u_id+= 1
 
     match_to_create = {
         "name": get_random_string_goodps(8),
         "min_players": 2,
         "max_players": 4,
-        "games_per_match": random.randint(20, 10000),
-        "rounds": random.randint(20,10000),
+        "games_per_match": random.randint(1, MAX_GAMES_PER_MATCH),
+        "rounds": random.randint(1,MAX_ROUNDS_PER_GAME),
         "robot_id": rob_id,
-        "creator": 1 if get_robot_owner_id(rob_id) else 2,
+        "creator": u_id,
         "password": get_random_string_goodps(8)
     }
 
@@ -101,8 +105,8 @@ def test_unstarted_match_already_exists():
         "name": get_random_string_goodps(8),
         "min_players": 2,
         "max_players": 4,
-        "games_per_match": random.randint(20, 10000),
-        "rounds": random.randint(20,10000),
+        "games_per_match": random.randint(1, MAX_GAMES_PER_MATCH),
+        "rounds": random.randint(1,MAX_ROUNDS_PER_GAME),
         "robot_id": rob_id,
         "creator": get_robot_owner_id(rob_id),
         "password": get_random_string_goodps(8)

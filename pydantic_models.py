@@ -1,4 +1,6 @@
+
 from pydantic import BaseModel, EmailStr
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from typing import List, Optional, Union
 
 MIN_PLAYERS_PER_MATCH = 2
@@ -10,17 +12,15 @@ class UserTemp(BaseModel):
     username: str
     password: str
     email: EmailStr
-    photo: Optional[str] = None
-
 
 class Token(BaseModel):
     access_token: str
     token_type: str
-
+    username: str
+    id: int
 
 class TokenData(BaseModel):
     username: Optional[str] = None
-
 
 class User(BaseModel):
     username: str
@@ -35,3 +35,10 @@ class TempMatch(BaseModel):
     robot_id: int
     creator: int
     password: Union[str, None] = None
+
+class TempRobot(BaseModel):
+    robot_name: str
+    creator: int
+    code: UploadFile = File(...)
+    avatar: Union[UploadFile, None] = None
+
