@@ -8,8 +8,8 @@ describe("NewRobotForm", () => {
     render(<NewRobotForm />);
     screen.getByText(/New Robot/i);
     screen.getByLabelText(/Name/i);
-    screen.getByText(/Upload Avatar/i);
-    screen.getByText(/Upload File/i);
+    screen.getByText(/Select Avatar/i);
+    screen.getByText(/Select File/i);
     screen.getByText(/Create Robot/i);
   });
 });
