@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 
-export default function FileUpload({ name, ...otherProps }) {
+export default function FileUploadInput({ name, ...otherProps }) {
   const { setFieldValue } = useFormikContext();
 
   function handleChange(e) {
