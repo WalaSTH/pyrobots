@@ -70,6 +70,15 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
     create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
     return {"detail":"Robot created succesfully."}
 
+@app.get("/robot/{robot_id}/position", tags=["Robots"], status_code = 200)
+async def robot_position(temp_robot: Robot = Depends()):
+    id_robot = get_id_robot(temp_robot.robot_name, temp_robot.creator)
+    set_position_robot_x_y(id_robot, temp_robot.position_x, temp_robot.position_y)
+
+    position_x = get_position_robot_x(id_robot)
+    position_y = get_position_robot_y(id_robot)
+    return {"position_x": position_x, "position_y": position_y}
+
 #match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
@@ -146,7 +155,7 @@ async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[Uploa
     elif email_exists(user_to_reg.email):
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,
-            detail="existing user"
+            detail="Exist a user with this email"
         )
     elif user_exists(user_to_reg.username):
         raise HTTPException(

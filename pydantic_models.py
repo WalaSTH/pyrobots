@@ -42,3 +42,11 @@ class TempRobot(BaseModel):
     code: UploadFile = File(...)
     avatar: Union[UploadFile, None] = None
 
+class Robot(BaseModel):
+    robot_name: str
+    creator: int
+    match_robot: str
+    position_x: int = None
+    position_y: int = None
+
+
