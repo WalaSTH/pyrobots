@@ -14,6 +14,7 @@ export default function FileUpload({
 
   function handleChange(e) {
     setFieldValue(name, e.target.files[0]);
+    e.target.value = "";
   }
 
   const configInput = {
