@@ -58,7 +58,7 @@ def get_robot_list(owner_id):
 
     for r in robot_list:
         if (r.owner).id == owner_id:
-            res_list.append((r.id, r.robot_name, (r.owner).user_name))
+            res_list.append(r.id, r.robot_name, r.avatar)
 
     return res_list
 
