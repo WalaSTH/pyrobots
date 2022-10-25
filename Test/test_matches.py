@@ -8,27 +8,31 @@ from pydantic_models import MAX_ROUNDS_PER_GAME, MAX_GAMES_PER_MATCH
 client = TestClient(app)
 
 # Auxiliar data.
-def test_auxiliar_data():
-    user_to_reg = {
-        "username": (get_random_string_lower(5)),
-        "password": (get_random_string_goodps(8)),
-        "email": (get_email()),
-    }
-    client.post("/user/signup", params=user_to_reg)
 
-    user_to_reg = {
-        "username": (get_random_string_lower(5)),
-        "password": (get_random_string_goodps(8)),
-        "email": (get_email()),
-    }
-    client.post("/user/signup", params=user_to_reg)
+user1 = get_random_string_lower(5)
+user_to_reg = {
+    "username": user1,
+    "password": (get_random_string_goodps(8)),
+    "email": (get_email()),
+}
+client.post("/user/signup", params=user_to_reg)
 
-    new_robot_upl = {
-        "robot_name": (get_random_string_lower(5)),
-        "creator": 1
-    }
-    code = open("Tests/files/dummybot.py", "rb")
-    client.post("/robot/create", params = new_robot_upl, files={"code":code})
+user2 = get_random_string_lower(5)
+user_to_reg = {
+    "username": user2,
+    "password": (get_random_string_goodps(8)),
+    "email": (get_email()),
+}
+client.post("/user/signup", params=user_to_reg)
+
+
+new_robot_upl = {
+    "robot_name": (get_random_string_lower(5)),
+    "creator": 1
+}
+code = open("Tests/files/dummybot.py", "rb")
+client.post("/robot/create", params = new_robot_upl, files={"code":code})
+robot1 = get_last_robot_id()
 
 # New match creation.
 def test_match_creation():
@@ -137,5 +141,7 @@ def test_unstarted_match_already_exists():
 
     response = client.post("/match/create", json=match_to_create)
     response = client.post("/match/create", json=match_to_create)
+    delete_user(user1)
+    delete_user(user2)
     assert response.json() == {"detail": "A match with this name already exists"}
     assert response.status_code == 409
