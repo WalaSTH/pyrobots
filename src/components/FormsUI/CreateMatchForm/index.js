@@ -82,7 +82,6 @@ export default function CreateMatchForm() {
           </Grid>
         </Card>
       </Form>
-      ;
     </>
   );
 }
