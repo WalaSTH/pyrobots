@@ -118,7 +118,7 @@ export default function RegisterForm() {
               >
                 <Grid container spacing={2} sx={{ justifyContent: "center" }}>
                   <Grid item xs={12} sx={{ textAlign: "center" }}>
-                    <Typography sx={{ fontSize: 18, fontWeight: 500 }}>
+                    <Typography component="h1" variant="h5">
                       Register
                     </Typography>
                   </Grid>
@@ -153,11 +153,23 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={6}>
+<<<<<<< HEAD
                     <TextField name="username" label="Name" />
                   </Grid>
 
                   <Grid item xs={6}>
                     <TextField name="email" label="Email" />
+=======
+                    <Textfield
+                      name="username"
+                      label="Name"
+                      autoComplete="off"
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <Textfield name="email" label="Email" autoComplete="off" />
+>>>>>>> 3a1d4e9 (Minor design details in register form and create match form)
                   </Grid>
 
                   <Grid item xs={12}>
@@ -177,7 +189,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <SubmitFormButton>Crear partida</SubmitFormButton>
+                    <ButtonForm>Register</ButtonForm>
                   </Grid>
                 </Grid>
               </Card>
