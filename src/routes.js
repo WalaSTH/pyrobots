@@ -7,7 +7,6 @@ import CreateMatch from "./screens/CreateMatch/CreateMatch";
 
 export default function RoutesWrapper({
   token,
-  setToken,
   navigate,
   handleLogin,
   userID,
