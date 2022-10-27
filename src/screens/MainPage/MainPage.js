@@ -13,7 +13,9 @@ export default function MainPage({ token, navigate }) {
         paddingTop: "200px",
       }}
     >
-      <Card sx={{ padding: 3, borderRadius: 3, width: "50%" }}>
+      <Card
+        sx={{ padding: 3, borderRadius: 3, width: "xs: {100%}, sm: {50%}" }}
+      >
         <Box
           display="flex"
           flexDirection="column"
@@ -26,7 +28,6 @@ export default function MainPage({ token, navigate }) {
               fontSize: "4rem",
               color: "#1976d2",
               marginBottom: "5px",
-              textShadow: "0px 0px 60px #050113",
             }}
           >
             Py Robots
