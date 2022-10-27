@@ -1,6 +1,6 @@
 import LoginForm from "../../components/LoginForm/LoginForm";
 import Snackbar from "../../components/FormsUI/Snackbar";
-import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import { useState } from "react";
 import axios from "axios";
 
@@ -55,14 +55,11 @@ export default function Login({ handleLogin }) {
     });
   };
   return (
-    <Box
+    <Container
+      component="main"
+      maxWidth="xs"
       sx={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#efefef",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        marginTop: 20,
       }}
     >
       <LoginForm handleSubmit={handleSubmit} />
@@ -74,6 +71,6 @@ export default function Login({ handleLogin }) {
           handleClose={handleClose}
         />
       )}
-    </Box>
+    </Container>
   );
 }
