@@ -1,11 +1,29 @@
-import { Container } from "@mui/system";
-import { useEffect, useRef, useState } from "react";
-import { Stage, Layer } from "react-konva";
+import { Box } from "@mui/system";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
+import { Stage, Layer, Rect } from "react-konva";
 import Robot from "../../components/Robot";
 
 export default function Board() {
   const intervalRef = useRef();
+  const stageRef = useRef();
   const [position, setPosition] = useState(0);
+  const sceneWidth = 1000;
+  const sceneHeight = 1000;
+
+  function fitStageIntoParentContainer() {
+    var container = document.querySelector("#stage-parent");
+
+    // now we need to fit stage into parent container
+    var containerWidth = container.offsetWidth;
+
+    // but we also make the full scene visible
+    // so we need to scale all objects on canvas
+    var scale = containerWidth / sceneWidth;
+
+    stageRef.current.width(sceneWidth * scale);
+    stageRef.current.height(sceneHeight * scale);
+    stageRef.current.scale({ x: scale, y: scale });
+  }
 
   const robotPositions = [
     { x: 200, y: 200 },
@@ -19,6 +37,8 @@ export default function Board() {
     { x: 800, y: 400 },
   ];
 
+  const scan = [10, 100, 200];
+
   useEffect(() => {
     intervalRef.current = getInterval();
     return () => clearInterval(intervalRef.current);
@@ -31,27 +51,21 @@ export default function Board() {
     return progressInterval;
   };
 
+  useLayoutEffect(() => {
+    fitStageIntoParentContainer();
+  });
+
   return (
-    <Container style={{ marginTop: "7rem" }}>
-      <Stage
-        width={1000}
-        height={800}
-        style={{
-          backgroundColor: "white",
-          border: ".1rem solid black",
-          borderRadius: 8,
-          display: "grid",
-          gridTemplateRows: "repeat(#,1fr)",
-        }}
-      >
-        <Layer x={40} y={100}>
+    <Box style={{ margin: "auto" }} id="stage-parent">
+      <Stage ref={stageRef}>
+        <Layer>
           <Robot
-            position={robotPositions[position]}
+            position={robotPositions[position % robotPositions.length]}
+            radius={scan[position % scan.length]}
             fill="#F5447F"
-            radius={10}
           />
         </Layer>
       </Stage>
-    </Container>
+    </Box>
   );
 }
