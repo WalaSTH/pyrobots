@@ -40,7 +40,7 @@ class Match(db.Entity):
 
 db.generate_mapping(create_tables=True)
 
-# --- Robot functions ---
+# Robot functions.
 
 @db_session
 def create_robot(robot_name,creator, code, avatar):
@@ -49,7 +49,6 @@ def create_robot(robot_name,creator, code, avatar):
         new_robot.avatar = avatar.file.read()
     else:
         new_robot.avatar = None
-    return new_robot.id
 
 @db_session
 def get_robot_list(owner_name):
@@ -63,8 +62,26 @@ def get_robot_list(owner_name):
     return res_list
 
 @db_session
-def check_user_quantity():
-    return User.select().count()
+def delete_robot(robot_id):
+    Robot[robot_id].delete()
+
+@db_session
+def check_robot_existance(robot_id):
+    return Robot.exists(id = robot_id)
+
+@db_session
+def get_last_robot_id():
+    return int(max(r.id for r in Robot) or 0)
+
+@db_session
+def check_robot_ownership(robot_id, creator):
+    return Robot[robot_id].owner != User[creator]
+
+@db_session
+def get_robot_owner_id(rob_id):
+    return Robot[rob_id].owner.id
+
+# Match functions.
 
 @db_session
 def create_match(match_name, password, game_quantity, round_quantity, min_players, max_players, creator_id, robot_id):
@@ -74,37 +91,26 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
     return new_match.id
 
 @db_session
-def check_user_quantity():
-    return User.select().count()
+def delete_match(match_id):
+    Match[match_id].delete()
 
 @db_session
-def check_robot_quantity():
-    return Robot.select().count()
-
-@db_session
-def check_match_quantity():
-    return Match.select().count()
-
-@db_session
-def check_robot_ownership(robot_id, creator):
-    return Robot[robot_id].owner != User[creator]
+def get_last_match_id():
+    return int(max(m.id for m in Match) or 0)
 
 @db_session
 def check_match_name_exists(match_name):
     return Match.exists(lambda m: m.name == match_name and m.started == False)
 
-@db_session
-def get_robot_owner_id(rob_id):
-    return Robot[rob_id].owner.id
+# User functions.
 
-# --- user functions ---
 @db_session
 def create_user(user_name, email, password):
         User(user_name=user_name, email=email, password=password, verified=False, photo=None)
 
 @db_session
 def get_user(user_name):
-    return User.get(user_name=user_name)
+    return User.get(user_name=user_name) or None
 
 @db_session
 def get_user_by_email(email):
@@ -128,6 +134,10 @@ def user_exists(user_name):
     return User.exists(user_name=user_name)
 
 @db_session
+def check_user_existance(user_id):
+    return User.exists(id = user_id)
+
+@db_session
 def user_is_verified(user_name):
     return User.get(user_name=user_name).verified
 
@@ -148,3 +158,7 @@ def user_have_photo(user_name):
 def delete_user_photo(user_name):
     user = get_user(user_name)
     user.photo = ""
+
+@db_session
+def get_last_user_id():
+    return int(max(u.id for u in User) or 0)
