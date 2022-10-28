@@ -7,6 +7,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
+from connections import *
 
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
@@ -55,6 +56,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+manager = ConnectionManager()
 
 @app.post("/robot/create", tags=["Robots"], status_code = 200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
@@ -221,3 +223,10 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
 
+# WebSockets
+@app.websocket("/ws/{client_id}")
+async def websocket_endpoint(websocket: WebSocket, client_id: int):
+    await manager.connect(websocket)
+    while True:
+        data = await websocket.receive_text()
+        await manager.broadcast(f"Client #{client_id}: {data}")
