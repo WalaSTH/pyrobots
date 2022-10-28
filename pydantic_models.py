@@ -43,4 +43,4 @@ class TempRobot(BaseModel):
     avatar: Union[UploadFile, None] = None
 
 class RobotOwner(BaseModel):
-    id: int
+    user_name: str

@@ -72,14 +72,14 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
 
 #robot listing
 @app.get("/robot/available", tags=["Robots"], status_code=200)
-async def match_listing(robot_owner: RobotOwner = Depends()):
-    if (robot_owner.id > check_user_quantity() or robot_owner <= 0):
+async def robot_listing(robot_owner: RobotOwner = Depends()):
+    if (robot_owner.user_name == ""):
         raise HTTPException (
             status_code=404,
             detail="No user with such ID"
         )
 
-    res_list = get_robot_list(robot_owner)
+    res_list = get_robot_list(robot_owner.user_name)
 
     if (res_list == []):
         raise HTTPException(
