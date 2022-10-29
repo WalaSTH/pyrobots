@@ -21,7 +21,7 @@ export default function NewRobot({ UserID }) {
     formData.append("code", values.code);
     formData.append("avatar", values.avatar);
 
-    return axios
+    return await axios
       .post("http://127.0.0.1:8000/robot/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

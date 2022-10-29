@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./screens/Login/Login";
 import MainPage from "./screens/MainPage/MainPage";
 import NewRobot from "./screens/NewRobot";
+import CreateSim from "./screens/CreateSim";
 import Register from "./screens/Register/Register";
 import CreateMatch from "./screens/CreateMatch/CreateMatch";
 
@@ -44,7 +45,7 @@ export default function RoutesWrapper({
       <Route
         exact
         path="/create-simulation"
-        element={privateRoute(token, <></>)}
+        element={privateRoute(token, <CreateSim UserID={UserID} />)}
       />
       <Route exact path="/profile" element={privateRoute(token, <></>)} />
       <Route
