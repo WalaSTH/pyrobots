@@ -22,8 +22,6 @@ class Robot(db.Entity):
     fights = Set('Match', reverse='fighters')
     code = Required(bytes)
     avatar = Optional(bytes)
-    position_x = Optional(int)
-    position_y = Optional(int)
 
 
 class Match(db.Entity):
@@ -105,19 +103,6 @@ def robot_in_game(robot_id):
 def robot_in_that_match(robot_id, match_name):
     return match_name in Robot[robot_id].fights.name
 
-@db_session
-def get_position_robot_x(rob_id):
-    return Robot[rob_id].position_x
-
-@db_session
-def get_position_robot_y(rob_id):
-    return Robot[rob_id].position_y
-
-@db_session
-def set_position_robot_x_y(rob_id, x,y):
-    Robot[rob_id].position_x = x
-    Robot[rob_id].position_y = y
-
 # --- user functions ---
 @db_session
 def create_user(user_name, email, password):
@@ -170,3 +155,6 @@ def delete_user_photo(user_name):
     user = get_user(user_name)
     user.photo = ""
 
+@db_session
+def get_user_id(user_name):
+    return User.get(user_name=user_name).id

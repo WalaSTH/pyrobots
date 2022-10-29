@@ -44,8 +44,7 @@ class TempRobot(BaseModel):
 
 class Robot(BaseModel):
     robot_name: str
-    creator: int
-    match_robot: str
+    creator: str
     position_x: int = None
     position_y: int = None
 

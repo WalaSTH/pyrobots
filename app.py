@@ -1,12 +1,13 @@
 from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Union, Optional 
+from typing import Union, Optional
 from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
+from random import *
 
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
@@ -71,13 +72,18 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
     return {"detail":"Robot created succesfully."}
 
 @app.get("/robot/{robot_id}/position", tags=["Robots"], status_code = 200)
-async def robot_position(temp_robot: Robot = Depends()):
-    id_robot = get_id_robot(temp_robot.robot_name, temp_robot.creator)
-    set_position_robot_x_y(id_robot, temp_robot.position_x, temp_robot.position_y)
-
-    position_x = get_position_robot_x(id_robot)
-    position_y = get_position_robot_y(id_robot)
-    return {"position_x": position_x, "position_y": position_y}
+async def robot_position(robot_postition: Robot = Depends()):
+    id_user = get_user_id(robot_postition.creator)
+    id_robot = get_id_robot(robot_postition.robot_name, id_user)
+    if id_robot == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Robot not found."
+        )
+    else:
+        robot_position.position_x = randint(0, 1000)
+        robot_position.position_y = randint(0, 1000)
+    return {"position_x": robot_position.position_x, "position_y": robot_position.position_y}
 
 #match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
