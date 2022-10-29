@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Routes from "./routes";
-import Leftbar from "./components/Leftbar";
+import NavigationLayout from "./layouts/Main";
 
 export default function App() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function App() {
   const [UserID, setUserID] = useState(localStorage.getItem("UserID"));
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
-  const handleLogin = (t) => {
+  function handleLogin(t) {
     localStorage.setItem("token", t.access_token);
     localStorage.setItem("UserID", t.id);
     localStorage.setItem("username", t.username);
@@ -19,9 +19,9 @@ export default function App() {
     setUserID(t.id);
     setUsername(t.username);
     navigate("/");
-  };
+  }
 
-  const handleLogout = (e) => {
+  function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("UserID");
     localStorage.removeItem("username");
@@ -29,14 +29,17 @@ export default function App() {
     setUserID(null);
     setUsername(null);
     navigate("/");
-  };
+  }
 
   return (
     <Box>
-      <Leftbar navigate={navigate} handleLogout={handleLogout} token={token} />
+      <NavigationLayout
+        navigate={navigate}
+        handleLogout={handleLogout}
+        token={token}
+      />
       <Routes
         token={token}
-        setToken={setToken}
         navigate={navigate}
         handleLogin={handleLogin}
         userID={user_id}
