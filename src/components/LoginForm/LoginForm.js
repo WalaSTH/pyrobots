@@ -66,6 +66,7 @@ export default function LoginForm({ handleSubmit }) {
                 name="password"
                 label="Password"
                 type="password"
+                autoComplete="off"
                 data-testid="password-input"
               />
             </Grid>
