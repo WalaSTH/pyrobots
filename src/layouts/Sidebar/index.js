@@ -51,7 +51,7 @@ export default function DrawerWrapper({
             height: "100%",
           }}
         >
-          <Box display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center" alignItems="center">
             <IconButton
               size="large"
               edge="start"
@@ -85,7 +85,7 @@ export default function DrawerWrapper({
             </Box>
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/")}>
-                <ListItemIcon className="{classes.icon}">
+                <ListItemIcon>
                   <Home sx={{ color: "#fff " }} />
                 </ListItemIcon>
                 <ListItemText primary="Home" />
