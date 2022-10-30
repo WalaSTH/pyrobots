@@ -78,7 +78,11 @@ export default function CreateMatch({ userID }) {
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ marginTop: 10 }}>
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ marginTop: { xs: 10, md: 5 } }}
+    >
       <Formik
         initialValues={{
           ...initialFormState,

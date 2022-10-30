@@ -7,25 +7,23 @@ import FormatListBulletedTwoToneIcon from "@mui/icons-material/FormatListBullete
 export default function MainPage({ token, navigate }) {
   return (
     <Container
+      maxWidth="sm"
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        paddingTop: "200px",
+        marginTop: "200px",
       }}
     >
       <Card
-        sx={{ padding: 3, borderRadius: 3, width: "xs: {100%}, sm: {50%}" }}
+        sx={{
+          padding: 3,
+          borderRadius: 3,
+          width: "xs: {100%}, sm: {50%}",
+        }}
       >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Box display="flex" flexDirection="column" alignItems="center">
           <Typography
             sx={{
               fontFamily: "Rajdhani",
-              fontSize: "4rem",
+              fontSize: { xs: "3.6rem", md: "4rem" },
               color: "#1976d2",
               marginBottom: "5px",
             }}
@@ -43,9 +41,7 @@ export default function MainPage({ token, navigate }) {
             Build your own robot and compete!
           </Typography>
           {!token && (
-            <Box
-              sx={{ display: "flex", flexDirection: "row", marginTop: "10px" }}
-            >
+            <Box sx={{ display: "flex", marginTop: "10px" }}>
               <Button
                 variant="contained"
                 startIcon={<LoginIcon />}
@@ -64,11 +60,13 @@ export default function MainPage({ token, navigate }) {
             </Box>
           )}
           {token && (
-            <Box marginTop="10px">
+            <Box sx={{ display: "flex", marginTop: "10px" }}>
               <Button
                 variant="outlined"
                 startIcon={<AddCircleIcon />}
-                sx={{ marginRight: "5px" }}
+                sx={{
+                  marginRight: "10px",
+                }}
                 onClick={() => navigate("/create-match")}
               >
                 Create match
@@ -76,7 +74,6 @@ export default function MainPage({ token, navigate }) {
               <Button
                 variant="outlined"
                 startIcon={<FormatListBulletedTwoToneIcon />}
-                sx={{ marginLeft: "5px" }}
                 onClick={() => navigate("/browse-matches")}
               >
                 Find match

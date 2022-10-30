@@ -56,7 +56,7 @@ export default function DrawerWrapper({
               <SmartToyIcon sx={{ color: "#fff" }} />
             </IconButton>
             <Typography variant="h6" sx={{ my: 2 }} color="#fff">
-              Py-Robots
+              Py Robots
             </Typography>
           </Box>
           <Divider />
@@ -70,7 +70,11 @@ export default function DrawerWrapper({
                 alignItems: "center",
               }}
             >
-              <Avatar sx={{ color: "#fff", marginBottom: "3px" }}>D</Avatar>
+              <Avatar
+                src="null"
+                alt={username}
+                sx={{ color: "#fff", marginBottom: "3px" }}
+              />
               <Typography>{username}</Typography>
             </Box>
             <ListItem disablePadding>

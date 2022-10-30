@@ -9,15 +9,13 @@ export default function App() {
 
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user_id, setUserID] = useState(localStorage.getItem("userID"));
-  const [username, setUsername] = useState(localStorage.getItem("username"));
 
   function handleLogin(t) {
     localStorage.setItem("token", t.access_token);
-    localStorage.setItem("userID", t.userid);
+    localStorage.setItem("userID", t.id);
     localStorage.setItem("username", t.username);
     setToken(t.access_token);
     setUserID(t.id);
-    setUsername(t.username);
     navigate("/");
   }
 
@@ -27,12 +25,11 @@ export default function App() {
     localStorage.removeItem("username");
     setToken(null);
     setUserID(null);
-    setUsername(null);
     navigate("/");
   }
 
   return (
-    <Box>
+    <Box display="flex" height="100vh">
       <NavigationLayout
         navigate={navigate}
         handleLogout={handleLogout}
