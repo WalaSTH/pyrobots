@@ -4,10 +4,17 @@ import Container from "@mui/material/Container";
 import { useState } from "react";
 import axios from "axios";
 
-export default function Login({ handleLogin }) {
+export default function Login({ navigate }) {
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
+
+  function handleLogin(t) {
+    localStorage.setItem("token", t.access_token);
+    localStorage.setItem("userID", t.id);
+    localStorage.setItem("username", t.username);
+    navigate("/");
+  }
 
   const handleClose = (reason) => {
     if (reason === "clickaway") {
