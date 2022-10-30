@@ -5,8 +5,8 @@ import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import Textfield from "../FormsUI/Textfield";
-import Button from "../FormsUI/Button";
+import TextField from "../FormsUI/TextField";
+import SubmitFormButton from "../FormsUI/SubmitFormButton";
 
 const initialFormState = {
   username: "",
@@ -53,7 +53,7 @@ export default function LoginForm({ handleSubmit }) {
             </Grid>
 
             <Grid item xs={12}>
-              <Textfield
+              <TextField
                 name="username"
                 label="Username"
                 autoComplete="off"
@@ -62,7 +62,7 @@ export default function LoginForm({ handleSubmit }) {
             </Grid>
 
             <Grid item xs={12}>
-              <Textfield
+              <TextField
                 name="password"
                 label="Password"
                 type="password"
@@ -70,13 +70,11 @@ export default function LoginForm({ handleSubmit }) {
                 data-testid="password-input"
               />
             </Grid>
-
             <Grid item xs={12}>
-              <Button type="submit" data-testid="login-button">
+              <SubmitFormButton data-testid="login-button">
                 Login
-              </Button>
+              </SubmitFormButton>
             </Grid>
-
             <Grid item xs={12}>
               <Link href="/register" variant="body2">
                 {"Don't have an account? Sign Up"}

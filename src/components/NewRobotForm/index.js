@@ -5,9 +5,10 @@ import { Form, Formik } from "formik";
 // Custom components for form input with formik and MUI
 import AvatarPreview from "../FormsUI/AvatarPreview";
 import FilePreview from "../FormsUI/FilePreview";
-import FileUpload from "../FormsUI/FileUpload";
-import SubmitButton from "../FormsUI/SubmitButton";
-import TextField from "../FormsUI/Textfield";
+import FileUploadInput from "../FormsUI/FileUploadInput";
+import FileUploadButton from "../FormsUI/FileUploadButton";
+import SubmitFormButton from "../FormsUI/SubmitFormButton";
+import TextField from "../FormsUI/TextField";
 
 // MUI components
 import { Card, Grid, Typography } from "@mui/material";
@@ -19,34 +20,30 @@ import {
   SmartToy as SmartToyIcon,
 } from "@mui/icons-material";
 
-const INITIAL_FORM_STATE = {
+const initialFormState = {
   name: "",
-  code: null,
-  avatar: null,
+  code: "",
+  avatar: "",
 };
 
-const FORM_VALIDATION = Yup.object().shape({
+const formValidation = Yup.object().shape({
   name: Yup.string()
     .required("A name is required")
-    .min(2, "Too short!")
-    .max(20, "Too long!")
-    .test(
-      "isAlphanumeric",
-      "Invalid character",
-      (value) => value && value.match(/^[0-9a-z]+$/i)
-    ),
+    .min(2, "Must be at least 2 characters long")
+    .max(20, "Must be at most 20 characters long")
+    .matches(/^[0-9a-z ]+$/i, "Invalid characters"),
   code: Yup.mixed()
     .required("No file selected")
     .test(
-      "codeFormat",
-      "Unsopported file format",
+      "codeFileFormat",
+      "Unsupported file format",
       (value) => value && ["text/x-python"].includes(value.type)
     ),
   avatar: Yup.mixed()
     .notRequired()
     .test(
-      "avatarFormat",
-      "Unsopported file format",
+      "avatarFileFormat",
+      "Unsupported file format",
       (value) =>
         !value ||
         (value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
@@ -56,12 +53,12 @@ const FORM_VALIDATION = Yup.object().shape({
 export default function NewRobotForm({ onSubmit }) {
   return (
     <Formik
-      initialValues={{ ...INITIAL_FORM_STATE }}
+      initialValues={{ ...initialFormState }}
       initialTouched={{
         code: true,
         avatar: true,
       }}
-      validationSchema={FORM_VALIDATION}
+      validationSchema={formValidation}
       onSubmit={onSubmit}
     >
       <Card
@@ -88,6 +85,8 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <Typography component="h1" variant="h5">
@@ -102,6 +101,8 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <AvatarPreview
@@ -129,24 +130,17 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <TextField
                 data-testid="robotNameInput"
                 name="name"
-                label="Robot Name"
+                label="Name"
                 autoComplete="off"
                 required
               />
-
-              <FileUpload
-                data-testid="robotAvatar"
-                accept="image/png,image/jpg,image/jpeg"
-                name="avatar"
-                buttonProps={{ startIcon: <AddAPhotoIcon /> }}
-              >
-                Upload avatar
-              </FileUpload>
             </Grid>
 
             <Grid
@@ -156,18 +150,21 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
               <FilePreview name="code" />
 
-              <FileUpload
-                data-testid="robotCodeInput"
-                accept=".py"
+              <FileUploadInput
                 name="code"
-                buttonProps={{ startIcon: <FileUploadIcon /> }}
-              >
-                Upload file
-              </FileUpload>
+                accept=".py"
+                data-testid="robotCodeInput"
+              />
+
+              <FileUploadButton name="code" startIcon={<FileUploadIcon />}>
+                Select file
+              </FileUploadButton>
             </Grid>
 
             <Grid
@@ -177,11 +174,34 @@ export default function NewRobotForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginTop: -0.5,
+                marginBottom: -0.5,
               }}
             >
-              <SubmitButton data-testid="submitButton">
+              <FileUploadInput
+                name="avatar"
+                accept="image/png,image/jpg,image/jpeg"
+                data-testid="robotAvatar"
+              />
+
+              <FileUploadButton name="avatar" startIcon={<AddAPhotoIcon />}>
+                Select avatar
+              </FileUploadButton>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: 0.5,
+              }}
+            >
+              <SubmitFormButton data-testid="submitButton">
                 Create robot
-              </SubmitButton>
+              </SubmitFormButton>
             </Grid>
           </Grid>
         </Form>

@@ -19,7 +19,6 @@ export default function FilePreview({ name, ...otherProps }) {
 
   const configFilePreview = {
     ...field,
-    ...otherProps,
     label: label,
     value: fileData,
     margin: "dense",
@@ -29,6 +28,7 @@ export default function FilePreview({ name, ...otherProps }) {
     maxRows: 5,
     fullWidth: true,
     color: "secondary",
+    ...otherProps,
   };
 
   return <>{isError ? null : <TextField {...configFilePreview} />}</>;

@@ -8,11 +8,11 @@ export default function SnackbarWrapper({
   ...otherProps
 }) {
   const configSnackbar = {
-    ...otherProps,
     open: open,
     severity: severity,
     onClose: handleClose,
     autoHideDuration: 4000,
+    ...otherProps,
   };
 
   const configAlert = {

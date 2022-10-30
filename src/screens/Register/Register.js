@@ -1,12 +1,12 @@
 import { Grid, Container, Typography, Box, Card, Button } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Textfield from "../../components/Textfield/Textfield";
-import ButtonForm from "../../components/Button/ButtonForm";
+import TextField from "../../components/FormsUI/TextField";
+import SubmitFormButton from "../../components/FormsUI/SubmitFormButton";
 import { useRef, useState } from "react";
-import PreviewImage from "../../components/PreviewImage/PreviewImage";
+import PreviewImage from "../../components/FormsUI/PreviewImage";
 import axios from "axios";
-import Snackbar from "../../components/Snackbar/Snackbar";
+import Snackbar from "../../components/FormsUI/Snackbar";
 
 const initialValues = {
   photo: null,
@@ -153,7 +153,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Textfield
+                    <TextField
                       name="username"
                       label="Name"
                       autoComplete="off"
@@ -161,11 +161,11 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Textfield name="email" label="Email" autoComplete="off" />
+                    <TextField name="email" label="Email" autoComplete="off" />
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Textfield
+                    <TextField
                       name="password"
                       label="Password"
                       type="password"
@@ -174,7 +174,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Textfield
+                    <TextField
                       name="passwordConfirmation"
                       label="Password"
                       type="password"
@@ -183,7 +183,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <ButtonForm>Register</ButtonForm>
+                    <SubmitFormButton>Register</SubmitFormButton>
                   </Grid>
                 </Grid>
               </Card>
