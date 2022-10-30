@@ -1,5 +1,5 @@
 import CreateMatchForm from "../../components/FormsUI/CreateMatchForm";
-import { Container, Box } from "@mui/material";
+import Container from "@mui/material/Container";
 import { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -43,9 +43,11 @@ const formValidation = Yup.object().shape({
     .integer()
     .typeError("Insert a number")
     .positive()
-    .min(2)
+    .min(
+      Yup.ref("min_players"),
+      "Max players must be greater or equal than Min players"
+    )
     .max(4)
-    .moreThan(Yup.ref("min_players"))
     .required("Required"),
   games_per_match: Yup.number()
     .integer()
@@ -62,7 +64,7 @@ const formValidation = Yup.object().shape({
   robot_id: Yup.number().integer().positive().required("Required"),
 });
 
-export default function CreateGame({ userID }) {
+export default function CreateMatch({ userID }) {
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
@@ -76,55 +78,46 @@ export default function CreateGame({ userID }) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 16,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+    <Container component="main" maxWidth="xs" sx={{ marginTop: 10 }}>
+      <Formik
+        initialValues={{
+          ...initialFormState,
+        }}
+        validationSchema={formValidation}
+        onSubmit={async (values) => {
+          await axios
+            .post("http://127.0.0.1:8000/match/create", {
+              name: values.name,
+              password: values.password,
+              min_players: values.min_players,
+              max_players: values.max_players,
+              games_per_match: values.games_per_match,
+              rounds: values.rounds,
+              robot_id: values.robot_id,
+              creator: userID,
+            })
+            .then(function (response) {
+              setOpen(true);
+              setSeverity("success");
+              setBody(response.data["detail"]);
+            })
+            .catch(function (error) {
+              setSeverity("success");
+              setBody("Match created succesfully");
+              setOpen(true);
+            });
         }}
       >
-        <Formik
-          initialValues={{
-            ...initialFormState,
-          }}
-          validationSchema={formValidation}
-          onSubmit={async (values) => {
-            await axios
-              .post("http://127.0.0.1:8000/match/create", {
-                name: values.name,
-                password: values.password,
-                min_players: values.min_players,
-                max_players: values.max_players,
-                games_per_match: values.games_per_match,
-                rounds: values.rounds,
-                robot_id: values.robot_id,
-                creator: userID,
-              })
-              .then(function (response) {
-                setOpen(true);
-                setSeverity("success");
-                setBody(response.data["detail"]);
-              })
-              .catch(function (error) {
-                setSeverity("success");
-                setBody("Match created succesfully");
-                setOpen(true);
-              });
-          }}
-        >
-          <CreateMatchForm />
-        </Formik>
-        {open && (
-          <Snackbar
-            open={open}
-            body={body}
-            severity={severity}
-            handleClose={handleClose}
-          />
-        )}
-      </Box>
+        <CreateMatchForm />
+      </Formik>
+      {open && (
+        <Snackbar
+          open={open}
+          body={body}
+          severity={severity}
+          handleClose={handleClose}
+        />
+      )}
     </Container>
   );
 }

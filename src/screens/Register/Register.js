@@ -169,6 +169,7 @@ export default function RegisterForm() {
                       name="password"
                       label="Password"
                       type="password"
+                      autoComplete="off"
                     />
                   </Grid>
 
@@ -177,6 +178,7 @@ export default function RegisterForm() {
                       name="passwordConfirmation"
                       label="Password"
                       type="password"
+                      autoComplete="off"
                     />
                   </Grid>
 
