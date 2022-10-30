@@ -28,12 +28,18 @@ const theme = createTheme({
 });
 
 export default function DrawerWrapper({
-  handleLogout,
   setMobileOpen,
   navigate,
   ...otherProps
 }) {
   const username = localStorage.getItem("username");
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userID");
+    localStorage.removeItem("username");
+    navigate("/");
+  }
 
   return (
     <Drawer {...otherProps}>

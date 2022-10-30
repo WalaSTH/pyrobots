@@ -5,7 +5,8 @@ import Navbar from "../Navbar";
 
 const drawerWidth = 240;
 
-export default function Leftbar({ token, navigate, handleLogout }) {
+export default function NavigationLayout({ navigate }) {
+  const token = localStorage.getItem("token");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -30,7 +31,6 @@ export default function Leftbar({ token, navigate, handleLogout }) {
           sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
         >
           <Drawer
-            handleLogout={handleLogout}
             setMobileOpen={setMobileOpen}
             navigate={navigate}
             variant="temporary"
@@ -44,7 +44,6 @@ export default function Leftbar({ token, navigate, handleLogout }) {
             }}
           />
           <Drawer
-            handleLogout={handleLogout}
             setMobileOpen={setMobileOpen}
             navigate={navigate}
             variant="permanent"
