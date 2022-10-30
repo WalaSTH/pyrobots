@@ -43,13 +43,10 @@ export default function Navbar({
                   <SmartToyIcon sx={{ color: "#fff" }} />
                 </IconButton>
                 <Typography variant="h6" sx={{ my: 2 }} color="#fff">
-                  Py-Robots
+                  Py Robots
                 </Typography>
               </Box>
             </Box>
-            {/* <Box>
-                <Avatar sx={{ width: "30px", height: "30px" }} />
-              </Box> */}
           </>
         )}
         {!token && (
@@ -66,10 +63,10 @@ export default function Navbar({
               </IconButton>
               <Typography
                 variant="h6"
-                sx={{ display: { xs: "none", md: "inline" }, my: 2 }}
+                sx={{ display: { xs: "none", sm: "inline" }, my: 2 }}
                 color="#fff"
               >
-                Py-Robots
+                Py Robots
               </Typography>
             </Box>
             <Box>
