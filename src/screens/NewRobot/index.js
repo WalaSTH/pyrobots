@@ -54,7 +54,7 @@ export default function NewRobot({ UserID }) {
       component="main"
       maxWidth="xs"
       sx={{
-        marginTop: 20,
+        marginTop: 10,
       }}
     >
       <NewRobotForm onSubmit={handleSubmit} />
