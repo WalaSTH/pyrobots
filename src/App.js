@@ -38,12 +38,7 @@ export default function App() {
         handleLogout={handleLogout}
         token={token}
       />
-      <Routes
-        token={token}
-        navigate={navigate}
-        handleLogin={handleLogin}
-        userID={user_id}
-      />
+      <Routes navigate={navigate} handleLogin={handleLogin} userID={user_id} />
     </Box>
   );
 }
