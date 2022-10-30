@@ -21,33 +21,17 @@ export default function Navbar({
     <AppBar {...otherProps}>
       <StyledToolbar>
         {token && (
-          <>
-            <Box>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { md: "none" } }}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="logo"
-                  onClick={() => navigate("/")}
-                >
-                  <SmartToyIcon sx={{ color: "#fff" }} />
-                </IconButton>
-                <Typography variant="h6" sx={{ my: 2 }} color="#fff">
-                  Py Robots
-                </Typography>
-              </Box>
-            </Box>
-          </>
+          <Box>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ display: { md: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
         )}
         {!token && (
           <>
