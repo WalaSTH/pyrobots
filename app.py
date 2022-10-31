@@ -55,9 +55,9 @@ app.add_middleware(
 )
 
 #match listing
-@app.get("/match/available", tags=["Matches"], status_code=200)
-async def match_listing():
-    res_list = get_match_list()
+@app.get("/match/list", tags=["Matches"], status_code=200)
+async def match_listing(list_params: MatchListParams = Depends()):
+    res_list = get_match_list(list_params)
 
     if (res_list == []):
         raise HTTPException(

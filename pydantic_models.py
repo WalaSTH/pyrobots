@@ -42,3 +42,6 @@ class TempRobot(BaseModel):
     code: UploadFile = File(...)
     avatar: Union[UploadFile, None] = None
 
+class MatchListParams(BaseModel):
+    name: str
+    filter: str
