@@ -5,6 +5,7 @@ import MainPage from "../screens/MainPage/MainPage";
 import NewRobot from "../screens/NewRobot";
 import Register from "../screens/Register/Register";
 import CreateMatch from "../screens/CreateMatch/CreateMatch";
+import ListRobot from "../screens/ListRobots/ListRobots";
 
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
@@ -25,8 +26,9 @@ export default function RoutesWrapper({ navigate }) {
         element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
       />
       <Route element={<PrivateRoute />}>
-        <Route path="/create-robot" element={<NewRobot userID={userID} />} />
+        <Route path="/create-robot" element={<NewRobot />} />
         <Route path="/create-match" element={<CreateMatch userID={userID} />} />
+        <Route path="/list-robot" element={<ListRobot />} />
         <Route path="/create-simulation" element={<></>} />
         <Route path="/browse-matches" element={<></>} />
         <Route path="/match-history" element={<></>} />

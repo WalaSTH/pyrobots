@@ -4,11 +4,12 @@ import Snackbar from "../../components/FormsUI/Snackbar";
 import NewRobotForm from "../../components/NewRobotForm";
 import axios from "axios";
 
-export default function NewRobot({ UserID }) {
+export default function NewRobot() {
   // Snackbar utilities
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
+  const userID = localStorage.getItem("userID");
 
   function handleClose(reason) {
     if (reason === "clickaway") return;
@@ -26,7 +27,7 @@ export default function NewRobot({ UserID }) {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        params: { robot_name: values.name, creator: UserID },
+        params: { robot_name: values.name, creator: userID },
       })
       .then(function (response) {
         if (response.status === 200) {

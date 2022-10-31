@@ -37,7 +37,8 @@ const formValidation = Yup.object().shape({
     .test(
       "codeFileFormat",
       "Unsupported file format",
-      (value) => value && ["text/x-python"].includes(value.type)
+      (value) =>
+        value && ["text/x-python", "text/x-python-script"].includes(value.type)
     ),
   avatar: Yup.mixed()
     .notRequired()
@@ -158,11 +159,15 @@ export default function NewRobotForm({ onSubmit }) {
 
               <FileUploadInput
                 name="code"
-                accept=".py"
+                // accept=".py"
                 data-testid="robotCodeInput"
               />
 
-              <FileUploadButton name="code" startIcon={<FileUploadIcon />}>
+              <FileUploadButton
+                onClick={() => console.log("corneta")}
+                name="code"
+                startIcon={<FileUploadIcon />}
+              >
                 Select file
               </FileUploadButton>
             </Grid>
@@ -180,7 +185,7 @@ export default function NewRobotForm({ onSubmit }) {
             >
               <FileUploadInput
                 name="avatar"
-                accept="image/png,image/jpg,image/jpeg"
+                // accept="image/png,image/jpg,image/jpeg"
                 data-testid="robotAvatar"
               />
 
