@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Fragment } from "react";
-import { Box } from "@mui/system";
 
 // Dummy constants for now, until websocket is implemented
 // const username = "user1";
@@ -57,24 +56,7 @@ const match = {
 export default function Lobby({ navigate }) {
   const listParticipants = match.participants.map((p, index) => (
     <Fragment key={p.userName}>
-      <ListItem
-        key={p.userName}
-        secondaryAction={
-          <Tooltip title={p.userName} placement="right" arrow>
-            <Avatar
-              alt={p.userName}
-              src={p.userAvatar}
-              sx={{
-                height: "40px",
-                width: "40px",
-                border: 2,
-                borderColor: "primary.main",
-              }}
-            />
-          </Tooltip>
-        }
-        sx={{ padding: 1.5 }}
-      >
+      <ListItem sx={{ padding: 1.5 }}>
         <ListItemAvatar>
           <Avatar
             alt={p.robotName}
@@ -94,8 +76,24 @@ export default function Lobby({ navigate }) {
             />
           </Avatar>
         </ListItemAvatar>
+
         <ListItemText>{p.robotName}</ListItemText>
+
+        <Tooltip title={p.userName} placement="right" arrow>
+          <Avatar
+            alt={p.userName}
+            src={p.userAvatar}
+            sx={{
+              height: "40px",
+              width: "40px",
+              border: 2,
+              borderColor: "primary.main",
+              ml: 20,
+            }}
+          />
+        </Tooltip>
       </ListItem>
+
       {index === match.participants.length - 1 ? null : (
         <Divider variant="inset" component="li" />
       )}
@@ -116,8 +114,9 @@ export default function Lobby({ navigate }) {
       >
         <Grid
           item
-          lg={11.5}
           xs={12}
+          md={10}
+          lg={12}
           mb={2}
           sx={{
             display: "flex",
@@ -146,7 +145,8 @@ export default function Lobby({ navigate }) {
             {match.name}
           </Typography>
         </Grid>
-        <Grid item lg={6.5} sm={8} xs={12}>
+
+        <Grid item xs={12} md={10} lg={7}>
           <Card
             variant="outlined"
             sx={{
@@ -164,43 +164,50 @@ export default function Lobby({ navigate }) {
                 padding: 1,
               }}
             >
-              <List>{listParticipants}</List>
+              <List> {listParticipants} </List>
             </Card>
           </Card>
         </Grid>
-        <Grid item lg={5} sm={8} xs={12}>
+
+        <Grid item xs={12} md={10} lg={5}>
           <Card
             variant="outlined"
             sx={{
               borderRadius: 3,
               padding: 2,
+              height: 393,
             }}
           >
             <Typography variant="h6" color="primary" padding={1}>
               Details
             </Typography>
+
             <Card
               variant="filled"
               sx={{
                 backgroundColor: "#f0f7ff",
+                height: 311,
               }}
             >
               <List>
                 <ListItem>
                   <ListItemText primary="Games" secondary={match.games} />
                 </ListItem>
+
                 <ListItem>
                   <ListItemText
                     primary="Rounds per game"
                     secondary={match.rounds}
                   />
                 </ListItem>
+
                 <ListItem>
                   <ListItemText
                     primary="Minimum players"
                     secondary={match.minPlayers}
                   />
                 </ListItem>
+
                 <ListItem>
                   <ListItemText
                     primary="Maximum players"
@@ -211,13 +218,24 @@ export default function Lobby({ navigate }) {
             </Card>
           </Card>
         </Grid>
-        <Grid item xs={9} sm={6} md={5} xl={3}>
+
+        <Grid
+          item
+          xs={12}
+          md={10}
+          lg={12}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
           {username === match.participants[0].userName ? (
-            <Button size="large" variant="contained" fullWidth>
+            <Button size="large" variant="contained" sx={{ width: 250 }}>
               Start match
             </Button>
           ) : (
-            <Button size="large" color="error" fullWidth>
+            <Button size="large" color="error" sx={{ width: 250 }}>
               Leave match
             </Button>
           )}
