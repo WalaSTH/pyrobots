@@ -118,7 +118,7 @@ export default function RegisterForm() {
               >
                 <Grid container spacing={2} sx={{ justifyContent: "center" }}>
                   <Grid item xs={12} sx={{ textAlign: "center" }}>
-                    <Typography sx={{ fontSize: 18, fontWeight: 500 }}>
+                    <Typography component="h1" variant="h5">
                       Register
                     </Typography>
                   </Grid>
@@ -169,6 +169,7 @@ export default function RegisterForm() {
                       name="password"
                       label="Password"
                       type="password"
+                      autoComplete="off"
                     />
                   </Grid>
 
@@ -177,6 +178,7 @@ export default function RegisterForm() {
                       name="passwordConfirmation"
                       label="Password"
                       type="password"
+                      autoComplete="off"
                     />
                   </Grid>
 
