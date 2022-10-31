@@ -40,50 +40,62 @@ class Match(db.Entity):
 
 db.generate_mapping(create_tables=True)
 
-# --- Robot functions ---
 
-@db_session
-def create_robot(robot_name,creator, code, avatar):
-    new_robot = Robot(robot_name = robot_name,code = code.file.read(),  owner = creator)
-    if avatar != None: 
-        new_robot.avatar = avatar.file.read()
-    else:
-        new_robot.avatar = None
 
-@db_session
-def check_user_quantity():
-    return User.select().count()
+# --- Match Functions --- #
 
 @db_session
 def create_match(match_name, password, game_quantity, round_quantity, min_players, max_players, creator_id, robot_id):
-    new_match  = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity, current_players=1, min_players=min_players, max_players=max_players, creator=creator_id)
+    new_match = Match(name=match_name, password=password, started=False, game_quantity=game_quantity, round_quantity=round_quantity, current_players=1, min_players=min_players, max_players=max_players, creator=creator_id)
     new_match.participants.add(User[creator_id])
     new_match.fighters.add(Robot[robot_id])
     return new_match.id
-
-@db_session
-def check_user_quantity():
-    return User.select().count()
-
-@db_session
-def check_robot_quantity():
-    return Robot.select().count()
-
-@db_session
-def check_match_quantity():
-    return Match.select().count()
-
-@db_session
-def check_robot_ownership(robot_id, creator):
-    return Robot[robot_id].owner != User[creator]
 
 @db_session
 def check_match_name_exists(match_name):
     return Match.exists(lambda m: m.name == match_name and m.started == False)
 
 @db_session
+def check_match_quantity():
+    return Match.select().count()
+# --- Robot functions ---
+@db_session
+def create_robot(robot_name,creator, code, avatar):
+    new_robot = Robot(robot_name = robot_name,code = code.file.read(), owner=creator)
+    if avatar != None:
+        new_robot.avatar = avatar.file.read()
+    else:
+        new_robot.avatar = None
+@db_session
+def check_robot_quantity():
+    return Robot.select().count()
+
+@db_session
+def check_robot_ownership(robot_id, creator):
+    return Robot[robot_id].owner != User[creator]
+
+
+@db_session
 def get_robot_owner_id(rob_id):
     return Robot[rob_id].owner.id
+
+@db_session
+def robot_exists(name_robot, creator_user):
+    if Robot.exists(robot_name=name_robot, owner=creator_user):
+        return True
+
+@db_session
+def get_id_robot(robot, creator):
+    if robot_exists(robot, creator):
+        return Robot.get(robot_name=robot, owner=creator).id
+    else:
+        return None
+@db_session
+def robot_in_game(robot_id):
+    return Robot[robot_id].fights.exists()
+@db_session
+def robot_in_that_match(robot_id, match_name):
+    return match_name in Robot[robot_id].fights.name
 
 # --- user functions ---
 @db_session
@@ -102,7 +114,11 @@ def get_user_by_email(email):
 def upload_photo_db(user_name, photo):
     user = get_user(user_name)
     user.photo = photo
-    
+
+@db_session
+def get_photo(user_name):
+    user = get_user(user_name)
+    return user.photo
 @db_session
 def email_exists(email_address):
     return User.exists(email=email_address)
@@ -136,3 +152,15 @@ def user_have_photo(user_name):
 def delete_user_photo(user_name):
     user = get_user(user_name)
     user.photo = ""
+
+@db_session
+def get_user_id(user_name):
+    return User.get(user_name=user_name).id
+
+@db_session
+def check_user_quantity():
+    return User.select().count()
+
+@db_session
+def get_user_name_by_id(user_id):
+    return User[user_id].user_name

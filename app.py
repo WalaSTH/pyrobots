@@ -1,12 +1,13 @@
 from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Union, Optional 
+from typing import Union, Optional
 from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
+from random import *
 
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
@@ -55,20 +56,40 @@ app.add_middleware(
 )
 
 
-@app.post("/robot/create", tags=["Robots"], status_code = 200)
+@app.post("/robot/create", tags=["Robots"], status_code=200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
+    if temp_robot.creator <= 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID"
+        )
+    user_name = get_user_name_by_id(temp_robot.creator)
     if not (temp_robot.robot_name.replace(' ','').isalnum()):
         raise HTTPException (
-            status_code = status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid robot name."
         )
-    if (temp_robot.creator > check_user_quantity() or temp_robot.creator < 1):
-        raise HTTPException (
-            status_code = status.HTTP_404_NOT_FOUND,
+    if not user_exists(user_name):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="There is no user with such ID."
         )
     create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
     return {"detail":"Robot created succesfully."}
+
+@app.get("/robot/robot_position", tags=["Robots"], status_code = 200)
+async def robot_position(robot_position: Robot = Depends()):
+    id_user = get_user_id(robot_position.creator)
+    id_robot = get_id_robot(robot_position.robot_name, id_user)
+    if id_robot == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Robot not found."
+        )
+    else:
+        robot_position.position_x = randint(0, 1000)
+        robot_position.position_y = randint(0, 1000)
+    return {"position_x": robot_position.position_x, "position_y": robot_position.position_y}
 
 #match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
@@ -146,7 +167,7 @@ async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[Uploa
     elif email_exists(user_to_reg.email):
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,
-            detail="existing user"
+            detail="Exist a user with this email"
         )
     elif user_exists(user_to_reg.username):
         raise HTTPException(
@@ -208,7 +229,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer", "username": user.user_name,"id":user.id}
+    return {"access_token": access_token, "token_type": "bearer", "username": user.user_name, "id":user.id}
 
 
 @app.get("/user/me/")

@@ -18,7 +18,6 @@ class Token(BaseModel):
     token_type: str
     username: str
     id: int
-
 class TokenData(BaseModel):
     username: Optional[str] = None
 
@@ -41,4 +40,11 @@ class TempRobot(BaseModel):
     creator: int
     code: UploadFile = File(...)
     avatar: Union[UploadFile, None] = None
+
+class Robot(BaseModel):
+    robot_name: str
+    creator: str
+    position_x: int = None
+    position_y: int = None
+
 
