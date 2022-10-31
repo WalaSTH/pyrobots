@@ -71,7 +71,7 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
     return {"detail":"Robot created succesfully", "id": new_bot_id}
 
 #robot listing
-@app.get("/robot/available", tags=["Robots"], status_code=200)
+@app.get("/robot/list", tags=["Robots"], status_code=200)
 async def robot_listing(robot_owner: RobotOwner = Depends()):
     if not (user_exists(robot_owner.user_name)):
         raise HTTPException (
