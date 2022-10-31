@@ -74,8 +74,6 @@ export default function CreateSimForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                marginTop: -0.5,
-                marginBottom: -0.5,
               }}
             >
               <TextField
@@ -94,8 +92,6 @@ export default function CreateSimForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                marginTop: -0.5,
-                marginBottom: -0.5,
               }}
             >
               <SubmitFormButton>Run simulation</SubmitFormButton>

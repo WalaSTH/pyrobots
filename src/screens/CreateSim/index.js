@@ -4,7 +4,7 @@ import CreateSimForm from "../../components/CreateSimForm";
 import axios from "axios";
 import Snackbar from "../../components/FormsUI/Snackbar";
 
-export default function CreateSim({ username }) {
+export default function CreateSim({ username, navigate }) {
   // Snackbar utilities
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
@@ -31,6 +31,7 @@ export default function CreateSim({ username }) {
         setOpen(true);
         setSeverity("success");
         setBody(response.data["detail"]);
+        navigate("/board");
       })
       .catch(function (error) {
         setSeverity("error");

@@ -31,7 +31,7 @@ export default function RoutesWrapper({ navigate }) {
         <Route path="/create-match" element={<CreateMatch userID={userID} />} />
         <Route
           path="/create-simulation"
-          element={<CreateSim username={username} />}
+          element={<CreateSim username={username} navigate={navigate} />}
         />
         <Route path="/browse-matches" element={<></>} />
         <Route path="/match-history" element={<></>} />
