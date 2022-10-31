@@ -46,50 +46,40 @@ export default function LoginForm({ handleSubmit }) {
               <Typography
                 component="h1"
                 variant="h5"
+                sx={{ color: "black", marginBottom: "20px" }}
                 data-testid="typography-signin"
               >
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  sx={{ color: "black", marginBottom: "20px" }}
-                  data-testid="typography-signin"
-                >
-                  Sign in
-                </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      name="username"
-                      label="Username"
-                      data-testid="username-input"
-                    />
-                  </Grid>
+                Sign in
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="username"
+                    label="Username"
+                    data-testid="username-input"
+                  />
+                </Grid>
 
-                  <Grid item xs={12}>
-                    <TextField
-                      name="password"
-                      label="Password"
-                      type="password"
-                      data-testid="password-input"
-                    />
-                  </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    name="password"
+                    label="Password"
+                    type="password"
+                    data-testid="password-input"
+                  />
+                </Grid>
 
-            <Grid item xs={12}>
-              <SubmitFormButton data-testid="login-button">
-                Login
-              </SubmitFormButton>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Button type="submit" data-testid="login-button">
-                Login
-              </Button>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+                <Grid item xs={12}>
+                  <SubmitFormButton data-testid="login-button">
+                    Login
+                  </SubmitFormButton>
+                </Grid>
+                <Grid item xs={12}>
+                  <Link href="/register" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Form>

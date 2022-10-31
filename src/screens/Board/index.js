@@ -1,10 +1,11 @@
-import { Grid, List, LinearProgress } from "@mui/material";
+import { Grid, List, LinearProgress, Container } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
-import Robot from "../../components/Robot";
+import Robot from "../../components/Game/Robot";
 
 export default function Board() {
+  var actualColor = 0;
   const intervalRef = useRef();
   const stageRef = useRef();
   const stageParentRef = useRef();
@@ -50,7 +51,7 @@ export default function Board() {
         { x: 300, y: 400 },
         { x: 100, y: 300 },
         { x: 100, y: 600 },
-        { x: 50, y: 400 },
+        { x: 50, y: 461 },
       ],
       healthProgress: [50, 60, 40, 70, 60, 50, 40, 30, 10],
     },
@@ -65,7 +66,7 @@ export default function Board() {
         { x: 400, y: 400 },
         { x: 100, y: 400 },
         { x: 100, y: 600 },
-        { x: 50, y: 400 },
+        { x: 50, y: 522 },
       ],
       healthProgress: [100, 90, 80, 70, 60, 50, 40, 30, 10],
     },
@@ -80,9 +81,21 @@ export default function Board() {
         { x: 500, y: 400 },
         { x: 100, y: 500 },
         { x: 100, y: 600 },
-        { x: 50, y: 400 },
+        { x: 50, y: 583 },
       ],
       healthProgress: [30, 90, 80, 70, 60, 50, 40, 30, 10],
+    },
+  ];
+
+  const colors = ["red", "black", "green", "blue"];
+
+  const misiles = [
+    {
+      misilePosition: [
+        { x: 1, y: 2 },
+        { x: 1, y: 2 },
+        { x: 1, y: 2 },
+      ],
     },
   ];
 
@@ -100,27 +113,21 @@ export default function Board() {
 
   useLayoutEffect(() => {
     fitStageIntoParentContainer();
-  }, [position]);
+  }, [stageParentRef]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        marginLeft: "5rem",
-        marginTop: "7rem",
-      }}
-    >
+    <Container maxwidth="xl" style={{ display: "flex", alignItems: "center" }}>
       <Grid
         style={{
           border: ".1rem solid black",
-          width: "50%",
+          width: "80%",
         }}
         ref={stageParentRef}
       >
         <Stage ref={stageRef}>
           <Layer>
             {robots.map((robot) => {
+              const colorIndex = actualColor++;
               return (
                 <Robot
                   position={
@@ -128,7 +135,7 @@ export default function Board() {
                       ? robot.robotPosition[position]
                       : robot.robotPosition[robot.robotPosition.length - 1]
                   }
-                  fill="#F5447F"
+                  fill={colors[colorIndex]}
                 />
               );
             })}
@@ -157,7 +164,7 @@ export default function Board() {
                   value={
                     robot.healthProgress[position]
                       ? robot.healthProgress[position]
-                      : 0
+                      : robot.healthProgress[robot.healthProgress.length - 1]
                   }
                   variant="determinate"
                 />
@@ -166,6 +173,6 @@ export default function Board() {
           })}
         </List>
       </Box>
-    </div>
+    </Container>
   );
 }

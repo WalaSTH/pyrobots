@@ -42,42 +42,16 @@ describe("<LoginForm", () => {
 
     expect(usernameInput.value).toBe("diego");
     expect(passwordInput.value).toBe("Diego123_");
-    expect(mockHandler).toHaveBeenCalledTimes(2);
+    expect(mockHandler).toHaveBeenCalledTimes(1);
   });
 
   it("checks button click", async () => {
     const mockHandler = jest.fn();
     render(<LoginForm handleSubmit={mockHandler} />);
 
-    const usernameInput = screen.getByLabelText("Username");
-    const passwordInput = screen.getByLabelText("Password");
-
-    await userEvent.type(usernameInput, "diego");
-    await userEvent.type(passwordInput, "Diego123_");
-
     const button = screen.queryByTestId("login-button");
     await user.click(button);
 
-    expect(usernameInput.value).toBe("diego");
-    expect(passwordInput.value).toBe("Diego123_");
-    expect(mockHandler).toHaveBeenCalledTimes(2);
-  });
-
-  it("checks button click", async () => {
-    const mockHandler = jest.fn();
-    render(<LoginForm handleSubmit={mockHandler} />);
-
-    const usernameInput = screen.getByLabelText("Username");
-    const passwordInput = screen.getByLabelText("Password");
-
-    await userEvent.type(usernameInput, "diego");
-    await userEvent.type(passwordInput, "Diego123_");
-
-    const button = screen.queryByTestId("login-button");
-    await user.click(button);
-
-    expect(usernameInput.value).toBe("diego");
-    expect(passwordInput.value).toBe("Diego123_");
-    expect(mockHandler).toHaveBeenCalledTimes(2);
+    expect(mockHandler).toHaveBeenCalledTimes(0);
   });
 });

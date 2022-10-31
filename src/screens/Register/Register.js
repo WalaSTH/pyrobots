@@ -179,7 +179,7 @@ export default function RegisterForm() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <ButtonForm>Register</ButtonForm>
+                    <SubmitFormButton>Register</SubmitFormButton>
                   </Grid>
                 </Grid>
               </Card>
