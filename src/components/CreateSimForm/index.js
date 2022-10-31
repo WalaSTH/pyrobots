@@ -27,7 +27,7 @@ export default function CreateSimForm({ onSubmit }) {
   return (
     <Formik
       initialValues={{ ...initialFormState }}
-      validarionSchema={formValidation}
+      validationSchema={formValidation}
       onSubmit={onSubmit}
     >
       <Card
@@ -79,6 +79,7 @@ export default function CreateSimForm({ onSubmit }) {
                 label="Rounds"
                 placeholder="10000"
                 autoComplete="off"
+                required={true}
               />
             </Grid>
 
