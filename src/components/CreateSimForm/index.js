@@ -25,18 +25,18 @@ const formValidation = Yup.object().shape({
 
 export default function CreateSimForm({ onSubmit }) {
   return (
-    <Formik
-      initialValues={{ ...initialFormState }}
-      validationSchema={formValidation}
-      onSubmit={onSubmit}
+    <Card
+      variant="outlined"
+      sx={{
+        marginTop: 3,
+        padding: 3,
+        borderRadius: 3,
+      }}
     >
-      <Card
-        variant="outlined"
-        sx={{
-          marginTop: 3,
-          padding: 3,
-          borderRadius: 3,
-        }}
+      <Formik
+        initialValues={{ ...initialFormState }}
+        validationSchema={formValidation}
+        onSubmit={onSubmit}
       >
         <Form>
           <Grid
@@ -54,11 +54,15 @@ export default function CreateSimForm({ onSubmit }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                marginTop: -0.5,
-                marginBottom: -0.5,
               }}
             >
-              <Typography component="h1" variant="h5">
+              <Typography
+                mt={1}
+                mb={1}
+                sx={{
+                  fontSize: { xs: "1rem", sm: "1.25rem", md: "1.50rem" },
+                }}
+              >
                 Create Simulation
               </Typography>
             </Grid>
@@ -98,7 +102,7 @@ export default function CreateSimForm({ onSubmit }) {
             </Grid>
           </Grid>
         </Form>
-      </Card>
-    </Formik>
+      </Formik>
+    </Card>
   );
 }

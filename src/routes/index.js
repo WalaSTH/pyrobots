@@ -10,6 +10,7 @@ import CreateMatch from "../screens/CreateMatch/CreateMatch";
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
   const userID = localStorage.getItem("userID");
+  const username = localStorage.getItem("username");
 
   return (
     <Routes>
@@ -30,7 +31,7 @@ export default function RoutesWrapper({ navigate }) {
         <Route path="/create-match" element={<CreateMatch userID={userID} />} />
         <Route
           path="/create-simulation"
-          element={<CreateSim UserID={userID} />}
+          element={<CreateSim username={username} />}
         />
         <Route path="/browse-matches" element={<></>} />
         <Route path="/match-history" element={<></>} />

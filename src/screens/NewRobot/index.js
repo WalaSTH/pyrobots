@@ -4,7 +4,7 @@ import Snackbar from "../../components/FormsUI/Snackbar";
 import NewRobotForm from "../../components/NewRobotForm";
 import axios from "axios";
 
-export default function NewRobot({ UserID }) {
+export default function NewRobot({ userID }) {
   // Snackbar utilities
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
@@ -26,25 +26,21 @@ export default function NewRobot({ UserID }) {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        params: { robot_name: values.name, creator: UserID },
+        params: { robot_name: values.name, creator: userID },
       })
       .then(function (response) {
-        if (response.status === 200) {
-          setSeverity("success");
-          setBody("Succes!");
-          resetForm({});
-        } else if (response.status === 400) {
-          setSeverity("error");
-          setBody("Invalid robot name");
-        } else if (response.status === 404) {
-          setSeverity("error");
-          setBody("Invalid user ID");
-        }
         setOpen(true);
+        setSeverity("success");
+        setBody(response.data["detail"]);
+        resetForm({});
       })
       .catch(function (error) {
         setSeverity("error");
-        setBody("Unknown error");
+        if (error.response) {
+          setBody(error.response.data["detail"]);
+        } else {
+          setBody("Unknown error");
+        }
         setOpen(true);
       });
   }
