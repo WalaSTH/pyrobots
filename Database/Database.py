@@ -56,6 +56,10 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
     return new_match.id
 
 @db_session
+def get_current_players(room_id):
+    return Match[room_id].current_players
+
+@db_session
 def delete_match(match_id):
     Match[match_id].delete()
 

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends
+from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends, WebSocketDisconnect
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union, Optional 
@@ -57,6 +57,20 @@ app.add_middleware(
 )
 
 manager = ConnectionManager()
+
+# WebSockets
+@app.websocket("/ws/{match_id}")
+async def websocket_endpoint(websocket: WebSocket, match_id : int):
+    await manager.connect(websocket, match_id)
+    print("Now we are connected to the WebSocket")
+    try:
+        while True:
+            data = str(get_current_players(match_id))
+            await manager.broadcast(data, match_id)
+            print(data)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, match_id)
+        await manager.broadcast(f"A player left the room", match_id)
 
 @app.post("/robot/create", tags=["Robots"], status_code = 200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
@@ -222,11 +236,3 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @app.get("/user/me/items/")
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
-
-# WebSockets
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    await manager.connect(websocket)
-    while True:
-        data = await websocket.receive_text()
-        await manager.broadcast(f"Client #{client_id}: {data}")
