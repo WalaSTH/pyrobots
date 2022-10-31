@@ -6,7 +6,6 @@ import {
   Container,
   Divider,
   Grid,
-  IconButton,
   List,
   ListItem,
   ListItemAvatar,
@@ -19,6 +18,8 @@ import { Fragment } from "react";
 import { Box } from "@mui/system";
 
 // Dummy constants for now, until websocket is implemented
+// const username = "user1";
+const username = "user2";
 const match = {
   name: "Match name goes here...",
   participants: [
@@ -211,9 +212,15 @@ export default function Lobby({ navigate }) {
           </Card>
         </Grid>
         <Grid item xs={9} sm={6} md={5} xl={3}>
-          <Button size="large" variant="contained" fullWidth>
-            Start match
-          </Button>
+          {username === match.participants[0].userName ? (
+            <Button size="large" variant="contained" fullWidth>
+              Start match
+            </Button>
+          ) : (
+            <Button size="large" color="error" fullWidth>
+              Leave match
+            </Button>
+          )}
         </Grid>
       </Grid>
     </Container>
