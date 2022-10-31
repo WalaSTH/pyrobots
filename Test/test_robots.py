@@ -49,7 +49,7 @@ def test_create_robot_invalid_id():
     code = open("Test/files/dummybot.py", "rb")
     response = client.post("/robot/create", params=new_robot_upl_invalid_id, files={"code":code})
     assert response.status_code == 400
-    assert response.json() == {"detail": "Invalid user id"}
+    assert response.json() == {"detail": "Invalid user ID"}
 
 # Creating a robot with invalid name
 

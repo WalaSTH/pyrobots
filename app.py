@@ -58,6 +58,11 @@ app.add_middleware(
 
 @app.post("/robot/create", tags=["Robots"], status_code=200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
+    if temp_robot.creator <= 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID"
+        )
     user_name = get_user_name_by_id(temp_robot.creator)
     if not (temp_robot.robot_name.replace(' ','').isalnum()):
         raise HTTPException (
@@ -68,11 +73,6 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="There is no user with such ID."
-        )
-    if temp_robot.creator < 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid user ID."
         )
     create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
     return {"detail":"Robot created succesfully."}
