@@ -56,8 +56,21 @@ def create_match(match_name, password, game_quantity, round_quantity, min_player
     return new_match.id
 
 @db_session
-def get_current_players(room_id):
-    return Match[room_id].current_players
+def get_match_info(room_id):
+    room = Match[room_id]
+    participants_list = []
+    for r in room.fighters:
+        participants_list.append(({"robot_name": r.robot_name, "user_name" : r.owner.user_name}))
+    data = {
+        "name" : room.name,
+        "game_quantity" : room.game_quantity,
+        "round_quantity" : room.round_quantity,
+        "min_players" : room.min_players,
+        "max_players" : room.max_players,
+        "creator" : room.creator.user_name,
+        "participants" : participants_list
+    }
+    return data
 
 @db_session
 def delete_match(match_id):
@@ -66,6 +79,10 @@ def delete_match(match_id):
 @db_session
 def delete_robot(robot_id):
     Robot[robot_id].delete()
+
+@db_session
+def check_match_existance(match_id):
+    return Match.exists(id = match_id)
 
 @db_session
 def check_user_existance(user_id):

@@ -8,6 +8,8 @@ from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
 from connections import *
+import json
+import asyncio
 
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
@@ -62,15 +64,16 @@ manager = ConnectionManager()
 @app.websocket("/ws/{match_id}")
 async def websocket_endpoint(websocket: WebSocket, match_id : int):
     await manager.connect(websocket, match_id)
-    print("Now we are connected to the WebSocket")
+
     try:
         while True:
-            data = str(get_current_players(match_id))
-            await manager.broadcast(data, match_id)
+            data = json.dumps(get_match_info(match_id)) if check_match_existance(match_id) else "Match {match_id} doesn't exist"
             print(data)
+            await manager.broadcast(data, match_id)
+            await asyncio.sleep(5)
     except WebSocketDisconnect:
         manager.disconnect(websocket, match_id)
-        await manager.broadcast(f"A player left the room", match_id)
+        await manager.broadcast(f"A player left the room {match_id}", match_id)
 
 @app.post("/robot/create", tags=["Robots"], status_code = 200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
