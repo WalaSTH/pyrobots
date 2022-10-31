@@ -12,6 +12,9 @@ client = TestClient(app)
 
 # Creating Robot no avatar
 
+if not user_exists("user_test1"):
+    user1 = create_user(user_name="user_test1", password="password", email="test@test.com")
+
 def test_create_robot():
     new_robot_upl = {
         "robot_name": (get_random_string_lower(5)),
@@ -44,9 +47,9 @@ def test_create_robot_invalid_id():
         "creator": (get_rand_negative())
     }
     code = open("Test/files/dummybot.py", "rb")
-    response = client.post("/robot/create", params = new_robot_upl_invalid_id, files={"code":code})
-    assert response.status_code == 404
-    assert response.json() == {"detail": "There is no user with such ID."}
+    response = client.post("/robot/create", params=new_robot_upl_invalid_id, files={"code":code})
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Invalid user id"}
 
 # Creating a robot with invalid name
 
@@ -59,3 +62,4 @@ def test_create_robt_inv_name():
     response = client.post("/robot/create", params = new_robot_upl_inv_name, files={"code":code})
     assert response.status_code == 400
     assert response.json() == {"detail": "Invalid robot name."}
+

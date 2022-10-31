@@ -56,25 +56,31 @@ app.add_middleware(
 )
 
 
-@app.post("/robot/create", tags=["Robots"], status_code = 200)
+@app.post("/robot/create", tags=["Robots"], status_code=200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
+    user_name = get_user_name_by_id(temp_robot.creator)
     if not (temp_robot.robot_name.replace(' ','').isalnum()):
         raise HTTPException (
-            status_code = status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid robot name."
         )
-    if (temp_robot.creator > check_user_quantity() or temp_robot.creator < 1):
-        raise HTTPException (
-            status_code = status.HTTP_404_NOT_FOUND,
+    if not user_exists(user_name):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="There is no user with such ID."
+        )
+    if temp_robot.creator < 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid user ID."
         )
     create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
     return {"detail":"Robot created succesfully."}
 
-@app.get("/robot/{robot_id}/position", tags=["Robots"], status_code = 200)
-async def robot_position(robot_postition: Robot = Depends()):
-    id_user = get_user_id(robot_postition.creator)
-    id_robot = get_id_robot(robot_postition.robot_name, id_user)
+@app.get("/robot/robot_position", tags=["Robots"], status_code = 200)
+async def robot_position(robot_position: Robot = Depends()):
+    id_user = get_user_id(robot_position.creator)
+    id_robot = get_id_robot(robot_position.robot_name, id_user)
     if id_robot == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -223,7 +229,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer", "username": user.user_name,"id":user.id}
+    return {"access_token": access_token, "token_type": "bearer", "username": user.user_name, "id":user.id}
 
 
 @app.get("/user/me/")

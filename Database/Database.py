@@ -114,7 +114,11 @@ def get_user_by_email(email):
 def upload_photo_db(user_name, photo):
     user = get_user(user_name)
     user.photo = photo
-    
+
+@db_session
+def get_photo(user_name):
+    user = get_user(user_name)
+    return user.photo
 @db_session
 def email_exists(email_address):
     return User.exists(email=email_address)
@@ -156,3 +160,7 @@ def get_user_id(user_name):
 @db_session
 def check_user_quantity():
     return User.select().count()
+
+@db_session
+def get_user_name_by_id(user_id):
+    return User[user_id].user_name
