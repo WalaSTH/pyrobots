@@ -1,10 +1,10 @@
 import CreateMatchForm from "../../components/FormsUI/CreateMatchForm";
 import { Container } from "@mui/material";
 
-export default function CreateGame({ UserID }) {
+export default function CreateMatch({ userID }) {
   return (
     <Container component="main" maxWidth="xs">
-      <CreateMatchForm UserID={UserID} />
+      <CreateMatchForm UserID={userID} />
     </Container>
   );
 }
