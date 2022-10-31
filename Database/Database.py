@@ -51,13 +51,15 @@ def create_robot(robot_name,creator, code, avatar):
         new_robot.avatar = None
 
 @db_session
-def get_robot_list(owner_name):
-    robot_list = Robot.select()[:]
+def get_robot_list(owner_name, detailed):
+    robot_list = Robot.select(lambda r: r.owner.user_name == owner_name)[:]
     res_list = []
 
     for r in robot_list:
-        if (r.owner).user_name == owner_name:
-            res_list.append((r.id, r.robot_name, r.avatar))
+        if detailed:
+            res_list.append((r.id, r.robot_name, r.code))
+        else:
+            res_list.append((r.id, r.robot_name))
 
     return res_list
 

@@ -79,7 +79,7 @@ async def robot_listing(robot_owner: RobotOwner = Depends()):
             detail="No user with such ID"
         )
 
-    res_list = get_robot_list(robot_owner.user_name)
+    res_list = get_robot_list(robot_owner.user_name, robot_owner.detailed)
 
     if (res_list == []):
         raise HTTPException(

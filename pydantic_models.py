@@ -44,3 +44,4 @@ class TempRobot(BaseModel):
 
 class RobotOwner(BaseModel):
     user_name: str
+    detailed: bool
