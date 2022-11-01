@@ -33,9 +33,11 @@ const formValidation = Yup.object().shape({
     .integer()
     .typeError("Insert a number")
     .positive()
-    .min(2)
+    .min(
+      Yup.ref("min_players"),
+      "Max players must be greater or equal than Min players"
+    )
     .max(4)
-    .moreThan(Yup.ref("min_players"))
     .required("Required"),
   games_per_match: Yup.number()
     .integer()

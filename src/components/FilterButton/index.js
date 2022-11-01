@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, ButtonGroup, Popover, Box, Card } from "@mui/material";
 
-export default function FilterButton({ ...otherProps }) {
+export default function FilterButton({ setFilter, getData, ...otherProps }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -39,9 +39,41 @@ export default function FilterButton({ ...otherProps }) {
             orientation="vertical"
             aria-label="outlined primary button group"
           >
-            <Button>Available</Button>
-            <Button>Joined</Button>
-            <Button>Hosted</Button>
+            <Button
+              onClick={() => {
+                setFilter("available");
+              }}
+            >
+              Available
+            </Button>
+            <Button
+              onClick={() => {
+                setFilter("public");
+              }}
+            >
+              Public
+            </Button>
+            <Button
+              onClick={() => {
+                setFilter("private");
+              }}
+            >
+              Private
+            </Button>
+            <Button
+              onClick={() => {
+                setFilter("joined");
+              }}
+            >
+              Joined
+            </Button>
+            <Button
+              onClick={() => {
+                setFilter("hosted");
+              }}
+            >
+              Hosted
+            </Button>
           </ButtonGroup>
         </Card>
       </Popover>
