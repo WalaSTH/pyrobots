@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends
+from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends, WebSocketDisconnect
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union, Optional
@@ -7,6 +7,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
+from connections import *
+import json
 from random import *
 from game_loop import *
 
@@ -35,6 +37,7 @@ description = """
     * Login
     * Upload a photo    
     """
+
 origins = [
     "http://localhost:3000",
     "localhost:3000",
@@ -62,6 +65,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+manager = ConnectionManager()
+
+# --- WebSocket Endpoints ---
+@app.websocket("/ws/{match_id}")
+async def websocket_endpoint(websocket: WebSocket, match_id : int):
+    await manager.connect(websocket, match_id)
+
+    try:
+        while True:
+            data = json.dumps(get_match_info(match_id)) if check_match_existance(match_id) else "Match {match_id} doesn't exist"
+            await manager.broadcast(data, match_id)
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, match_id)
+        await manager.broadcast(f"A player has disconnected", match_id)
+
 # --- Robot Endpoints ---
 @app.post("/robot/create", tags=["Robots"], status_code=200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
@@ -69,6 +89,7 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID"
         )
+
     user_name = get_user_name_by_id(temp_robot.creator)
     if not (temp_robot.robot_name.replace(" ", "").isalnum()):
         raise HTTPException(
@@ -234,7 +255,7 @@ async def user_delete(user_name: str):
     """
     if not user_exists(user_name):
         raise HTTPException(status_code=404, detail="user doesn't exist")
-
+ 
     else:
         delete_user(user_name)
         return {"user successfully deleted"}
@@ -292,4 +313,4 @@ async def create_sim(sim: SimData):
                 detail="User does not have any robot named "
                 + str(sim.robot_names[i] + "."),
             )
-    return run_simulation(sim)
+    return run_simulation(sim) 

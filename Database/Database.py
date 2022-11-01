@@ -74,6 +74,27 @@ def create_match(
     return new_match.id
 
 @db_session
+def get_match_info(room_id):
+    room = Match[room_id]
+    participants_list = []
+    for r in room.fighters:
+        participants_list.append(({"robot_name": r.robot_name, "user_name" : r.owner.user_name}))
+    data = {
+        "name" : room.name,
+        "game_quantity" : room.game_quantity,
+        "round_quantity" : room.round_quantity,
+        "min_players" : room.min_players,
+        "max_players" : room.max_players,
+        "creator" : room.creator.user_name,
+        "participants" : participants_list
+    }
+    return data
+
+@db_session
+def check_match_existance(match_id):
+    return Match.exists(id = match_id)
+
+@db_session
 def delete_match(match_id):
     Match[match_id].delete()
 
@@ -91,7 +112,6 @@ def check_match_quantity():
 
 
 # --- Robot functions ---
-
 
 @db_session
 def create_robot(robot_name, creator, code, avatar):
@@ -177,7 +197,6 @@ def create_user(user_name, email, password):
 @db_session
 def get_user(user_name):
     return User.get(user_name=user_name) or None
-
 
 @db_session
 def get_user_by_email(email):
