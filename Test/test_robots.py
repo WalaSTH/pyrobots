@@ -15,13 +15,16 @@ client = TestClient(app)
 if not user_exists("user_test1"):
     user1 = create_user(user_name="user_test1", password="password", email="test@test.com")
 
+user_id = get_user_id("user_test1")
+
 def test_create_robot():
     new_robot_upl = {
         "robot_name": (get_random_string_lower(5)),
-        "creator": 1
+        "creator": user_id
     }
     code = open("Test/files/dummybot.py", "rb")
     response = client.post("/robot/create", params = new_robot_upl, files={"code":code})
+    delete_robot(get_last_robot_id())
     assert response.status_code == 200
     assert response.json() == {"detail": "Robot created succesfully."}
 
@@ -31,11 +34,12 @@ def test_create_robot():
 def test_create_robot_avatar():
     new_robot_upl = {
         "robot_name": (get_random_string_lower(5)),
-        "creator": 1
+        "creator": user_id
     }
     code = open("Test/files/dummybot.py", "rb")
     avatar = open("Test/files/image.jpg", "rb")
     response = client.post("/robot/create", params = new_robot_upl, files={"code":code, "avatar":avatar})
+    delete_robot(get_last_robot_id())
     assert response.status_code == 200
     assert response.json() == {"detail": "Robot created succesfully."}
 
@@ -56,7 +60,7 @@ def test_create_robot_invalid_id():
 def test_create_robt_inv_name():
     new_robot_upl_inv_name = {
         "robot_name": (get_random_string_special()),
-        "creator": 1
+        "creator": user_id
     }
     code = open("Test/files/dummybot.py", "rb")
     response = client.post("/robot/create", params = new_robot_upl_inv_name, files={"code":code})

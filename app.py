@@ -62,10 +62,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# --- Robot Endpoints ---
 @app.post("/robot/create", tags=["Robots"], status_code=200)
 async def robot_upload(temp_robot: TempRobot = Depends()):
-    if temp_robot.creator <= 0:
+    if (temp_robot.creator > get_last_user_id() or temp_robot.creator < 1):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID"
         )
@@ -84,6 +84,23 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
     )
     return {"detail": "Robot created succesfully."}
 
+@app.get("/robot/list", tags=["Robots"], status_code=200)
+async def robot_listing(robot_owner: RobotOwner = Depends()):
+    if not (user_exists(robot_owner.user_name)):
+        raise HTTPException (
+            status_code=404,
+            detail="No user with such ID"
+        )
+
+    res_list = get_robot_list(robot_owner.user_name, robot_owner.detailed)
+
+    if (res_list == []):
+        raise HTTPException(
+            status_code=404,
+            detail="No Robots available"
+        )
+
+    return {"Robots": res_list}
 
 @app.get("/robot/robot_position", tags=["Robots"], status_code=200)
 async def robot_position(robot_position: Robot = Depends()):
@@ -101,15 +118,14 @@ async def robot_position(robot_position: Robot = Depends()):
         "position_y": robot_position.position_y,
     }
 
-
-# match creation
+# --- Match endpoints ---
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
 
-    if match_data.robot_id > check_robot_quantity() or match_data.robot_id <= 0:
+    if (match_data.robot_id > get_last_robot_id() or match_data.robot_id <= 0):
         raise HTTPException(status_code=404, detail="No robot with such ID")
 
-    if match_data.creator > check_user_quantity() or match_data.creator <= 0:
+    if (match_data.creator > get_last_user_id() or match_data.creator <= 0):
         raise HTTPException(status_code=404, detail="No user with such ID")
 
     if match_data.password == None:
@@ -143,7 +159,7 @@ def match_creation(match_data: TempMatch):
     return {"detail": "Match created successfully", "id": match_id}
 
 
-# user register
+# --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(
     user_to_reg: UserTemp = Depends(), photo: Optional[UploadFile] = None
@@ -174,7 +190,7 @@ async def user_register(
     elif email_exists(user_to_reg.email):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Exist a user with this email",
+            detail="A user with this email already exists",
         )
     elif user_exists(user_to_reg.username):
         raise HTTPException(
@@ -256,9 +272,7 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
 
 
-# Simulation
-
-
+# --- Simulation Endpoints ---
 @app.post("/simulation/start")
 async def create_sim(sim: SimData):
     # do some validation checks

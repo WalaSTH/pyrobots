@@ -40,20 +40,21 @@ class TempMatch(BaseModel):
     creator: int
     password: Union[str, None] = None
 
-
 class TempRobot(BaseModel):
     robot_name: str
     creator: int
     code: UploadFile = File(...)
     avatar: Union[UploadFile, None] = None
 
+class RobotOwner(BaseModel):
+    user_name: str
+    detailed: bool
 
 class Robot(BaseModel):
     robot_name: str
     creator: str
     position_x: int = None
     position_y: int = None
-
 
 class SimData(BaseModel):
     username: str
