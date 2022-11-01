@@ -114,6 +114,7 @@ def get_robot_list(owner_name, detailed):
 
     return res_list
 
+@db_session
 def get_last_robot_id():
     return int(max(r.id for r in Robot) or 0)
 

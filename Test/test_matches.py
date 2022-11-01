@@ -33,7 +33,7 @@ new_robot_upl = {
     "robot_name": "DummyBot1",
     "creator": rob_owner
 }
-code = open("Tests/files/dummybot.py", "rb")
+code = open("Test/files/dummybot.py", "rb")
 rob_res = client.post("/robot/create", params = new_robot_upl, files={"code":code})
 print(rob_res.json())
 assert rob_res.status_code == 200

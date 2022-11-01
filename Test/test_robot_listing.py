@@ -22,7 +22,7 @@ new_robot_upl = {
     "robot_name": "DummyBot01",
     "creator": rob_owner
 }
-code = open("Tests/files/dummybot.py", "rb")
+code = open("Test/files/dummybot.py", "rb")
 rob_res = client.post("/robot/create", params = new_robot_upl, files={"code":code})
 assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
@@ -31,7 +31,7 @@ new_robot_upl = {
     "robot_name": "DummyBot02",
     "creator": rob_owner
 }
-code = open("Tests/files/dummybot.py", "rb")
+code = open("Test/files/dummybot.py", "rb")
 rob_res = client.post("/robot/create", params = new_robot_upl, files={"code":code})
 assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
@@ -59,7 +59,7 @@ def test_robot_listing_empty():
     assert response.json() == {"detail" : "No Robots available"}
     assert response.status_code == 404
 
-# List robots
+# List robots without code.
 def test_robot_listing_with_items_no_code():
     rob_owner = {
         "user_name" : user1,
@@ -72,6 +72,7 @@ def test_robot_listing_with_items_no_code():
     assert response.status_code == 200
     assert response.json() == {"Robots": res_list}
 
+# List robots with code.
 def test_robot_listing_with_items_and_code():
     rob_owner = {
         "user_name" : user1,
@@ -82,5 +83,6 @@ def test_robot_listing_with_items_and_code():
     response = client.get("/robot/list", params = rob_owner)
 
     delete_user(user1)
+    delete_user(user2)
     assert response.status_code == 200
 
