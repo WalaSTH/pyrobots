@@ -8,6 +8,7 @@ from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
 from random import *
+from game import *
 
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
@@ -142,7 +143,7 @@ def match_creation(match_data: TempMatch):
     return {"detail": "Match created successfully", "id": match_id}
 
 
-# registro de usuario
+# user register
 @app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(
     user_to_reg: UserTemp = Depends(), photo: Optional[UploadFile] = None
@@ -253,3 +254,27 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @app.get("/user/me/items/")
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
+
+
+# Simulation
+
+
+@app.post("/simulation/start")
+async def create_sim(sim: SimData):
+    # do some validation checks
+    if sim.n_rounds < 1 or sim.n_rounds > 100000:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect number of rounds"
+        )
+    if not user_exists(sim.username):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User doesn't exist"
+        )
+    for i in range(len(sim.robot_names)):
+        if not user_has_robot(sim.username, sim.robot_names[i]):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User does not have any robot named "
+                + str(sim.robot_names[i] + "."),
+            )
+    return run_simulation(sim)

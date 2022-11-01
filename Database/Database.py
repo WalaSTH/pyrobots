@@ -133,6 +133,12 @@ def robot_in_that_match(robot_id, match_name):
     return match_name in Robot[robot_id].fights.name
 
 
+@db_session
+def user_has_robot(username, robot_name):
+    user = get_user(username)
+    return robot_exists(robot_name, user)
+
+
 # --- user functions ---
 @db_session
 def create_user(user_name, email, password):

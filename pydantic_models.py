@@ -53,3 +53,9 @@ class Robot(BaseModel):
     creator: str
     position_x: int = None
     position_y: int = None
+
+
+class SimData(BaseModel):
+    username: str
+    n_rounds: int
+    robot_names: List[str]
