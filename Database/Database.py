@@ -49,6 +49,12 @@ def get_match_list(params : MatchListParams):
         case "available":
             match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players) [:]
 
+        case "public":
+            match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players and m.password == "") [:]
+
+        case "private":
+            match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players and m.password != "") [:]
+
         case "hosted":
             match_list = Match.select(lambda m: (not m.started) and m.creator.user_name == params.name) [:]
 
@@ -74,12 +80,13 @@ def get_match_list(params : MatchListParams):
         for u in m.participants:
             participants_list.append(u.user_name)
 
-        res_list.append((m.id, 
-                        m.name, 
-                        m.current_players, 
-                        m.game_quantity, 
-                        m.round_quantity, 
-                        m.min_players, 
+        res_list.append((m.id,
+                        m.password != "",
+                        m.name,
+                        m.current_players,
+                        m.game_quantity,
+                        m.round_quantity,
+                        m.min_players,
                         m.max_players,
                         participants_list))
 
@@ -89,7 +96,7 @@ def get_match_list(params : MatchListParams):
 @db_session
 def create_robot(robot_name,creator, code, avatar):
     new_robot = Robot(robot_name = robot_name,code = code.file.read(),  owner = creator)
-    if avatar != None: 
+    if avatar != None:
         new_robot.avatar = avatar.file.read()
     else:
         new_robot.avatar = None
@@ -146,7 +153,7 @@ def get_user_by_email(email):
 def upload_photo_db(user_name, photo):
     user = get_user(user_name)
     user.photo = photo
-    
+
 @db_session
 def email_exists(email_address):
     return User.exists(email=email_address)
