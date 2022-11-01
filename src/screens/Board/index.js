@@ -117,7 +117,11 @@ export default function Board() {
   }, [stageParentRef]);
 
   return (
-    <Container maxwidth="xl" style={{ display: "flex", alignItems: "center" }}>
+    <Container
+      maxwidth="xl"
+      style={{ display: "flex", alignItems: "center" }}
+      data-testid="boardContainer"
+    >
       <Grid
         style={{
           border: ".1rem solid black",
@@ -125,7 +129,7 @@ export default function Board() {
         }}
         ref={stageParentRef}
       >
-        <Stage ref={stageRef}>
+        <Stage ref={stageRef} data-testid="board">
           <Layer>
             {robots.map((robot) => {
               const colorIndex = actualColor++;
