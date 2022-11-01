@@ -1,7 +1,8 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@testing-library/react";
+import renderer from "react-test-renderer";
+import { fireEvent, render, screen } from "@testing-library/react";
 import LoginForm from "./LoginForm";
 
 describe("<LoginForm", () => {
@@ -11,20 +12,16 @@ describe("<LoginForm", () => {
   });
 
   it("component rendering", () => {
+    const component = renderer.create(<LoginForm />);
+    expect(component.toJSON()).toMatchSnapshot();
+  });
+
+  it("component renders with all the components", () => {
     render(<LoginForm />);
     screen.getByText(/Sign in/i);
     screen.getByLabelText(/Username/i);
-    screen.getByLabelText(/assword/i);
-  });
-
-  it("click button calls event handler", async () => {
-    const mockHandler = jest.fn();
-    render(<LoginForm handleSubmit={mockHandler} />);
-
-    const button = screen.getByTestId("login-button");
-    await user.click(button);
-
-    expect(mockHandler.mock.calls).toHaveLength(0);
+    screen.getByLabelText(/Password/i);
+    screen.getByTestId(/login-button/i);
   });
 
   it("validates username and password field to be not empty after write", async () => {
@@ -45,7 +42,7 @@ describe("<LoginForm", () => {
     expect(mockHandler).toHaveBeenCalledTimes(1);
   });
 
-  it("checks button click", async () => {
+  it("checks login without username and password does not login", async () => {
     const mockHandler = jest.fn();
     render(<LoginForm handleSubmit={mockHandler} />);
 

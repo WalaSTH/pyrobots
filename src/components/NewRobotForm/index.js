@@ -162,7 +162,11 @@ export default function NewRobotForm({ onSubmit }) {
                 data-testid="robotCodeInput"
               />
 
-              <FileUploadButton name="code" startIcon={<FileUploadIcon />}>
+              <FileUploadButton
+                name-testid="fileUploadButton"
+                name="code"
+                startIcon={<FileUploadIcon />}
+              >
                 Select file
               </FileUploadButton>
             </Grid>
