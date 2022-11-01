@@ -164,3 +164,8 @@ def check_user_quantity():
 @db_session
 def get_user_name_by_id(user_id):
     return User[user_id].user_name
+
+@db_session
+def set_user_verified(user_email):
+    user = User.get(email=user_email)
+    user.verified = True
