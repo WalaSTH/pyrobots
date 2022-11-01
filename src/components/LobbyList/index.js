@@ -14,8 +14,8 @@ export default function LobbyList({ matches, getData, filter }) {
   }, [filter]);
 
   const columns = [
-    { field: "id", hide: true },
-    { field: "name", headerName: "Name", minWidth: 190, flex: 1 },
+    { field: "id", hide: true, filterable: false },
+    { field: "name", headerName: "Name", minWidth: 200, flex: 1 },
     {
       field: "isPrivate",
       headerName: "Private",
@@ -31,42 +31,47 @@ export default function LobbyList({ matches, getData, filter }) {
           </>
         );
       },
-      minWidth: 75,
+      minWidth: 66,
       flex: 1,
     },
     {
       field: "players",
       headerName: "Players",
       type: "number",
-      minWidth: 75,
+      filterable: false,
+      minWidth: 65,
       flex: 1,
     },
     {
       field: "games",
       headerName: "Games",
       type: "number",
-      minWidth: 75,
+      filterable: false,
+      minWidth: 65,
       flex: 1,
     },
     {
       field: "rounds",
       headerName: "Rounds",
       type: "number",
-      minWidth: 75,
+      filterable: false,
+      minWidth: 65,
       flex: 1,
     },
     {
       field: "minPlayers",
       headerName: "Min players",
       type: "number",
-      minWidth: 100,
+      filterable: false,
+      minWidth: 90,
       flex: 1,
     },
     {
       field: "maxPlayers",
       headerName: "Max players",
       type: "number",
-      minWidth: 100,
+      filterable: false,
+      minWidth: 95,
       flex: 1,
     },
     {
@@ -74,7 +79,8 @@ export default function LobbyList({ matches, getData, filter }) {
       headerName: "Join",
       type: "actions",
       renderCell: (params) => <JoinLobby {...{ params }} />,
-      minWidth: 75,
+      minWidth: 50,
+      flex: 1,
     },
   ];
 
@@ -98,7 +104,7 @@ export default function LobbyList({ matches, getData, filter }) {
       rows={rows}
       columns={columns}
       pageSize={pageSize}
-      rowsPerPageOptions={[5, 7, 10]}
+      rowsPerPageOptions={[3, 5, 7]}
       onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
       getRowSpacing={(params) => ({
         top: params.isFirstVisible ? 0 : 5,
@@ -107,8 +113,14 @@ export default function LobbyList({ matches, getData, filter }) {
       autoHeight
       disableColumnSelector
       disableSelectionOnClick
-      disableColumnMenu
       density="comfortable"
+      componentsProps={{
+        panel: {
+          sx: {
+            top: "-75px !important",
+          },
+        },
+      }}
       sx={{
         "&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus": {
           outline: "none",

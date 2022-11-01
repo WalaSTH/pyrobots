@@ -42,6 +42,7 @@ export default function FilterButton({ setFilter, getData, ...otherProps }) {
             <Button
               onClick={() => {
                 setFilter("available");
+                handleClose();
               }}
             >
               Available
@@ -49,6 +50,7 @@ export default function FilterButton({ setFilter, getData, ...otherProps }) {
             <Button
               onClick={() => {
                 setFilter("public");
+                handleClose();
               }}
             >
               Public
@@ -56,6 +58,7 @@ export default function FilterButton({ setFilter, getData, ...otherProps }) {
             <Button
               onClick={() => {
                 setFilter("private");
+                handleClose();
               }}
             >
               Private
@@ -63,6 +66,7 @@ export default function FilterButton({ setFilter, getData, ...otherProps }) {
             <Button
               onClick={() => {
                 setFilter("joined");
+                handleClose();
               }}
             >
               Joined
@@ -70,6 +74,7 @@ export default function FilterButton({ setFilter, getData, ...otherProps }) {
             <Button
               onClick={() => {
                 setFilter("hosted");
+                handleClose();
               }}
             >
               Hosted
