@@ -1,5 +1,6 @@
 import { Container, Card, Button } from "@mui/material";
-import TableBasic from "../../components/TableBasic";
+import TableBasic from "../../components/LobbyList";
+import FilterButton from "../../components/FilterButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
@@ -16,7 +17,7 @@ export default function BrowseMatches() {
         }}
       >
         <Button startIcon={<RefreshIcon />}>Refresh</Button>
-        <Button endIcon={<FilterListIcon />}>Filters</Button>
+        <FilterButton endIcon={<FilterListIcon />} />
       </Card>
       <TableBasic />
     </Container>
