@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Circle } from "react-konva";
 
-const Robot = ({ position, ...props }) => {
+export default function Robot({ position, ...props }) {
   const roboRef = useRef(null);
   useEffect(() => {
     const rect = roboRef.current;
@@ -17,6 +17,4 @@ const Robot = ({ position, ...props }) => {
       {...props}
     />
   );
-};
-
-export default Robot;
+}

@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
+import Misile from "../../components/Game/Misile";
 
 export default function Board() {
   var actualColor = 0;
@@ -92,9 +93,9 @@ export default function Board() {
   const misiles = [
     {
       misilePosition: [
-        { x: 1, y: 2 },
-        { x: 1, y: 2 },
-        { x: 1, y: 2 },
+        { x: 100, y: 200 },
+        { x: 500, y: 200 },
+        { x: 400, y: 500 },
       ],
     },
   ];
@@ -136,6 +137,14 @@ export default function Board() {
                       : robot.robotPosition[robot.robotPosition.length - 1]
                   }
                   fill={colors[colorIndex]}
+                />
+              );
+            })}
+            {misiles.map((misile) => {
+              return (
+                <Misile
+                  position={misile.misilePosition[position]}
+                  fill={colors[0]}
                 />
               );
             })}
