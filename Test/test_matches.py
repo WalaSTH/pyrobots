@@ -33,8 +33,9 @@ new_robot_upl = {
     "robot_name": "DummyBot1",
     "creator": rob_owner
 }
-code = open("Tests/files/dummybot.py", "rb")
+code = open("Test/files/dummybot.py", "rb")
 rob_res = client.post("/robot/create", params = new_robot_upl, files={"code":code})
+print(rob_res.json())
 assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
 
@@ -148,7 +149,6 @@ def test_unstarted_match_already_exists():
 
     response = client.post("/match/create", json=match_to_create)
     response = client.post("/match/create", json=match_to_create)
-    delete_robot(robot1)
     delete_user(user1)
     delete_user(user2)
     assert response.json() == {"detail": "A match with this name already exists"}

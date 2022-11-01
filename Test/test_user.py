@@ -18,8 +18,8 @@ def test_user_register():
         "email": (get_email()),
     }
     response = client.post("/user/signup", params=user_to_reg)
-    assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
+    assert response.status_code == 200
     delete_user(user_to_reg["username"])
 
 
