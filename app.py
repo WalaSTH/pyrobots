@@ -182,7 +182,58 @@ async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[Uploa
             upload_photo_db(user_to_reg.username, None)
         return {"detail": "User created successfully"}
 
-
+@app.post("/send_email")
+async def send_email(user_email: str):
+    user = get_user_by_email(user_email)
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="The email was not found in our system"
+        )
+    else:
+        if user.verified:
+            raise HTTPException(
+                status_code=404,
+                detail="This email is already verified"
+            )
+        else:
+            email = EmailSchema(email=[user_email])
+            validate_token_expires = \
+                timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+            validate_token = create_access_token(
+                data={"sub": user_email},
+                expires_delta=validate_token_expires
+            )
+            alias = user.user_name
+            html = generate_html(alias, validate_token)
+            message = get_message(email, html)
+            fm = FastMail(conf)
+            await fm.send_message(message)
+            return {"token_val": validate_token}
+@app.get("/validate/{token}")
+async def validate_email(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="BAD_TOKEN"
+            )
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="LINK_EXPIRES"
+        )
+    user = get_user_by_email(email)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="BAD_TOKEN"
+        )
+    else:
+        set_user_verified(email)
+    return {"Thanks for checking your email! email_user": email}
 #Upload image
 @app.post("/user/upload_photo", tags=["Users"], status_code=200)
 async def upload_photo(user: User = Depends(), photo: UploadFile = File(decription="Upload a photo")):

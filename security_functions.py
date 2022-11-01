@@ -1,22 +1,58 @@
 from Database.Database import *
-from datetime import datetime, timedelta
 from pydantic_models import *
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, BackgroundTasks, UploadFile, File, Form
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from typing import Optional
+from datetime import date, datetime, timedelta
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from starlette.requests import Request
+import re
+
 # to get a string like this run:
 # openssl rand -hex 321
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+VALIDATE_TOKEN_EXPIRE_MINUTES = 120
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+conf = ConnectionConfig(
+    MAIL_USERNAME="sheremaiantest@outlook.com",
+    MAIL_PASSWORD="chetisidad123",
+    MAIL_FROM="sheremaiantest@outlook.com",
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp-mail.outlook.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True,
+)
 
+def get_message(email: EmailSchema, html):
+    message = MessageSchema(
+        subject="Email verification - no reply",
+        recipients=email.dict().get("email"),  # List of recipients, as many as you can pass
+        body=html,
+        subtype="html"
+    )
+
+    return message
+
+def generate_html(user: str, validate_token: str):
+    html = """
+    <html>
+    <body>
+    <p>Hi! """ + user + """ Thanks for registering in pyrobots!</p>
+    <br>Please follow the next link to verify your account!
+    <br>http://localhost/validate/""" + validate_token + """</p>
+    </body>
+    </html>
+    """
+    return html
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 

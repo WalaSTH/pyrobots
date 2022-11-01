@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, EmailStr
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from typing import List, Optional, Union
@@ -46,5 +45,5 @@ class Robot(BaseModel):
     creator: str
     position_x: int = None
     position_y: int = None
-
-
+class EmailSchema(BaseModel):
+    email: List[EmailStr]
