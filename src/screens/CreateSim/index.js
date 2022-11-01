@@ -24,7 +24,7 @@ export default function CreateSim({ username, navigate }) {
         params: {
           username: username,
           n_rounds: values.rounds,
-          robot_list: values.robot_ids,
+          robot_list: values.robotNames,
         },
       })
       .then(function (response) {

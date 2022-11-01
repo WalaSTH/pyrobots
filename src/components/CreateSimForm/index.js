@@ -8,11 +8,25 @@ import SubmitFormButton from "../FormsUI/SubmitFormButton";
 
 // MUI components
 import { Card, Grid, Typography } from "@mui/material";
+import SelectRobot from "../FormsUI/Select";
 
 const initialFormState = {
   rounds: "",
-  robot_ids: [1, 2],
+  robotNames: ["", "", "", ""],
 };
+
+// const count = arr.reduce((accumulator, value) => {
+//   return accumulator + (value !== "" ? 1 : 0);
+// }, 0);
+
+function countRobots(arr) {
+  var accumulator = 0;
+  arr.forEach((element) => {
+    accumulator = accumulator + (element ? 1 : 0);
+  });
+  console.log(accumulator);
+  return accumulator;
+}
 
 const formValidation = Yup.object().shape({
   rounds: Yup.number()
@@ -21,6 +35,13 @@ const formValidation = Yup.object().shape({
     .positive("Must be a positive number")
     .max(10000, "Max number of rounds is 10000")
     .required("Required"),
+  robotNames: Yup.array()
+    .of(Yup.string().required())
+    .test(
+      "minRobots",
+      "Select more than one robot",
+      (value) => countRobots(value) > 1
+    ),
 });
 
 export default function CreateSimForm({ onSubmit }) {
@@ -60,7 +81,7 @@ export default function CreateSimForm({ onSubmit }) {
                 mt={1}
                 mb={1}
                 sx={{
-                  fontSize: { xs: "1rem", sm: "1.25rem", md: "1.50rem" },
+                  fontSize: { xs: "1.25rem", md: "1.50rem" },
                 }}
               >
                 Create Simulation
@@ -73,9 +94,18 @@ export default function CreateSimForm({ onSubmit }) {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
+                gridGap: "13px",
               }}
             >
+              <Typography
+                sx={{
+                  fontSize: { xs: "0.9rem", md: "1rem" },
+                }}
+                color="primary"
+              >
+                Number of rounds
+              </Typography>
+
               <TextField
                 name="rounds"
                 label="Rounds"
@@ -83,6 +113,29 @@ export default function CreateSimForm({ onSubmit }) {
                 autoComplete="off"
                 required={true}
               />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gridGap: "13px",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: "0.9rem", md: "1rem" },
+                }}
+                color="primary"
+              >
+                Select robots
+              </Typography>
+              <SelectRobot name={"robotNames[0]"} />
+              <SelectRobot name={"robotNames[1]"} />
+              <SelectRobot name={"robotNames[2]"} />
+              <SelectRobot name={"robotNames[3]"} />
             </Grid>
 
             <Grid
