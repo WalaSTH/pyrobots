@@ -20,6 +20,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function FullScreenDialog() {
   const [open, setOpen] = React.useState(false);
+  // 'Choice' its the selected robot
+  const [choice, setChoice] = React.useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -36,6 +38,7 @@ export default function FullScreenDialog() {
     getRobots().then((response) => setdataRobot(response));
   }, []);
 
+  console.log(choice);
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -66,8 +69,8 @@ export default function FullScreenDialog() {
           </Toolbar>
         </AppBar>
         <List>
-          {dataRobot.map((robot) => (
-            <ListItem button>
+          {dataRobot.map((robot, i) => (
+            <ListItem button onClick={() => setChoice(dataRobot[i])}>
               <ListItemText
                 primary={robot[1]}
                 secondary={`ID Robot: ${robot[0]}`}
