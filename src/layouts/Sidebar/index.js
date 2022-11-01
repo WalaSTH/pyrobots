@@ -15,6 +15,7 @@ import {
 import Home from "@mui/icons-material/Home";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import SmartToyTwoToneIcon from "@mui/icons-material/SmartToyTwoTone";
+import FormatListBulleted from "@mui/icons-material/FormatListBulleted";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
@@ -89,6 +90,14 @@ export default function DrawerWrapper({
                   <Home sx={{ color: "#fff " }} />
                 </ListItemIcon>
                 <ListItemText primary="Home" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/browse-matches")}>
+                <ListItemIcon>
+                  <FormatListBulleted sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Browse matches" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
