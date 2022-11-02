@@ -47,8 +47,9 @@ def generate_html(user: str, validate_token: str):
     <html>
     <body>
     <p>Hi! """ + user + """ Thanks for registering in pyrobots!</p>
+    <img src="https://i.pinimg.com/222x/45/c9/e7/45c9e77359ab33552eb1fafcd731205a.jpg" width="100" height="200">
     <br>Please follow the next link to verify your account!
-    <br>http://localhost/validate/""" + validate_token + """</p>
+    <br>http://localhost:8000/validate/""" + validate_token + """</p>
     </body>
     </html>
     """

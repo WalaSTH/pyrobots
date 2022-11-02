@@ -99,3 +99,18 @@ def test_upload_photo_invalid_username():
     response = client.post("/user/upload_photo", files={"photo": photo}, params={"username": username})
     assert response.status_code == 401
     assert response.json() == {"detail": "user does not exist"}
+
+def test_user_not_verified():
+    username = (get_random_string_lower(5))
+    user_to_reg={
+        "username": username,
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+    }
+    response = client.post("/user/signup", params=user_to_reg)
+    assert response.status_code == 200
+    assert response.json() == {"detail": "User created successfully"}
+    response = client.post("/user/token", params={"username": username, "password": user_to_reg["password"]})
+    assert response.status_code == 401
+    assert response.json() == {"detail": "user not verified"}
+    delete_user(username)

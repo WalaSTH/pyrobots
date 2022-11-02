@@ -18,8 +18,6 @@ MIN_LEN_EMAIL = 10
 MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
 
-
-
 description = """ 
     PyRobots 🤖
     
@@ -64,8 +62,8 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
             detail="Invalid user ID"
         )
     user_name = get_user_name_by_id(temp_robot.creator)
-    if not (temp_robot.robot_name.replace(' ','').isalnum()):
-        raise HTTPException (
+    if not (temp_robot.robot_name.replace(' ', '').isalnum()):
+        raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid robot name."
         )
@@ -75,9 +73,10 @@ async def robot_upload(temp_robot: TempRobot = Depends()):
             detail="There is no user with such ID."
         )
     create_robot(temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar)
-    return {"detail":"Robot created succesfully."}
+    return {"detail": "Robot created succesfully."}
 
-@app.get("/robot/robot_position", tags=["Robots"], status_code = 200)
+
+@app.get("/robot/robot_position", tags=["Robots"], status_code=200)
 async def robot_position(robot_position: Robot = Depends()):
     id_user = get_user_id(robot_position.creator)
     id_robot = get_id_robot(robot_position.robot_name, id_user)
@@ -91,18 +90,18 @@ async def robot_position(robot_position: Robot = Depends()):
         robot_position.position_y = randint(0, 1000)
     return {"position_x": robot_position.position_x, "position_y": robot_position.position_y}
 
-#match creation
+
+# match creation
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
-
     if (match_data.robot_id > check_robot_quantity() or match_data.robot_id <= 0):
-        raise HTTPException (
+        raise HTTPException(
             status_code=404,
             detail="No robot with such ID"
         )
 
     if (match_data.creator > check_user_quantity() or match_data.creator <= 0):
-        raise HTTPException (
+        raise HTTPException(
             status_code=404,
             detail="No user with such ID"
         )
@@ -111,19 +110,19 @@ def match_creation(match_data: TempMatch):
         match_data.password = ''
 
     if (check_robot_ownership(match_data.robot_id, match_data.creator)):
-        raise HTTPException (
+        raise HTTPException(
             status_code=409,
             detail=f"Robot {match_data.robot_id} does not belong to you"
         )
 
     if (check_match_name_exists(match_data.name)):
-        raise HTTPException (
+        raise HTTPException(
             status_code=409,
             detail="A match with this name already exists"
         )
 
     if not create_match_field_validation(match_data):
-        raise HTTPException (
+        raise HTTPException(
             status_code=409,
             detail="One or more fields are not valid"
         )
@@ -141,8 +140,9 @@ def match_creation(match_data: TempMatch):
 
     return {"detail": "Match created successfully", "id": match_id}
 
-#registro de usuario
-@app.post("/user/signup", tags=["Users"],status_code=200)
+
+# registro de usuario
+@app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[UploadFile] = None):
     """USER REGISTER FUNCTION"""
 
@@ -155,23 +155,23 @@ async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[Uploa
             len(user_to_reg.password) > MAX_LEN_PASSWORD or \
             len(user_to_reg.password) <= MIN_LEN_PASSWORD or \
             len(user_to_reg.email) > MAX_LEN_EMAIL or \
-            len(user_to_reg.email) < MIN_LEN_EMAIL :
+            len(user_to_reg.email) < MIN_LEN_EMAIL:
         raise invalid_fields
     elif any(char.isupper() for char in user_to_reg.password) == False or \
             any(char.islower() for char in user_to_reg.password) == False or \
             any(char.isdigit() for char in user_to_reg.password) == False:
         raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="password must have at least one uppercase, one lowercase and one number"
         )
     elif email_exists(user_to_reg.email):
         raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Exist a user with this email"
         )
     elif user_exists(user_to_reg.username):
         raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="existing username"
         )
     else:
@@ -182,7 +182,8 @@ async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[Uploa
             upload_photo_db(user_to_reg.username, None)
         return {"detail": "User created successfully"}
 
-@app.post("/send_email")
+
+@app.post("/send_email", tags=["Users"], status_code=200)
 async def send_email(user_email: str):
     user = get_user_by_email(user_email)
     if user is None:
@@ -210,7 +211,9 @@ async def send_email(user_email: str):
             fm = FastMail(conf)
             await fm.send_message(message)
             return {"token_val": validate_token}
-@app.get("/validate/{token}")
+
+
+@app.get("/validate/{token}", tags=["Users"], status_code=200)
 async def validate_email(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -234,7 +237,9 @@ async def validate_email(token: str):
     else:
         set_user_verified(email)
     return {"Thanks for checking your email! email_user": email}
-#Upload image
+
+
+# Upload image
 @app.post("/user/upload_photo", tags=["Users"], status_code=200)
 async def upload_photo(user: User = Depends(), photo: UploadFile = File(decription="Upload a photo")):
     """UPLOAD PHOTO FUNCTION"""
@@ -266,8 +271,8 @@ async def user_delete(user_name: str):
         return {"user successfully deleted"}
 
 
-#login
-@app.post("/token",tags=["Token"], response_model=Token)
+# login
+@app.post("/token", tags=["Token"], response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
@@ -276,11 +281,17 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    elif not user.verified:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email not verified",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer", "username": user.user_name, "id":user.id}
+    return {"access_token": access_token, "token_type": "bearer", "username": user.user_name, "id": user.id}
 
 
 @app.get("/user/me/")
@@ -291,4 +302,3 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @app.get("/user/me/items/")
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
-
