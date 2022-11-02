@@ -11,7 +11,7 @@ export default function Robot({ position, ...props }) {
       ref={roboRef}
       x={props.x ? props.x : 100}
       y={props.y ? props.y : 100}
-      radius={props.radius ? props.radius : 30}
+      radius={props.radius ? props.radius : 10}
       {...props}
     />
   );
