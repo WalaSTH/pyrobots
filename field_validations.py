@@ -18,3 +18,23 @@ def create_match_field_validation(match_data: TempMatch):
     )
 
     return str_valid and num_valid
+
+
+class gameRobot:
+    def __init__(self):
+        return None
+
+
+def robot_code_valid(code):
+    try:
+        classname: str = code.filename
+        size = len(classname)
+        classname = classname[: size - 3]
+        classname = classname.replace("_", " ").title().replace(" ", "")
+        print(classname)
+        exec_str = "newRobot = " + classname + "(" + ")"
+        exec(code.file.read(), globals())
+        exec(exec_str, globals())
+        return True
+    except:
+        return False
