@@ -4,7 +4,7 @@ import Snackbar from "../../components/FormsUI/Snackbar";
 import NewRobotForm from "../../components/NewRobotForm";
 import axios from "axios";
 
-export default function NewRobot({ UserID }) {
+export default function NewRobot({ userID }) {
   // Snackbar utilities
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
@@ -26,7 +26,7 @@ export default function NewRobot({ UserID }) {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        params: { robot_name: values.name, creator: UserID },
+        params: { robot_name: values.name, creator: userID },
       })
       .then(function (response) {
         if (response.status === 200) {

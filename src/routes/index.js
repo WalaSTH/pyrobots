@@ -27,11 +27,14 @@ export default function RoutesWrapper({ navigate }) {
       />
       <Route element={<PrivateRoute />}>
         <Route path="/create-robot" element={<NewRobot userID={userID} />} />
-        <Route path="/create-match" element={<CreateMatch userID={userID} />} />
+        <Route
+          path="/create-match"
+          element={<CreateMatch navigate={navigate} userID={userID} />}
+        />
         <Route path="/create-simulation" element={<></>} />
         <Route path="/browse-matches" element={<></>} />
         <Route path="/match-history" element={<></>} />
-        <Route path="/lobby" element={<Lobby navigate={navigate} />} />
+        <Route path="/lobby/:matchID" element={<Lobby />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

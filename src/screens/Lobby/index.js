@@ -1,4 +1,3 @@
-import { SmartToy as SmartToyIcon } from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -13,54 +12,51 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Fragment } from "react";
+import {
+  SmartToy as SmartToyIcon,
+  ArrowBack as ArrowBackIcon,
+} from "@mui/icons-material";
+import { Fragment, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
-// Dummy constants for now, until websocket is implemented
-// const username = "user1";
-const username = "user2";
-const match = {
-  name: "Match name goes here...",
-  participants: [
-    {
-      robotName: "Robot 1",
-      robotAvatar: "null",
-      userName: "user1",
-      userAvatar: "null",
-    },
-    {
-      robotName: "Robot 2",
-      robotAvatar: "null",
-      userName: "user2",
-      userAvatar: "null",
-    },
-    {
-      robotName: "twentycharacterlimit",
-      robotAvatar: "null",
-      userName: "sixteencharlimit",
-      userAvatar: "null",
-    },
-    {
-      robotName: "Robot 4",
-      robotAvatar: "null",
-      userName: "user4",
-      userAvatar: "null",
-    },
-  ],
-  games: 200,
-  rounds: 10000,
-  minPlayers: 2,
-  maxPlayers: 4,
-};
+export default function Lobby() {
+  const [match, setMatch] = useState({
+    creator: "",
+    game_quantity: 0,
+    max_players: 0,
+    min_players: 0,
+    name: "",
+    participants: [],
+    round_quantity: 0,
+  });
+  const params = useParams();
+  const navigate = useNavigate();
 
-export default function Lobby({ navigate }) {
+  // Manage connection with websocket
+  useEffect(() => {
+    const client = new W3CWebSocket(`ws://localhost:8000/ws/${params.matchID}`);
+    client.onopen = function () {
+      console.log("WebSocket Client Connected");
+    };
+    client.onmessage = function (message) {
+      setMatch(JSON.parse(message.data));
+    };
+    client.onerror = function () {
+      console.log("Connection Error");
+    };
+    return () => {
+      client.close();
+    };
+  }, [params.matchID]);
+
   const listParticipants = match.participants.map((p, index) => (
-    <Fragment key={p.userName}>
+    <Fragment key={p.user_name}>
       <ListItem sx={{ padding: 1.5 }}>
         <ListItemAvatar>
           <Avatar
-            alt={p.robotName}
-            src={p.robotAvatar}
+            alt={p.robot_name}
+            src="null"
             sx={{
               height: "45px",
               width: "45px",
@@ -77,12 +73,12 @@ export default function Lobby({ navigate }) {
           </Avatar>
         </ListItemAvatar>
 
-        <ListItemText>{p.robotName}</ListItemText>
+        <ListItemText>{p.robot_name}</ListItemText>
 
-        <Tooltip title={p.userName} placement="right" arrow>
+        <Tooltip title={p.user_name} placement="right" arrow>
           <Avatar
-            alt={p.userName}
-            src={p.userAvatar}
+            alt={p.user_name}
+            src="null"
             sx={{
               height: "40px",
               width: "40px",
@@ -191,27 +187,30 @@ export default function Lobby({ navigate }) {
             >
               <List>
                 <ListItem>
-                  <ListItemText primary="Games" secondary={match.games} />
+                  <ListItemText
+                    primary="Games"
+                    secondary={match.game_quantity}
+                  />
                 </ListItem>
 
                 <ListItem>
                   <ListItemText
                     primary="Rounds per game"
-                    secondary={match.rounds}
+                    secondary={match.round_quantity}
                   />
                 </ListItem>
 
                 <ListItem>
                   <ListItemText
                     primary="Minimum players"
-                    secondary={match.minPlayers}
+                    secondary={match.min_players}
                   />
                 </ListItem>
 
                 <ListItem>
                   <ListItemText
                     primary="Maximum players"
-                    secondary={match.maxPlayers}
+                    secondary={match.max_players}
                   />
                 </ListItem>
               </List>
@@ -219,6 +218,8 @@ export default function Lobby({ navigate }) {
           </Card>
         </Grid>
 
+        {/*
+        This buttons don't do anything for now
         <Grid
           item
           xs={12}
@@ -230,16 +231,21 @@ export default function Lobby({ navigate }) {
             alignItems: "flex-end",
           }}
         >
-          {username === match.participants[0].userName ? (
+          {username === match.creator ? (
             <Button size="large" variant="contained" sx={{ width: 250 }}>
               Start match
             </Button>
           ) : (
-            <Button size="large" color="error" sx={{ width: 250 }}>
+            <Button
+              size="large"
+              variant="outlined"
+              color="error"
+              sx={{ width: 250 }}
+            >
               Leave match
             </Button>
           )}
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );

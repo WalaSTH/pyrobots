@@ -52,7 +52,7 @@ const formValidation = Yup.object().shape({
   robot_id: Yup.number().integer().positive().required("Required"),
 });
 
-export default function CreateMatchForm({ UserID }) {
+export default function CreateMatchForm({ navigate, UserID }) {
   const initialFormState = {
     name: "",
     password: "",
@@ -63,7 +63,6 @@ export default function CreateMatchForm({ UserID }) {
     robot_id: "",
     creator: UserID,
   };
-
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
@@ -77,12 +76,14 @@ export default function CreateMatchForm({ UserID }) {
   };
 
   async function handleSubmit(values) {
+    console.log(values);
     await axios
       .post("http://127.0.0.1:8000/match/create", values)
       .then(function (response) {
         setOpen(true);
         setSeverity("success");
         setBody(response.data["detail"]);
+        navigate(`/lobby/${response.data["id"]}`);
       })
       .catch(function (error) {
         setSeverity("error");
