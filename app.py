@@ -12,7 +12,7 @@ import json
 from random import *
 from game_loop import *
 
-MAX_LEN_ALIAS = 9
+MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
 MIN_LEN_PASSWORD = 7
@@ -65,7 +65,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 manager = ConnectionManager()
 
 # --- WebSocket Endpoints ---
@@ -90,9 +89,10 @@ async def robot_upload(
     code: UploadFile = File(),
     avatar: Optional[str] = Form(None),
 ):
-    if (creator > get_last_user_id() or creator < 1):
+    if not check_user_existance(creator):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="There is no user with such ID.",
         )
 
     user_name = get_user_name_by_id(creator)
@@ -104,15 +104,8 @@ async def robot_upload(
     if robot_exists(robot_name, creator):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="You already own a robot with the same name.",
+            detail=f"You already own a robot with name {robot_name}.",
         )
-
-    if not user_exists(user_name):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="There is no user with such ID.",
-        )
-
     create_robot(
         robot_name, creator, code, avatar
     )
@@ -192,6 +185,23 @@ def match_creation(match_data: TempMatch):
 
     return {"detail": "Match created successfully", "id": match_id}
 
+@app.get("/match/list", tags=["Matches"], status_code=200)
+async def match_listing(list_params: MatchListParams = Depends()):
+    res_list = get_match_list(list_params.name, list_params.filter)
+
+    if (res_list == []):
+        raise HTTPException(
+            status_code=404,
+            detail="No matches available"
+        )
+
+    if res_list == ["no_valid_filter"]:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Filter {list_params.filter} is not a valid filter"
+        )
+
+    return {"Matches": res_list}
 
 # --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)

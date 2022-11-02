@@ -39,6 +39,10 @@ class RobotOwner(BaseModel):
     user_name: str
     detailed: bool
 
+class MatchListParams(BaseModel):
+    name: str
+    filter: str
+
 class Robot(BaseModel):
     robot_name: str
     creator: str

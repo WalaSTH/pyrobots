@@ -95,6 +95,52 @@ def get_match_info(room_id):
     return data
 
 @db_session
+def get_match_list(name, filter):
+    match filter:
+        case "available":
+            match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players) [:]
+
+        case "public":
+            match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players and m.password == "") [:]
+
+        case "private":
+            match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players and m.password != "") [:]
+
+        case "hosted":
+            match_list = Match.select(lambda m: (not m.started) and m.creator.user_name == name) [:]
+
+        case "joined":
+            u_id = get_user_id(name)
+            match_list = select(m for m in User[u_id].ongoing_matches if not m.started) [:]
+
+        case "finished":
+            u_id = get_user_id(name)
+            match_list = select(m for m in User[u_id].ongoing_matches if m.started) [:]
+            print(match_list)
+
+        case _:
+            return ["no_valid_filter"]
+
+    res_list = []
+
+    for m in match_list:
+        participants_list = []
+        for u in m.participants:
+            participants_list.append(u.user_name)
+
+        res_list.append((m.id,
+                        m.password != "",
+                        m.name,
+                        m.current_players,
+                        m.game_quantity,
+                        m.round_quantity,
+                        m.min_players,
+                        m.max_players,
+                        participants_list))
+
+    return res_list
+
+@db_session
 def check_match_existance(match_id):
     return Match.exists(id = match_id)
 
