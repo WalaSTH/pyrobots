@@ -8,17 +8,12 @@ MAX_ROUNDS_PER_GAME = 10000
 MAX_GAMES_PER_MATCH = 200
 
 
-class UserTemp(BaseModel):
-    username: str
-    password: str
-    email: EmailStr
-
-
 class Token(BaseModel):
     access_token: str
     token_type: str
     username: str
     id: int
+    avatar: Optional[str]
 
 
 class TokenData(BaseModel):
@@ -39,12 +34,6 @@ class TempMatch(BaseModel):
     robot_id: int
     creator: int
     password: Union[str, None] = None
-
-class TempRobot(BaseModel):
-    robot_name: str
-    creator: int
-    code: UploadFile = File(...)
-    avatar: Union[UploadFile, None] = None
 
 class RobotOwner(BaseModel):
     user_name: str
