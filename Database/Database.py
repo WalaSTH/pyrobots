@@ -47,7 +47,9 @@ class Match(db.Entity):
 
 db.generate_mapping(create_tables=True)
 
+
 # --- Match Functions --- #
+
 
 @db_session
 def create_match(
