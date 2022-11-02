@@ -1,5 +1,5 @@
-import { Grid, List, LinearProgress, Container } from "@mui/material";
-import { Box } from "@mui/system";
+import { Grid, List, LinearProgress, Container, Box } from "@mui/material";
+// import {} from "@mui/system";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
@@ -7,7 +7,7 @@ import Missile from "../../components/Game/Missile";
 import frames from "./prueba.json";
 
 export default function Board() {
-  var robotColor = 0;
+  var [finished, setFinished] = useState(false);
   const [position, setPosition] = useState(0);
   const stageParentRef = useRef();
   const intervalRef = useRef();
@@ -27,17 +27,25 @@ export default function Board() {
     stageRef.current.scale({ x: scale, y: scale });
   }
 
-  const colors = ["red", "green", "black", "blue"];
+  const colors = ["red", "green", "black", "purple"];
 
   useEffect(() => {
     intervalRef.current = getInterval();
     window.addEventListener("resize", fitStageIntoParentContainer);
     fitStageIntoParentContainer();
+    if (finished) {
+      clearInterval(intervalRef.current);
+      setPosition(frames.length - 1);
+      alert(
+        "Termino la simulacion. El ganador es: " +
+          frames[frames.length - 1].robots[0].robotName
+      );
+    }
     return () => {
       clearInterval(intervalRef.current);
       window.removeEventListener("resize", fitStageIntoParentContainer);
     };
-  }, []);
+  }, [finished]);
 
   function getInterval() {
     const progressInterval = setInterval(() => {
@@ -69,41 +77,21 @@ export default function Board() {
               ? frames[position].robots.map((robot) => {
                   return (
                     <Robot
-                      key={robotColor++}
+                      key={robot.id}
                       name={robot.name}
                       x={robot.robotPosition ? robot.robotPosition.x : 100}
                       y={robot.robotPosition ? robot.robotPosition.y : 200}
-                      fill={colors[robotColor % colors.length]}
+                      fill={colors[robot.id % colors.length]}
                     />
                   );
-                }) // ? frames[position].missiles.map((missile) => {
-              : //     return (
-                //       <Missile
-                //         key={missile.missileId}
-                //         position={missile.missilePosition[position]}
-                //         fill={colors[0]}
-                //         scale={
-                //           missile.missilePosition.length >= position
-                //             ? { x: 0.3, y: 0.3 }
-                //             : position === missile.missilePosition.length + 1
-                //             ? { x: 20, y: 20 }
-                //             : { x: 0, y: 0 }
-                //         }
-                //       />
-                //     );
-                //   })
-                // : null
-                setPosition(frames.length - 1) &&
-                window.removeEventListener(
-                  "resize",
-                  fitStageIntoParentContainer
-                )}
+                })
+              : setFinished(true)}
             {/* {missiles.map((missile) => {
               return (
                 <Missile
-                  key={missile.missileId}
+                  key={missile.id}
                   position={missile.missilePosition[position]}
-                  fill={colors[0]}
+                  fill={colors[missile.sender]}
                   scale={
                     missile.missilePosition.length >= position
                       ? { x: 0.3, y: 0.3 }
@@ -129,24 +117,46 @@ export default function Board() {
             ? frames[position].robots.map((robot) => {
                 return (
                   <Grid
-                    key={robot.robotName}
+                    key={robot.id}
                     style={{
                       marginBottom: "1rem",
                       border: ".1rem solid black",
                       padding: "1rem",
                       width: "10rem",
+                      backgroundColor: colors[robot.id % colors.length],
                     }}
                   >
-                    {robot.robotName}
+                    <div
+                      style={{
+                        color: "white",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        marginBottom: "5px",
+                      }}
+                    >
+                      {robot.robotName}
+                    </div>
                     <LinearProgress
                       value={robot.health}
                       variant="determinate"
+                      color="primary"
                     />
+                    <div
+                      style={{
+                        color: "white",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        marginTop: "5px",
+                      }}
+                    >
+                      {robot.health + "%"}
+                    </div>
                   </Grid>
                 );
               })
-            : setPosition(frames.length - 1) &&
-              window.removeEventListener("resize", fitStageIntoParentContainer)}
+            : setPosition(frames.length - 1)}
         </List>
       </Box>
     </Container>
