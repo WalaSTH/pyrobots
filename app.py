@@ -12,7 +12,7 @@ import json
 from random import *
 from game_loop import *
 
-MAX_LEN_ALIAS = 9
+MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
 MIN_LEN_PASSWORD = 7
@@ -64,19 +64,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-#match listing
-@app.get("/match/list", tags=["Matches"], status_code=200)
-async def match_listing(list_params: MatchListParams = Depends()):
-    res_list = get_match_list(list_params)
-
-    if (res_list == []):
-        raise HTTPException(
-            status_code=404,
-            detail="No matches available"
-        )
-
-    return {"Matches": res_list}
 
 manager = ConnectionManager()
 
@@ -203,6 +190,23 @@ def match_creation(match_data: TempMatch):
 
     return {"detail": "Match created successfully", "id": match_id}
 
+@app.get("/match/list", tags=["Matches"], status_code=200)
+async def match_listing(list_params: MatchListParams = Depends()):
+    res_list = get_match_list(list_params.name, list_params.filter)
+
+    if (res_list == []):
+        raise HTTPException(
+            status_code=404,
+            detail="No matches available"
+        )
+
+    if res_list == ["no_valid_filter"]:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Filter {list_params.filter} is not a valid filter"
+        )
+
+    return {"Matches": res_list}
 
 # --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)

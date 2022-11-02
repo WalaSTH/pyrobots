@@ -1,6 +1,4 @@
 from pony.orm import *
-from pydantic_models import MatchListParams
-from fastapi import HTTPException
 import sys
 
 db = pony.orm.Database()
@@ -95,8 +93,8 @@ def get_match_info(room_id):
     return data
 
 @db_session
-def get_match_list(params : MatchListParams):
-    match params.filter:
+def get_match_list(name, filter):
+    match filter:
         case "available":
             match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players) [:]
 
@@ -107,22 +105,19 @@ def get_match_list(params : MatchListParams):
             match_list = Match.select(lambda m: (not m.started) and m.current_players < m.max_players and m.password != "") [:]
 
         case "hosted":
-            match_list = Match.select(lambda m: (not m.started) and m.creator.user_name == params.name) [:]
+            match_list = Match.select(lambda m: (not m.started) and m.creator.user_name == name) [:]
 
         case "joined":
-            u_id = get_user_id(params.name)
+            u_id = get_user_id(name)
             match_list = select(m for m in User[u_id].ongoing_matches if not m.started) [:]
 
         case "finished":
-            u_id = get_user_id(params.name)
+            u_id = get_user_id(name)
             match_list = select(m for m in User[u_id].ongoing_matches if m.started) [:]
             print(match_list)
 
         case _:
-            raise HTTPException(
-            status_code=404,
-            detail=f"Filter {params.filter} is not a valid filter"
-        )
+            return ["no_valid_filter"]
 
     res_list = []
 

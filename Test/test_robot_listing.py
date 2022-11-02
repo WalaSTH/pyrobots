@@ -50,7 +50,7 @@ user_to_reg = {
 u2_res = client.post("/user/signup", data=user_to_reg)
 assert u2_res.status_code == 200
 
-# List robots on empty database
+# List robots of user without them
 def test_robot_listing_empty():
     rob_owner = {
         "user_name" : user2,
