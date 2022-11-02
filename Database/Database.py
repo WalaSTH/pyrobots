@@ -1,6 +1,5 @@
 from pony.orm import *
 import sys
-from base64 import b64encode
 
 db = pony.orm.Database()
 
