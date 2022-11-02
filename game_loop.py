@@ -21,7 +21,7 @@ def run_simulation(sim: SimData):
         robot_list[i].initialize()
         set_position_by_index(robot_list[i], i)
         robot_for_frame = {
-            "id": robot_list[i].robot_id,
+            "id": i,
             "robotName": robot_list[i].robot_name,
             "robotPosition": {
                 "x": robot_list[i].x_position,
@@ -52,7 +52,7 @@ def run_simulation(sim: SimData):
         for i in range(n_robots):
             robot_list[i].move()
             robot_for_frame = {
-                "id": robot_list[i].robot_id,
+                "id": i,
                 "robotName": robot_list[i].robot_name,
                 "robotPosition": {
                     "x": robot_list[i].x_position,
