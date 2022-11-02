@@ -34,7 +34,6 @@ class gameRobot:
     current_speed_level: int
     frames_on_vel: int
     # aux
-    counter: int
 
     def __init__(self, id):
         self.robot_id = id
@@ -85,7 +84,7 @@ class gameRobot:
             print(
                 "Current speed level for "
                 + str(self.robot_name)
-                + "is "
+                + " is "
                 + str(self.current_speed_level)
             )
             self.engine_request = False
@@ -117,8 +116,16 @@ class gameRobot:
         )
         if self.y_position < 0:
             self.y_position = 0
-
-        if newx > 0 or newy > 0:
+        print(
+            "Position for robot: "
+            + str(self.robot_name)
+            + " is ("
+            + str(self.x_position)
+            + ", "
+            + str(self.y_position)
+            + ")"
+        )
+        if newx or newy:
             print(
                 str(self.robot_name)
                 + " has moved! New direction is ("

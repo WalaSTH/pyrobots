@@ -20,8 +20,12 @@ def run_simulation(sim: SimData):
     for i in range(n_robots):
         robot_list[i].initialize()
         robot_for_frame = {
+            "id": robot_list[i].robot_id,
             "robotName": robot_list[i].robot_name,
-            "robotPosition": {robot_list[i].x_position, robot_list[i].y_position},
+            "robotPosition": {
+                "x": robot_list[i].x_position,
+                "y": robot_list[i].y_position,
+            },
             "health": robot_list[i].health,
         }
         robot_frame_list.append(robot_for_frame)
@@ -55,8 +59,12 @@ def run_simulation(sim: SimData):
         for i in range(n_robots):
             robot_list[i].move()
             robot_for_frame = {
+                "id": robot_list[i].robot_id,
                 "robotName": robot_list[i].robot_name,
-                "robotPosition": {robot_list[i].x_position, robot_list[i].y_position},
+                "robotPosition": {
+                    "x": robot_list[i].x_position,
+                    "y": robot_list[i].y_position,
+                },
                 "health": robot_list[i].health,
             }
             robot_frame_list.append(robot_for_frame)
