@@ -8,6 +8,12 @@ MAX_ROUNDS_PER_GAME = 10000
 MAX_GAMES_PER_MATCH = 200
 
 
+
+class UserTemp(BaseModel):
+    username: str
+    password: str
+    email: EmailStr
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -15,15 +21,12 @@ class Token(BaseModel):
     id: int
     avatar: Optional[str]
 
-
 class TokenData(BaseModel):
     username: Optional[str] = None
-
 
 class User(BaseModel):
     username: str
     email: Optional[str] = None
-
 
 class TempMatch(BaseModel):
     name: str
@@ -53,3 +56,9 @@ class SimData(BaseModel):
     username: str
     n_rounds: int
     robot_names: List[str]
+
+class JoiningMatch(BaseModel):
+    username: str
+    robot: str
+    match: int
+    password: Optional[str]

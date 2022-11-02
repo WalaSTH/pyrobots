@@ -8,7 +8,7 @@ from pydantic_models import MAX_ROUNDS_PER_GAME, MAX_GAMES_PER_MATCH
 client = TestClient(app)
 
 # Auxiliar data.
-user1 = "Dummy2"
+user1 = "User_MC_1"
 pwd = "Test1234"
 user_to_reg = {
     "username": user1,
@@ -17,10 +17,9 @@ user_to_reg = {
     "avatar": None
 }
 u1_res = client.post("/user/signup", data=user_to_reg)
-print(u1_res.json())
 assert u1_res.status_code == 200
 
-user2 = "Dummy3"
+user2 = "User_MC_2"
 user_to_reg = {
     "username": user2,
     "password": pwd,
@@ -32,13 +31,12 @@ assert u2_res.status_code == 200
 
 rob_owner = get_last_user_id()
 new_robot_upl = {
-    "robot_name": "DummyBot1",
+    "robot_name": "Robot MC 1",
     "creator": rob_owner,
     "avatar": None,
 }
 code = open("Test/files/dummybot.py", "rb")
 rob_res = client.post("/robot/create", data=new_robot_upl, files={"code":code})
-print(rob_res.json())
 assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
 
@@ -63,7 +61,6 @@ def test_match_creation():
     new_match = get_last_match_id()
     assert response.json() == {"detail": "Match created successfully", "id": new_match}
     assert response.status_code == 200
-    delete_match(new_match)
 
 # New match with unexistant robot.
 def test_match_unexistant_robot():
@@ -152,7 +149,5 @@ def test_unstarted_match_already_exists():
 
     response = client.post("/match/create", json=match_to_create)
     response = client.post("/match/create", json=match_to_create)
-    delete_user(user1)
-    delete_user(user2)
     assert response.json() == {"detail": "A match with this name already exists"}
     assert response.status_code == 409

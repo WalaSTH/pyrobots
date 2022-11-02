@@ -82,11 +82,25 @@ def create_match(
 @db_session
 def get_match_info(room_id):
     room = Match[room_id]
+
     participants_list = []
     for r in room.fighters:
-        participants_list.append(
-            ({"robot_name": r.robot_name, "user_name": r.owner.user_name})
-        )
+
+        u_avatar = None
+        if r.owner.photo is not None:
+            u_avatar = r.owner.photo.decode()
+
+        r_avatar = None
+        if r.avatar is not None:
+            r_avatar = r.avatar.decode()
+
+
+        participants_list.append(({
+            "robot_name": r.robot_name, 
+            "robot_avatar": r_avatar, 
+            "user_name": r.owner.user_name, 
+            "user_avatar": u_avatar
+        }))
     data = {
         "name": room.name,
         "game_quantity": room.game_quantity,
@@ -119,18 +133,17 @@ def get_match_list(name, filter):
                 lambda m: (not m.started)
                 and m.current_players < m.max_players
                 and m.password != ""
-            )[:]
+                )[:]
 
         case "hosted":
             match_list = Match.select(
-                lambda m: (not m.started) and m.creator.user_name == name
-            )[:]
+                lambda m: (not m.started) 
+                and m.creator.user_name == name
+                )[:]
 
         case "joined":
             u_id = get_user_id(name)
-            match_list = select(m for m in User[u_id].ongoing_matches if not m.started)[
-                :
-            ]
+            match_list = select(m for m in User[u_id].ongoing_matches if not m.started)[:]
 
         case "finished":
             u_id = get_user_id(name)
@@ -180,13 +193,32 @@ def get_last_match_id():
 
 
 @db_session
+def check_full_match(match_id):
+    return Match[match_id].current_players == Match[match_id].max_players
+
+@db_session
 def check_match_name_exists(match_name):
     return Match.exists(lambda m: m.name == match_name and m.started == False)
 
 
 @db_session
+def check_match_password(match, pwd):
+    if pwd == None: pwd = ""
+    return Match[match].password == pwd
+
+@db_session
+def check_user_connected(match_id, username):
+    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:]
+
+@db_session
 def check_match_quantity():
     return Match.select().count()
+
+@db_session
+def join_match(m_id, u_id, r_id):
+    Match[m_id].participants.add(User[u_id])
+    Match[m_id].fighters.add(Robot[r_id])
+    Match[m_id].current_players += 1
 
 
 # --- Robot functions ---
@@ -252,8 +284,7 @@ def get_robot_owner_id(rob_id):
 
 @db_session
 def robot_exists(name_robot, creator_user):
-    if Robot.exists(robot_name=name_robot, owner=creator_user):
-        return True
+    return Robot.exists(robot_name=name_robot, owner=creator_user)
 
 
 @db_session
