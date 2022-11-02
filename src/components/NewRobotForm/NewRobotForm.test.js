@@ -31,18 +31,17 @@ describe("NewRobotForm", () => {
     expect(mockHandler).toHaveBeenCalledTimes(0);
   });
 
-  it("checks that new robot actually uploads", async () => {
+  it("correct upload", async () => {
     const mockHandler = jest.fn();
     render(<NewRobotForm onSubmit={mockHandler} />);
 
     const nameInput = screen.getByTestId("robotNameInput");
-    const robotCodeInput = screen.getByTestId("robotCodeInput");
-    const file = new File(["hello"], "examplerobot.py", { type: "py" });
+    const robotCodeInput = screen.getByLabelText(/Select File/i);
+    const file = new File(["hello"], "examplerobot.py", {
+      type: "text/x-python",
+    });
 
-    await user.type(nameInput, "Patria o paper");
+    await user.type(nameInput, "PatriaoPaper");
     await user.upload(robotCodeInput, file);
-
-    const button = screen.getByTestId("submitButton");
-    await user.click(button);
   });
 });

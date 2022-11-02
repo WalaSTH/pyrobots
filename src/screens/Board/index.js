@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
-import Misile from "../../components/Game/Misile";
+import Missile from "../../components/Game/Missile";
 
 export default function Board() {
   const [position, setPosition] = useState(0);
@@ -24,7 +24,7 @@ export default function Board() {
     stageRef.current.scale({ x: scale, y: scale });
   }
 
-  const colors = ["red", "black", "green", "blue", "cyan"];
+  const colors = ["red", "black", "green", "blue"];
 
   useEffect(() => {
     intervalRef.current = getInterval();
@@ -53,32 +53,32 @@ export default function Board() {
         {
           id: 1,
           robotName: "Pinaculo",
-          robotPosition: { x: 100, y: 200 },
+          robotPosition: { x: 800, y: 400 },
           health: 100,
         },
         {
           id: 2,
           robotName: "Jorge",
-          robotPosition: { x: 200, y: 200 },
+          robotPosition: { x: 300, y: 970 },
           health: 100,
         },
         {
           id: 3,
           robotName: "Aurelio",
-          robotPosition: { x: 700, y: 200 },
+          robotPosition: { x: 100, y: 200 },
           health: 100,
         },
         {
           id: 4,
           robotName: "Bonifacio",
-          robotPosition: { x: 100, y: 200 },
+          robotPosition: { x: 90, y: 200 },
           health: 100,
         },
       ],
-      misiles: [
+      missiles: [
         {
           sender: 1,
-          misilePosition: { x: 100, y: 200 },
+          missilePosition: { x: 100, y: 200 },
           end: { x: 200, y: 500 },
         },
       ],
@@ -110,10 +110,10 @@ export default function Board() {
           health: 20,
         },
       ],
-      misiles: [
+      missiles: [
         {
           sender: 1,
-          misilePosition: { x: 500, y: 200 },
+          missilePosition: { x: 500, y: 200 },
           end: { x: 200, y: 500 },
         },
       ],
@@ -148,7 +148,7 @@ export default function Board() {
                     />
                   );
                 })
-              : // frames[position].misiles.map((misile) =>)
+              : // frames[position].missiles.map((missile) =>)
                 frames[frames.length - 1].robots.map((robot) => {
                   // console.log(robot);
                   return (
@@ -161,16 +161,16 @@ export default function Board() {
                     />
                   );
                 })}
-            {/* {misiles.map((misile) => {
+            {/* {missiles.map((missile) => {
               return (
-                <Misile
-                  key={misile.misileId}
-                  position={misile.misilePosition[position]}
+                <Missile
+                  key={missile.missileId}
+                  position={missile.missilePosition[position]}
                   fill={colors[0]}
                   scale={
-                    misile.misilePosition.length >= position
+                    missile.missilePosition.length >= position
                       ? { x: 0.3, y: 0.3 }
-                      : position === misile.misilePosition.length + 1
+                      : position === missile.missilePosition.length + 1
                       ? { x: 20, y: 20 }
                       : { x: 0, y: 0 }
                   }

@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import { Circle } from "react-konva";
 
-export default function Misile({ position, ...props }) {
-  const misileRef = useRef(null);
+export default function Missile({ position, ...props }) {
+  const missileRef = useRef(null);
   var mIdCount = 0;
   useEffect(() => {
-    const mis = misileRef.current;
+    const mis = missileRef.current;
     mis.to({ ...position, duration: 0.5 });
     // mis.rotate()
   });
@@ -13,7 +13,7 @@ export default function Misile({ position, ...props }) {
   return (
     <Circle
       key={props.id ? props.id : mIdCount++}
-      ref={misileRef}
+      ref={missileRef}
       x={props.x ? props.x : 100}
       y={props.y ? props.y : 100}
       radius={props.radius ? props.radius : 30}
