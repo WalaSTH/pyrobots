@@ -190,6 +190,7 @@ def check_match_name_exists(match_name):
 
 @db_session
 def check_match_password(match, pwd):
+    if pwd == None: pwd = ""
     return Match[match].password == pwd
 
 @db_session
