@@ -26,8 +26,8 @@ def get_random_string_goodps(length):
     lower = string.ascii_lowercase
     upper = string.ascii_uppercase
     num = string.digits
-    all = lower + upper + num
-    result_str = ''.join(random.choice(all) for i in range(length))
+    all = [lower, upper, num]
+    result_str = ''.join(random.choice(all[i%3]) for i in range(length))
     return result_str
 
 def get_email():

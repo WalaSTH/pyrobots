@@ -7,32 +7,35 @@ from pydantic_models import MAX_ROUNDS_PER_GAME, MAX_GAMES_PER_MATCH
 
 client = TestClient(app)
 
-user1 = "Dummy_1"
+user1 = "Dummy_5"
 pwd = "Test1234"
 user_to_reg = {
     "username": user1,
     "password": pwd,
     "email": (get_email()),
+    "avatar": None
 }
-u1_res = client.post("/user/signup", params=user_to_reg)
+u1_res = client.post("/user/signup", data=user_to_reg)
 assert u1_res.status_code == 200
 
 rob_owner = get_last_user_id()
 new_robot_upl = {
-    "robot_name": "DummyBot01",
-    "creator": rob_owner
+    "robot_name": "DummyBot02",
+    "creator": rob_owner,
+    "avatar": None,
 }
 code = open("Test/files/dummybot.py", "rb")
-rob_res = client.post("/robot/create", params = new_robot_upl, files={"code":code})
+rob_res = client.post("/robot/create", data=new_robot_upl, files={"code":code})
 assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
 
 new_robot_upl = {
     "robot_name": "DummyBot02",
-    "creator": rob_owner
+    "creator": rob_owner,
+    "avatar": None,
 }
 code = open("Test/files/dummybot.py", "rb")
-rob_res = client.post("/robot/create", params = new_robot_upl, files={"code":code})
+rob_res = client.post("/robot/create", data=new_robot_upl, files={"code":code})
 assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
 
@@ -42,8 +45,9 @@ user_to_reg = {
     "username": user2,
     "password": pwd,
     "email": (get_email()),
+    "avatar": None,
 }
-u2_res = client.post("/user/signup", params=user_to_reg)
+u2_res = client.post("/user/signup", data=user_to_reg)
 assert u2_res.status_code == 200
 
 # List robots on empty database
