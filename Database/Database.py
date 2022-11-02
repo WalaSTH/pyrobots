@@ -148,7 +148,6 @@ def get_match_list(name, filter):
         case "finished":
             u_id = get_user_id(name)
             match_list = select(m for m in User[u_id].ongoing_matches if m.started)[:]
-            print(match_list)
 
         case _:
             return ["no_valid_filter"]

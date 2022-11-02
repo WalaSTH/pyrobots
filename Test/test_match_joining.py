@@ -88,7 +88,6 @@ match_to_create = {
 }
 m_res = client.post("/match/create", json=match_to_create)
 test_match = get_last_match_id()
-print(m_res.json())
 assert m_res.status_code == 200
 
 

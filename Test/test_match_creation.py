@@ -17,7 +17,6 @@ user_to_reg = {
     "avatar": None
 }
 u1_res = client.post("/user/signup", data=user_to_reg)
-print(u1_res.json())
 assert u1_res.status_code == 200
 
 user2 = "Dummy3"
@@ -38,7 +37,6 @@ new_robot_upl = {
 }
 code = open("Test/files/dummybot.py", "rb")
 rob_res = client.post("/robot/create", data=new_robot_upl, files={"code":code})
-print(rob_res.json())
 assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
 
