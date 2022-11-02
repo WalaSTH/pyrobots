@@ -210,8 +210,7 @@ export default function Lobby() {
             />
           )}
         </Grid>
-
-        <Grid item xs={12} md={10} lg={7}>
+        <Grid item xs={12} md={10} lg={7} rowSpacing={10}>
           <Card
             variant="outlined"
             sx={{
@@ -232,8 +231,25 @@ export default function Lobby() {
               {listParticipants}
             </Card>
           </Card>
-        </Grid>
 
+          {match && match.creator ? (
+            username !== match.creator ? (
+              <Button
+                size="large"
+                variant="outlined"
+                color="error"
+                sx={{
+                  width: 250,
+                  marginTop: 2,
+                  marginBottom: 2,
+                  display: { xs: "none", lg: "flex" },
+                }}
+              >
+                Leave match
+              </Button>
+            ) : null
+          ) : null}
+        </Grid>
         <Grid item xs={12} md={10} lg={5}>
           <Card
             variant="outlined"
@@ -241,6 +257,7 @@ export default function Lobby() {
               borderRadius: 3,
               padding: 2,
               height: 393,
+              marginBottom: { xs: 0, lg: 2 },
             }}
           >
             <Typography variant="h6" color="primary" padding={1}>
@@ -279,33 +296,33 @@ export default function Lobby() {
           </Card>
         </Grid>
 
-        {/*
-        <Grid
-          item
-          xs={12}
-          md={10}
-          lg={12}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
-          }}
-        >
-          {username === match.creator ? (
-            <Button size="large" variant="contained" sx={{ width: 250 }}>
-              Start match
-            </Button>
-          ) : (
-            <Button
-              size="large"
-              variant="outlined"
-              color="error"
-              sx={{ width: 250 }}
+        {match && match.creator ? (
+          username !== match.creator ? (
+            <Grid
+              item
+              xs={12}
+              md={10}
+              lg={12}
+              sx={{
+                display: { xs: "flex", lg: "none" },
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }}
             >
-              Leave match
-            </Button>
-          )}
-        </Grid> */}
+              <Button
+                size="large"
+                variant="outlined"
+                color="error"
+                sx={{
+                  width: 250,
+                  marginBottom: 2,
+                }}
+              >
+                Leave match
+              </Button>
+            </Grid>
+          ) : null
+        ) : null}
       </Grid>
     </Container>
   );
