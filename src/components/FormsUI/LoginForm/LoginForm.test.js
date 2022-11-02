@@ -2,7 +2,7 @@ import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import LoginForm from "./";
 
 describe("<LoginForm", () => {
@@ -17,7 +17,7 @@ describe("<LoginForm", () => {
   });
 
   it("component renders with all the components", () => {
-    render(<LoginForm />);
+    act(() => render(<LoginForm />));
     screen.getByText(/Sign in/i);
     screen.getByLabelText(/Username/i);
     screen.getByLabelText(/Password/i);
