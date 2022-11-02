@@ -230,6 +230,11 @@ async def match_join(
     }
 
     await manager.broadcast(join_alert, match_to_join.match)
+    data = {
+        "message_type": 1,
+        "message_content": (get_match_info(match_to_join.match)) 
+    }
+    await manager.broadcast(data, match_to_join.match)
 
     return {"detail": "You have succesfully joined the match"}
 

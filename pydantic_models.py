@@ -21,15 +21,12 @@ class Token(BaseModel):
     id: int
     avatar: Optional[str]
 
-
 class TokenData(BaseModel):
     username: Optional[str] = None
-
 
 class User(BaseModel):
     username: str
     email: Optional[str] = None
-
 
 class TempMatch(BaseModel):
     name: str
