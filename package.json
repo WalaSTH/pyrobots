@@ -14,6 +14,7 @@
     "axios": "^1.1.3",
     "canvas": "^2.10.2",
     "formik": "^2.2.9",
+    "jest-localstorage-mock": "^2.4.22",
     "konva": "^8.3.13",
     "material-icons": "^1.12.0",
     "react": "^18.2.0",
