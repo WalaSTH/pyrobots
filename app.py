@@ -89,9 +89,10 @@ async def robot_upload(
     code: UploadFile = File(),
     avatar: Optional[str] = Form(None),
 ):
-    if (creator > get_last_user_id() or creator < 1):
+    if not check_user_existance(creator):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="There is no user with such ID.",
         )
 
     user_name = get_user_name_by_id(creator)
@@ -100,15 +101,9 @@ async def robot_upload(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid robot name."
         )
 
-    if not user_exists(user_name):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="There is no user with such ID.",
-        )
-
     if robot_exists(robot_name, creator):
         raise HTTPException(
-            status_code=status.HTTP_400_NOT_FOUND,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"You already own a robot with name {robot_name}.",
         )
     create_robot(
