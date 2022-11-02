@@ -213,11 +213,11 @@ async def match_join(
     if robot_id == None:
         raise HTTPException(status_code=404, detail=f"Robot {match_to_join.robot} does not exist or does not belong to you")
 
-    if check_full_match(match_to_join.match):
-        raise HTTPException(status_code=409, detail="The match you tried joining is already full")
-
     if check_user_connected(match_to_join.match, match_to_join.username) != []:
         raise HTTPException(status_code=409, detail="You have already joined this match")
+
+    if check_full_match(match_to_join.match):
+        raise HTTPException(status_code=409, detail="The match you tried joining is already full")
 
     if not check_match_password(match_to_join.match, match_to_join.password):
         raise HTTPException(status_code=401, detail="Incorrect password")
