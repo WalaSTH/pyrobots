@@ -1,4 +1,4 @@
-class SuperRobotCopy(gameRobot):
+class Dummybot(gameRobot):
     def initialize(self):
         print("Initializing " + self.robot_name + ".")
         count_var: int
