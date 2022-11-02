@@ -167,8 +167,8 @@ class gameRobot:
     def get_velocity():
         return "here you go"
 
-    def get_position():
-        return "here you go"
+    def get_position(self):
+        return [self.x_position, self.y_position]
 
     def get_damage(self):
         return self.health
