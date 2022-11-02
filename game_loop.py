@@ -1,12 +1,15 @@
 from Database.Database import *
 from pydantic_models import *
 from game_robot import *
+from game_auxilar_functions import *
 
 
 @db_session
 def run_simulation(sim: SimData):
     n_robots = len(sim.robot_names)
     robot_list = []
+    robot_frame_list = []
+    frame_list = []
     missileList = []
     frame_list1 = []
     frame_list2 = []
@@ -16,6 +19,15 @@ def run_simulation(sim: SimData):
     # initialize every robot
     for i in range(n_robots):
         robot_list[i].initialize()
+        robot_for_frame = {
+            "robotName": robot_list[i].robot_name,
+            "robotPosition": {robot_list[i].x_position, robot_list[i].y_position},
+            "health": robot_list[i].health,
+        }
+        robot_frame_list.append(robot_for_frame)
+    frame = {"robots": robot_frame_list.copy(), "missiles": {}}
+    robot_frame_list = []
+    frame_list.append(frame)
     # if i == 0:
     # frame_list.append({robot_list[i].x_position, robot_list[i].y_position})
     # loop for number of rounds
@@ -23,8 +35,7 @@ def run_simulation(sim: SimData):
         print("Starting round N: " + str(i + 1) + "!")
         # respond for every robot
         for i in range(n_robots):
-            # robot_list[i].respond()
-            continue
+            robot_list[i].respond()
         # scan for every robot
         for i in range(n_robots):
             # other_robots = robot_list.copy()
@@ -42,9 +53,35 @@ def run_simulation(sim: SimData):
             continue
         # move robots
         for i in range(n_robots):
-            # robot_list[i].move()
-            continue
+            robot_list[i].move()
+            robot_for_frame = {
+                "robotName": robot_list[i].robot_name,
+                "robotPosition": {robot_list[i].x_position, robot_list[i].y_position},
+                "health": robot_list[i].health,
+            }
+            robot_frame_list.append(robot_for_frame)
+        frame = {"robots": robot_frame_list.copy(), "missiles": {}}
+        robot_frame_list = []
+        frame_list.append(frame)
         # check collisions
         # apply damage
         # calculate deaths
-    return True
+    return frame_list
+
+
+def load_robot(username, robot_name: str):
+    # code = Robot[i].code
+
+    # get_robot_code_by_name
+    code = get_code_by_robotname(username, robot_name)
+    classname: str = get_robot_by_name(username, robot_name).robot_class_name
+    user = get_user(username)
+    robot_id = get_id_robot(robot_name, user)
+    size = len(classname)
+    classname = classname[: size - 3]
+    classname = classname.replace("_", " ").title().replace(" ", "")
+    exec_str = "newRobot = " + classname + "(" + str(robot_id) + ")"
+    # exec_str = code + exec_str.encode()  -> use this to load code instead of custom file
+    exec(open("super_robot_copy.py").read(), globals())
+    exec(exec_str, globals())
+    return newRobot  # newRobot is defined in exec_str
