@@ -12,7 +12,7 @@ import json
 from random import *
 from game_loop import *
 
-MAX_LEN_ALIAS = 9
+MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
 MIN_LEN_PASSWORD = 7
@@ -149,10 +149,10 @@ async def robot_position(robot_position: Robot = Depends()):
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
 
-    if (match_data.robot_id > get_last_robot_id() or match_data.robot_id <= 0):
+    if not check_robot_existance(match_data.robot_id):
         raise HTTPException(status_code=404, detail="No robot with such ID")
 
-    if (match_data.creator > get_last_user_id() or match_data.creator <= 0):
+    if not check_user_existance(match_data.creator):
         raise HTTPException(status_code=404, detail="No user with such ID")
 
     if match_data.password == None:
@@ -184,6 +184,44 @@ def match_creation(match_data: TempMatch):
     )
 
     return {"detail": "Match created successfully", "id": match_id}
+
+@app.post("/match/join", tags=["Matches"], status_code=200)
+async def match_join(
+    match_to_join: JoiningMatch = Depends()
+):
+
+    if not check_match_existance(match_to_join.match):
+        raise HTTPException(status_code=404, detail=f"Match id {match_to_join.match} does not exist")
+
+    if not user_exists(match_to_join.username):
+        raise HTTPException(status_code=404, detail=f"User {match_to_join.username} is not a user")
+
+    user_id = get_user_id(match_to_join.username)
+    robot_id = get_id_robot(match_to_join.robot, user_id)
+
+    if robot_id == None:
+        raise HTTPException(status_code=404, detail=f"Robot {match_to_join.robot} does not exist or does not belong to you")
+
+    if check_full_match(match_to_join.match):
+        raise HTTPException(status_code=409, detail="The match you tried joining is already full")
+
+    if check_user_connected(match_to_join.match, match_to_join.username) != []:
+        raise HTTPException(status_code=409, detail="You have already joined this match")
+
+    if not check_match_password(match_to_join.match, match_to_join.password):
+        raise HTTPException(status_code=401, detail="Incorrect password")
+
+
+    join_match(match_to_join.match, user_id, robot_id)
+
+    join_alert = {
+        "message_type": 2,
+        "message_content": f"User {match_to_join.username} has joined the battle"
+    }
+
+    await manager.broadcast(join_alert, match_to_join.match)
+
+    return {"detail": "You have succesfully joined the match"}
 
 
 # --- User Endpoints ---

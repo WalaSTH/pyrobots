@@ -8,6 +8,12 @@ MAX_ROUNDS_PER_GAME = 10000
 MAX_GAMES_PER_MATCH = 200
 
 
+class JoiningMatch(BaseModel):
+    username: str
+    robot: str
+    match: int
+    password: str
+
 class UserTemp(BaseModel):
     username: str
     password: str

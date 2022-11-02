@@ -107,12 +107,30 @@ def get_last_match_id():
     return int(max(m.id for m in Match) or 0)
 
 @db_session
+def check_full_match(match_id):
+    return Match[match_id].current_players == Match[match_id].max_players
+
+@db_session
 def check_match_name_exists(match_name):
     return Match.exists(lambda m: m.name == match_name and m.started == False)
 
 @db_session
+def check_match_password(match, pwd):
+    return Match[match].password == pwd
+
+@db_session
+def check_user_connected(match_id, username):
+    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:]
+
+@db_session
 def check_match_quantity():
     return Match.select().count()
+
+@db_session
+def join_match(m_id, u_id, r_id):
+    Match[m_id].participants.add(User[u_id])
+    Match[m_id].fighters.add(Robot[r_id])
+    Match[m_id].current_players += 1
 
 
 # --- Robot functions ---
@@ -164,8 +182,7 @@ def get_robot_owner_id(rob_id):
 
 @db_session
 def robot_exists(name_robot, creator_user):
-    if Robot.exists(robot_name=name_robot, owner=creator_user):
-        return True
+    return Robot.exists(robot_name=name_robot, owner=creator_user)
 
 @db_session
 def get_id_robot(robot, creator):
