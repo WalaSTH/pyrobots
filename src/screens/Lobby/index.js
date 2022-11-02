@@ -30,6 +30,8 @@ export default function Lobby() {
     participants: [],
     round_quantity: 0,
   });
+
+  const username = localStorage.getItem("username");
   const params = useParams();
   const navigate = useNavigate();
 
@@ -40,7 +42,22 @@ export default function Lobby() {
       console.log("WebSocket Client Connected");
     };
     client.onmessage = function (message) {
-      setMatch(JSON.parse(message.data));
+      if (message.data) {
+        const msgData = JSON.parse(message.data);
+        if (msgData.message_type === 1) {
+          setMatch(msgData.message_content);
+          if (
+            !msgData.message_content.participants.some(
+              (p) => p.user_name === username
+            )
+          ) {
+            navigate("/");
+          }
+        } else if (msgData.message_type === 2) {
+          console.log(msgData.message_content);
+          navigate("/");
+        }
+      }
     };
     client.onerror = function () {
       console.log("Connection Error");
@@ -219,7 +236,7 @@ export default function Lobby() {
         </Grid>
 
         {/*
-        This buttons don't do anything for now
+        These buttons don't do anything (for now)
         <Grid
           item
           xs={12}
