@@ -26,10 +26,20 @@ def get_random_string_goodps(length):
     lower = string.ascii_lowercase
     upper = string.ascii_uppercase
     num = string.digits
-    all = lower + upper + num
-    result_str = ''.join(random.choice(all) for i in range(length))
+    all = [lower, upper, num]
+    result_str = ''.join(random.choice(all[i%3]) for i in range(length))
     return result_str
 
 def get_email():
     return "test" + "@" + get_random_string_lower(4) + ".com"
+
+#Random string with special characters
+def get_random_string_special():
+    return ''.join([random.choice(string.punctuation) for n in range(12)])
+
+
+#random negative number
+def get_rand_negative():
+    return random.randint(-1000, 0)
+
 
