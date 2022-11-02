@@ -82,13 +82,24 @@ def create_match(
 @db_session
 def get_match_info(room_id):
     room = Match[room_id]
+
     participants_list = []
     for r in room.fighters:
+
+        u_avatar = None
+        if r.owner.photo is not None:
+            u_avatar = r.owner.photo.decode()
+
+        r_avatar = None
+        if r.avatar is not None:
+            r_avatar = r.avatar.decode()
+
+
         participants_list.append(({
             "robot_name": r.robot_name, 
-            "robot_avatar": r.avatar.decode(), 
+            "robot_avatar": r_avatar, 
             "user_name": r.owner.user_name, 
-            "user_avatar": r.owner.photo.decode()
+            "user_avatar": u_avatar
         }))
     data = {
         "name": room.name,
