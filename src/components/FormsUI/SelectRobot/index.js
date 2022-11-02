@@ -13,16 +13,16 @@ import {
   Toolbar,
 } from "@mui/material";
 import getRobots from "../../api/getRobots";
+import { useField, useFormikContext } from "formik";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({
-  handleChoice,
-  children,
-  ...otherProps
-}) {
+export default function FullScreenDialog({ name, children, ...otherProps }) {
+  const [field, meta] = useField(name);
+  const { setFieldValue } = useFormikContext();
+
   const [open, setOpen] = useState(false);
   const [dataRobot, setDataRobot] = useState([]);
 
@@ -75,7 +75,7 @@ export default function FullScreenDialog({
                   button
                   key={robot[1]}
                   onClick={() => {
-                    handleChoice(robot[1]);
+                    setFieldValue(name, robot[1]);
                     handleClose();
                   }}
                 >
