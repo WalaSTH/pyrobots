@@ -101,7 +101,6 @@ def get_match_info(room_id):
             "user_name": r.owner.user_name, 
             "user_avatar": u_avatar
         }))
-    
     data = {
         "name": room.name,
         "game_quantity": room.game_quantity,
