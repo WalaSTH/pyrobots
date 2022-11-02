@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Union, Optional
 from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from field_validations import create_match_field_validation
+from field_validations import *
 from security_functions import *
 from pydantic_models import *
 from connections import *
@@ -119,6 +119,10 @@ async def robot_upload(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"You already own a robot with name {robot_name}.",
+        )
+    if not robot_code_valid(code):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid robot code"
         )
     create_robot(robot_name, creator, code, avatar)
     return {"detail": "Robot created succesfully."}
