@@ -72,7 +72,6 @@ match_to_create = {
         "password": ""
     }
 m2r = client.post("/match/create", json=match_to_create)
-print(m2r.json())
 assert m2r.status_code == 200
 
 match_to_create = {

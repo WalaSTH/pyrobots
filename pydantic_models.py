@@ -64,4 +64,4 @@ class JoiningMatch(BaseModel):
     username: str
     robot: str
     match: int
-    password: str
+    password: Optional[str]
