@@ -19,6 +19,7 @@ def run_simulation(sim: SimData):
     # initialize every robot
     for i in range(n_robots):
         robot_list[i].initialize()
+        set_position_by_index(robot_list[i], i)
         robot_for_frame = {
             "id": robot_list[i].robot_id,
             "robotName": robot_list[i].robot_name,
@@ -32,9 +33,6 @@ def run_simulation(sim: SimData):
     frame = {"robots": robot_frame_list.copy(), "missiles": {}}
     robot_frame_list = []
     frame_list.append(frame)
-    # if i == 0:
-    # frame_list.append({robot_list[i].x_position, robot_list[i].y_position})
-    # loop for number of rounds
     for i in range(sim.n_rounds):
         print("Starting round N: " + str(i + 1) + "!")
         # respond for every robot
@@ -42,11 +40,6 @@ def run_simulation(sim: SimData):
             robot_list[i].respond()
         # scan for every robot
         for i in range(n_robots):
-            # other_robots = robot_list.copy()
-            # del other_robots[i]
-            # print(other_robots)
-            # robot_list[i].scan(other_robots)
-            # launch missle for every robot
             continue
         for i in range(n_robots):
             # robot_list[i].shoot_cannon()
@@ -78,9 +71,6 @@ def run_simulation(sim: SimData):
 
 
 def load_robot(username, robot_name: str):
-    # code = Robot[i].code
-
-    # get_robot_code_by_name
     code = get_code_by_robotname(username, robot_name)
     classname: str = get_robot_by_name(username, robot_name).robot_class_name
     user = get_user(username)
@@ -89,7 +79,18 @@ def load_robot(username, robot_name: str):
     classname = classname[: size - 3]
     classname = classname.replace("_", " ").title().replace(" ", "")
     exec_str = "newRobot = " + classname + "(" + str(robot_id) + ")"
-    # exec_str = code + exec_str.encode()  -> use this to load code instead of custom file
-    exec(open("super_robot_copy.py").read(), globals())
+    exec_str = code + exec_str.encode()
     exec(exec_str, globals())
     return newRobot  # newRobot is defined in exec_str
+
+
+def set_position_by_index(gameRobot, index):
+    match index:
+        case 0:
+            gameRobot.set_position(750, 250)
+        case 1:
+            gameRobot.set_position(250, 250)
+        case 2:
+            gameRobot.set_position(250, 750)
+        case 3:
+            gameRobot.set_position(750, 750)
