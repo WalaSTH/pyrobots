@@ -75,12 +75,18 @@ async def websocket_endpoint(websocket: WebSocket, match_id : int):
 
     try:
         while True:
-            data = json.dumps(get_match_info(match_id)) if check_match_existance(match_id) else "Match {match_id} doesn't exist"
+            data = {
+                "message_type": 1,
+                "message_content": (get_match_info(match_id)) 
+            } if check_match_existance(match_id) else {
+                "message_type": 2,
+                "message_content": "Match {match_id} doesn't exist"
+            }
             await manager.broadcast(data, match_id)
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket, match_id)
-        await manager.broadcast(f"A player has disconnected", match_id)
+        await manager.broadcast({"message_type": 2, "message_content": "A player has disconnected"})
 
 # --- Robot Endpoints ---
 @app.post("/robot/create", tags=["Robots"], status_code=200)
