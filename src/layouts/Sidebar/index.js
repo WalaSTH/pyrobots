@@ -34,6 +34,7 @@ export default function DrawerWrapper({
   ...otherProps
 }) {
   const username = localStorage.getItem("username");
+  const avatar = localStorage.getItem("avatar");
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -78,9 +79,14 @@ export default function DrawerWrapper({
               }}
             >
               <Avatar
-                src="null"
+                src={avatar}
                 alt={username}
-                sx={{ color: "#fff", marginBottom: "3px" }}
+                sx={{
+                  color: "#fff",
+                  marginBottom: "3px",
+                  height: "60px",
+                  width: "60px",
+                }}
               />
               <Typography>{username}</Typography>
             </Box>
