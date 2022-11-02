@@ -89,7 +89,7 @@ export default function Lobby() {
     return () => {
       client.close();
     };
-  }, [params.matchID]);
+  }, [params.matchID, navigate, username]);
 
   const listParticipants = match.participants ? (
     <List>
@@ -99,11 +99,11 @@ export default function Lobby() {
             <ListItemAvatar>
               <Avatar
                 alt={p.robot_name}
-                src="null"
+                src={p.robot_avatar ? p.robot_avatar : "null"}
                 sx={{
                   height: "45px",
                   width: "45px",
-                  backgroundColor: "primary.main",
+                  backgroundColor: p.robot_avatar ? "white" : "primary.main",
                 }}
               >
                 <SmartToyIcon
@@ -121,10 +121,11 @@ export default function Lobby() {
             <Tooltip title={p.user_name} placement="right" arrow>
               <Avatar
                 alt={p.user_name}
-                src="null"
+                src={p.user_avatar ? p.user_avatar : "null"}
                 sx={{
                   height: "40px",
                   width: "40px",
+                  backgroundColor: p.user_avatar ? "white" : "",
                   border: 2,
                   borderColor: "primary.main",
                   ml: 20,
