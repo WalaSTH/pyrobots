@@ -84,9 +84,12 @@ def get_match_info(room_id):
     room = Match[room_id]
     participants_list = []
     for r in room.fighters:
-        participants_list.append(
-            ({"robot_name": r.robot_name, "user_name": r.owner.user_name})
-        )
+        participants_list.append(({
+            "robot_name": r.robot_name, 
+            "robot_avatar": r.avatar.decode(), 
+            "user_name": r.owner.user_name, 
+            "user_avatar": r.owner.photo.decode()
+        }))
     data = {
         "name": room.name,
         "game_quantity": room.game_quantity,
@@ -119,18 +122,17 @@ def get_match_list(name, filter):
                 lambda m: (not m.started)
                 and m.current_players < m.max_players
                 and m.password != ""
-            )[:]
+                )[:]
 
         case "hosted":
             match_list = Match.select(
-                lambda m: (not m.started) and m.creator.user_name == name
-            )[:]
+                lambda m: (not m.started) 
+                and m.creator.user_name == name
+                )[:]
 
         case "joined":
             u_id = get_user_id(name)
-            match_list = select(m for m in User[u_id].ongoing_matches if not m.started)[
-                :
-            ]
+            match_list = select(m for m in User[u_id].ongoing_matches if not m.started)[:]
 
         case "finished":
             u_id = get_user_id(name)
