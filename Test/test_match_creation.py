@@ -63,7 +63,6 @@ def test_match_creation():
     new_match = get_last_match_id()
     assert response.json() == {"detail": "Match created successfully", "id": new_match}
     assert response.status_code == 200
-    delete_match(new_match)
 
 # New match with unexistant robot.
 def test_match_unexistant_robot():
@@ -152,7 +151,5 @@ def test_unstarted_match_already_exists():
 
     response = client.post("/match/create", json=match_to_create)
     response = client.post("/match/create", json=match_to_create)
-    delete_user(user1)
-    delete_user(user2)
     assert response.json() == {"detail": "A match with this name already exists"}
     assert response.status_code == 409

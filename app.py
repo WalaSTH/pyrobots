@@ -87,7 +87,7 @@ async def websocket_endpoint(websocket: WebSocket, match_id: int):
                 "message_type": 1,
                 "message_content": (get_match_info(match_id)) 
             } if check_match_existance(match_id) else {
-                "message_type": 2,
+                "message_type": 3,
                 "message_content": "Match {match_id} doesn't exist"
             }
             await manager.broadcast(data, match_id)
@@ -221,7 +221,6 @@ async def match_join(
 
     if not check_match_password(match_to_join.match, match_to_join.password):
         raise HTTPException(status_code=401, detail="Incorrect password")
-
 
     join_match(match_to_join.match, user_id, robot_id)
 
