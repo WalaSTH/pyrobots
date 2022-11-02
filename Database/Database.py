@@ -1,10 +1,11 @@
 from pony.orm import *
 import sys
+from base64 import b64encode
 
 db = pony.orm.Database()
 
 if "pytest" in sys.modules:
-    db.bind(provider='sqlite', filename='db.tests', create_db=True)
+    db.bind(provider='sqlite', filename=':sharedmemory:')
 else:
     db.bind(provider='sqlite', filename='db.pyrobots', create_db=True)
 
@@ -121,7 +122,7 @@ def check_match_quantity():
 def create_robot(robot_name, creator, code, avatar):
     new_robot = Robot(robot_name=robot_name, code=code.file.read(), owner=creator)
     if avatar != None:
-        new_robot.avatar = avatar.file.read()
+        new_robot.avatar = avatar.encode()
     else:
         new_robot.avatar = None
 
@@ -187,20 +188,31 @@ def user_has_robot(username, robot_name):
     user = get_user(username)
     return robot_exists(robot_name, user)
 
+@db_session
+def get_robot_by_id(id: int):
+    return Robot.get(id=id)
 
 # --- User Functions ---
 
 
 @db_session
-def create_user(user_name, email, password):
-    User(
+def create_user(user_name, email, password, avatar):
+    new_user = User(
         user_name=user_name, email=email, password=password, verified=False, photo=None
     )
+    if avatar != None:
+        new_user.photo = avatar.encode()
+    else:
+        new_user.photo = None
 
 
 @db_session
 def get_user(user_name):
     return User.get(user_name=user_name) or None
+
+@db_session
+def get_user_by_id(id: int):
+    return User.get(id=id)
 
 @db_session
 def get_user_by_email(email):
@@ -210,13 +222,18 @@ def get_user_by_email(email):
 @db_session
 def upload_photo_db(user_name, photo):
     user = get_user(user_name)
-    user.photo = photo
+    user.photo = photo.encode()
 
 
 @db_session
 def get_photo(user_name):
     user = get_user(user_name)
-    return user.photo
+
+    photo = None
+    if user.photo is not None:
+        photo = user.photo.decode()
+
+    return photo
 
 
 @db_session
@@ -237,6 +254,7 @@ def user_exists(user_name):
 @db_session
 def check_user_existance(user_id):
     return User.exists(id = user_id)
+
 
 @db_session
 def user_is_verified(user_name):
