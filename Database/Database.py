@@ -1,8 +1,12 @@
 from pony.orm import *
+import sys
 
 db = pony.orm.Database()
 
-db.bind(provider="sqlite", filename="db.pyrobots", create_db=True)
+if "pytest" in sys.modules:
+    db.bind(provider='sqlite', filename='db.tests', create_db=True)
+else:
+    db.bind(provider='sqlite', filename='db.pyrobots', create_db=True)
 
 
 class User(db.Entity):
