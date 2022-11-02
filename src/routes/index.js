@@ -27,8 +27,9 @@ export default function RoutesWrapper({ navigate }) {
       />
       <Route element={<PrivateRoute />}>
         <Route path="/browse-matches" element={<BrowseMatches />} />
-        <Route path="/create-robot" element={<NewRobot UserID={userID} />} />
-        <Route path="/create-match" element={<CreateMatch UserID={userID} />} />
+        <Route path="/create-robot" element={<NewRobot userID={userID} />} />
+        <Route path="/create-match" element={<CreateMatch userID={userID} />} />
+        <Route path="/lobby/:matchID" element={<></>} />
         <Route path="/create-simulation" element={<></>} />
         <Route path="/match-history" element={<></>} />
       </Route>

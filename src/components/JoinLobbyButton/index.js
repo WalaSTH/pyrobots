@@ -1,16 +1,20 @@
 import { Box, Fab } from "@mui/material";
 import { useState } from "react";
 import { blue } from "@mui/material/colors";
-import { useNavigate } from "react-router-dom";
 import PasswordDialog from "../PasswordDialog";
+import RobotDialog from "../RobotDialog";
 import LoginIcon from "@mui/icons-material/Login";
 
 export default function JoinLobby({ params }) {
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const [robotDialogOpen, setRobotDialogOpen] = useState(false);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseRobot = () => {
+    setRobotDialogOpen(false);
+  };
+
+  const handleCloseDialog = () => {
+    setPasswordDialogOpen(false);
   };
 
   return (
@@ -27,14 +31,23 @@ export default function JoinLobby({ params }) {
           }}
           onClick={() =>
             params.row.password
-              ? setOpen(true)
-              : navigate(`/lobby/${params.id}`)
+              ? setPasswordDialogOpen(true)
+              : setRobotDialogOpen(true)
           }
         >
           <LoginIcon />
         </Fab>
       </Box>
-      <PasswordDialog open={open} handleClose={handleClose} />
+      <RobotDialog
+        open={robotDialogOpen}
+        handleClose={handleCloseRobot}
+        id={params.row.id}
+      />
+      <PasswordDialog
+        open={passwordDialogOpen}
+        handleClose={handleCloseDialog}
+        id={params.row.id}
+      />
     </Box>
   );
 }

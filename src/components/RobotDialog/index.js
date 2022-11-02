@@ -57,15 +57,9 @@ export default function PasswordDialog({ open, handleClose, id }) {
           <Form>
             <TextField
               name="robot_name"
-              label="Robot ID"
+              label="Robot Name"
               autoComplete="off"
-              variant="standard"
-            />
-            <TextField
-              name="password"
-              label="Password"
-              type="password"
-              autoComplete="off"
+              fullWidth
               variant="standard"
             />
 

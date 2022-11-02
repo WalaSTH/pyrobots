@@ -13,7 +13,7 @@ import TextField from "../../FormsUI/TextField";
 import { Card, Grid, Typography } from "@mui/material";
 
 // MUI icons
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import PersonIcon from "@mui/icons-material/Person";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 const initialFormState = {
@@ -83,7 +83,7 @@ export default function RegisterUserForm({ handleSubmit }) {
                   textAlign: "center",
                 }}
               >
-                <AccountCircleIcon
+                <PersonIcon
                   sx={{
                     height: "50px",
                     width: "50px",
