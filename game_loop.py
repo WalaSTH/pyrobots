@@ -1,5 +1,6 @@
 from Database.Database import *
 from pydantic_models import *
+from game_robot import *
 
 
 @db_session
@@ -10,12 +11,11 @@ def run_simulation(sim: SimData):
     frame_list1 = []
     frame_list2 = []
     # load robots to robot list
-    # for i in sim.robot_names:
-    # load robots
+    for i in sim.robot_names:
+        robot_list.append(load_robot(sim.username, i))
     # initialize every robot
     for i in range(n_robots):
-        # robot_list[i].initialize()
-        continue
+        robot_list[i].initialize()
     # if i == 0:
     # frame_list.append({robot_list[i].x_position, robot_list[i].y_position})
     # loop for number of rounds
@@ -47,9 +47,4 @@ def run_simulation(sim: SimData):
         # check collisions
         # apply damage
         # calculate deaths
-    return True
-
-
-def load_robot(username, robot_name: str):
-
     return True
