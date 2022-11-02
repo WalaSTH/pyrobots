@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from Database.Database import *
 from Test.auxiliar_functions import *
 from starlette.middleware.cors import CORSMiddleware
+from base64 import b64encode
 from app import app
 import random
 import string

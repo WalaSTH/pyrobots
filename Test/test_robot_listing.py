@@ -30,7 +30,7 @@ assert rob_res.status_code == 200
 robot1 = get_last_robot_id()
 
 new_robot_upl = {
-    "robot_name": "DummyBot02",
+    "robot_name": "DummyBot03",
     "creator": rob_owner,
     "avatar": None,
 }

@@ -87,7 +87,7 @@ async def websocket_endpoint(websocket: WebSocket, match_id : int):
 async def robot_upload(
     robot_name: str = Form(),
     creator: int = Form(),
-    code: UploadFile = Form(),
+    code: UploadFile = File(),
     avatar: Optional[str] = Form(None),
 ):
     if (creator > get_last_user_id() or creator < 1):
@@ -100,11 +100,19 @@ async def robot_upload(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid robot name."
         )
+
+    if robot_exists(robot_name, creator):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You already own a robot with the same name.",
+        )
+
     if not user_exists(user_name):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="There is no user with such ID.",
         )
+
     create_robot(
         robot_name, creator, code, avatar
     )
