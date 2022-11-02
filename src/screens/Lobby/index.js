@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Skeleton,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -20,16 +21,37 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
+function ParticipantSkeleton() {
+  return (
+    <ListItem sx={{ padding: 1.5 }}>
+      <ListItemAvatar>
+        <Skeleton variant="circular" width="45px" height="45px" />
+      </ListItemAvatar>
+
+      <ListItemText primary={<Skeleton width="60%" />} />
+
+      <Skeleton variant="circular" width="40px" height="40px" ml={20} />
+    </ListItem>
+  );
+}
+
+function ListItemSkeleton({ primary, secondary, ...otherProps }) {
+  return (
+    <ListItem>
+      {secondary ? (
+        <ListItemText primary={primary} secondary={secondary} {...otherProps} />
+      ) : (
+        <ListItemText
+          primary={<Skeleton width="60%" />}
+          secondary={<Skeleton width="40%" />}
+        />
+      )}
+    </ListItem>
+  );
+}
+
 export default function Lobby() {
-  const [match, setMatch] = useState({
-    creator: "",
-    game_quantity: 0,
-    max_players: 0,
-    min_players: 0,
-    name: "",
-    participants: [],
-    round_quantity: 0,
-  });
+  const [match, setMatch] = useState({});
 
   const username = localStorage.getItem("username");
   const params = useParams();
@@ -55,6 +77,8 @@ export default function Lobby() {
           }
         } else if (msgData.message_type === 2) {
           console.log(msgData.message_content);
+        } else if (msgData.message_type === 3) {
+          console.log(msgData.message_content);
           navigate("/");
         }
       }
@@ -67,51 +91,65 @@ export default function Lobby() {
     };
   }, [params.matchID]);
 
-  const listParticipants = match.participants.map((p, index) => (
-    <Fragment key={p.user_name}>
-      <ListItem sx={{ padding: 1.5 }}>
-        <ListItemAvatar>
-          <Avatar
-            alt={p.robot_name}
-            src="null"
-            sx={{
-              height: "45px",
-              width: "45px",
-              backgroundColor: "primary.main",
-            }}
-          >
-            <SmartToyIcon
-              sx={{
-                height: "25px",
-                width: "25px",
-                textAlign: "center",
-              }}
-            />
-          </Avatar>
-        </ListItemAvatar>
+  const listParticipants = match.participants ? (
+    <List>
+      {match.participants.map((p, index) => (
+        <Fragment key={p.user_name}>
+          <ListItem sx={{ padding: 1.5 }}>
+            <ListItemAvatar>
+              <Avatar
+                alt={p.robot_name}
+                src="null"
+                sx={{
+                  height: "45px",
+                  width: "45px",
+                  backgroundColor: "primary.main",
+                }}
+              >
+                <SmartToyIcon
+                  sx={{
+                    height: "25px",
+                    width: "25px",
+                    textAlign: "center",
+                  }}
+                />
+              </Avatar>
+            </ListItemAvatar>
 
-        <ListItemText>{p.robot_name}</ListItemText>
+            <ListItemText>{p.robot_name}</ListItemText>
 
-        <Tooltip title={p.user_name} placement="right" arrow>
-          <Avatar
-            alt={p.user_name}
-            src="null"
-            sx={{
-              height: "40px",
-              width: "40px",
-              border: 2,
-              borderColor: "primary.main",
-              ml: 20,
-            }}
-          />
-        </Tooltip>
-      </ListItem>
+            <Tooltip title={p.user_name} placement="right" arrow>
+              <Avatar
+                alt={p.user_name}
+                src="null"
+                sx={{
+                  height: "40px",
+                  width: "40px",
+                  border: 2,
+                  borderColor: "primary.main",
+                  ml: 20,
+                }}
+              />
+            </Tooltip>
+          </ListItem>
 
-      {index === match.participants.length - 1 ? null : (
-        <Divider variant="inset" component="li" />
-      )}
-    </Fragment>
-  ));
+          {index === match.participants.length - 1 ? null : (
+            <Divider variant="inset" />
+          )}
+        </Fragment>
+      ))}
+    </List>
+  ) : (
+    <List>
+      <ParticipantSkeleton />
+      <Divider variant="inset" />
+      <ParticipantSkeleton />
+      <Divider variant="inset" />
+      <ParticipantSkeleton />
+      <Divider variant="inset" />
+      <ParticipantSkeleton />
+    </List>
+  );
 
   return (
     <Container
@@ -147,16 +185,29 @@ export default function Lobby() {
           >
             Back
           </Button>
-          <Typography
-            ml={2}
-            mr={1}
-            mt={0}
-            sx={{
-              fontSize: { xs: "1.4rem", lg: "1.55rem" },
-            }}
-          >
-            {match.name}
-          </Typography>
+          {match && match.name ? (
+            <Typography
+              ml={2}
+              mr={1}
+              mt={0}
+              sx={{
+                fontSize: { xs: "1.4rem", lg: "1.55rem" },
+              }}
+            >
+              {match.name}
+            </Typography>
+          ) : (
+            <Skeleton
+              variant="text"
+              ml={2}
+              mr={1}
+              mt={0}
+              sx={{
+                fontSize: { xs: "1.4rem", lg: "1.55rem" },
+              }}
+              width={"20ch"}
+            />
+          )}
         </Grid>
 
         <Grid item xs={12} md={10} lg={7}>
@@ -177,7 +228,7 @@ export default function Lobby() {
                 padding: 1,
               }}
             >
-              <List> {listParticipants} </List>
+              {listParticipants}
             </Card>
           </Card>
         </Grid>
@@ -203,40 +254,31 @@ export default function Lobby() {
               }}
             >
               <List>
-                <ListItem>
-                  <ListItemText
-                    primary="Games"
-                    secondary={match.game_quantity}
-                  />
-                </ListItem>
+                <ListItemSkeleton
+                  primary="Games"
+                  secondary={match.game_quantity}
+                />
 
-                <ListItem>
-                  <ListItemText
-                    primary="Rounds per game"
-                    secondary={match.round_quantity}
-                  />
-                </ListItem>
+                <ListItemSkeleton
+                  primary="Rounds per game"
+                  secondary={match.round_quantity}
+                />
 
-                <ListItem>
-                  <ListItemText
-                    primary="Minimum players"
-                    secondary={match.min_players}
-                  />
-                </ListItem>
+                <ListItemSkeleton
+                  primary="Minimum players"
+                  secondary={match.min_players}
+                />
 
-                <ListItem>
-                  <ListItemText
-                    primary="Maximum players"
-                    secondary={match.max_players}
-                  />
-                </ListItem>
+                <ListItemSkeleton
+                  primary="Maximum players"
+                  secondary={match.max_players}
+                />
               </List>
             </Card>
           </Card>
         </Grid>
 
         {/*
-        These buttons don't do anything (for now)
         <Grid
           item
           xs={12}
