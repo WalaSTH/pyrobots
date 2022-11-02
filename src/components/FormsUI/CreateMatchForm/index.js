@@ -9,12 +9,12 @@ import axios from "axios";
 
 const formValidation = Yup.object().shape({
   name: Yup.string()
-    .max(250, "Name cant contain more than 250 characters")
+    .min(3, "Match name must have more than 3 characters")
+    .max(20, "Match name cant contain more than 20 characters")
     .matches(
       "^[A-Za-z0-9 ]*$",
       "Match name can only contains letters, numbers or spaces"
-    )
-    .required("Required"),
+    ),
   password: Yup.string()
     .matches(
       "^[A-Za-z0-9 ]*$",
@@ -27,8 +27,7 @@ const formValidation = Yup.object().shape({
     .typeError("Insert a number")
     .positive()
     .min(2)
-    .max(4)
-    .required("Required"),
+    .max(4),
   max_players: Yup.number()
     .integer()
     .typeError("Insert a number")
@@ -37,21 +36,18 @@ const formValidation = Yup.object().shape({
       Yup.ref("min_players"),
       "Max players must be greater or equal than Min players"
     )
-    .max(4)
-    .required("Required"),
+    .max(4),
   games_per_match: Yup.number()
     .integer()
     .typeError("Insert a number")
     .positive()
-    .max(200)
-    .required("Required"),
+    .max(200),
   rounds: Yup.number()
     .integer()
     .typeError("Insert a number")
     .positive()
-    .max(10000)
-    .required("Required"),
-  robot_id: Yup.number().integer().positive().required("Required"),
+    .max(10000),
+  robot_id: Yup.number().integer().positive(),
 });
 
 export default function CreateMatchForm({ UserID }) {
@@ -130,6 +126,7 @@ export default function CreateMatchForm({ UserID }) {
                   name="name"
                   label="Name of the match"
                   autoComplete="off"
+                  required
                 />
               </Grid>
 
@@ -148,6 +145,7 @@ export default function CreateMatchForm({ UserID }) {
                   label="Min players"
                   placeholder="2"
                   autoComplete="off"
+                  required
                 />
               </Grid>
 
@@ -157,6 +155,7 @@ export default function CreateMatchForm({ UserID }) {
                   label="Max players"
                   placeholder="4"
                   autoComplete="off"
+                  required
                 />
               </Grid>
 
@@ -166,6 +165,7 @@ export default function CreateMatchForm({ UserID }) {
                   label="Games"
                   placeholder="200"
                   autoComplete="off"
+                  required
                 />
               </Grid>
 
@@ -175,6 +175,7 @@ export default function CreateMatchForm({ UserID }) {
                   label="Rounds"
                   placeholder="10000"
                   autoComplete="off"
+                  required
                 />
               </Grid>
 
@@ -184,6 +185,7 @@ export default function CreateMatchForm({ UserID }) {
                   name="robot_id"
                   label="Robot ID"
                   autoComplete="off"
+                  required
                 />
               </Grid>
 

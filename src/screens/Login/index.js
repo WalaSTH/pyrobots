@@ -1,4 +1,4 @@
-import LoginForm from "../../components/LoginForm/LoginForm";
+import LoginForm from "../../components/FormsUI/LoginForm";
 import Snackbar from "../../components/FormsUI/Snackbar";
 import Container from "@mui/material/Container";
 import { useState } from "react";
@@ -13,6 +13,7 @@ export default function Login({ navigate }) {
     localStorage.setItem("token", t.access_token);
     localStorage.setItem("userID", t.id);
     localStorage.setItem("username", t.username);
+    localStorage.setItem("avatar", t.avatar);
     navigate("/");
   }
 
