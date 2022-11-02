@@ -1,36 +1,18 @@
-// api/getter
-import jwt_decode from "jwt-decode";
 import axios from "axios";
 
-const getRobots = async () => {
-  let token, decoded, username;
+export default async function getRobots() {
+  const username = localStorage.getItem("username");
 
-  try {
-    token = localStorage.getItem("token");
-    decoded = jwt_decode(token);
-    username = decoded.sub;
-  } catch (err) {
-    console.log("Error while decodign the token", err);
-  }
-
-  if (!username) {
-    console.log("Username does not exist");
-    return [];
-  }
-
-  const { data, status, statusText } = await axios.get(
-    "http://localhost:8000/robot/list",
-    {
+  return await axios
+    .get("http://localhost:8000/robot/list", {
       params: { user_name: username, detailed: false },
-    }
-  );
-
-  if (status !== 200) {
-    console.log(statusText);
-    return [];
-  }
-
-  return data.Robots;
-};
-
-export default getRobots;
+    })
+    .then((response) => {
+      return response.data["Robots"];
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response);
+      }
+    });
+}
