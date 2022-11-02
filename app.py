@@ -1,4 +1,13 @@
-from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends, Form, WebSocketDisconnect
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    status,
+    File,
+    UploadFile,
+    Depends,
+    Form,
+    WebSocketDisconnect,
+)
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union, Optional
@@ -69,20 +78,25 @@ manager = ConnectionManager()
 
 # --- WebSocket Endpoints ---
 @app.websocket("/ws/{match_id}")
-async def websocket_endpoint(websocket: WebSocket, match_id : int):
+async def websocket_endpoint(websocket: WebSocket, match_id: int):
     await manager.connect(websocket, match_id)
 
     try:
         while True:
-            data = json.dumps(get_match_info(match_id)) if check_match_existance(match_id) else "Match {match_id} doesn't exist"
+            data = (
+                json.dumps(get_match_info(match_id))
+                if check_match_existance(match_id)
+                else "Match {match_id} doesn't exist"
+            )
             await manager.broadcast(data, match_id)
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket, match_id)
         await manager.broadcast(f"A player has disconnected", match_id)
 
+
 # --- Robot Endpoints ---
-@app.post("/robot/create", tags=["Robots"], status_code = 200)
+@app.post("/robot/create", tags=["Robots"], status_code=200)
 async def robot_upload(
     robot_name: str = Form(),
     creator: int = Form(),
@@ -106,28 +120,22 @@ async def robot_upload(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"You already own a robot with name {robot_name}.",
         )
-    create_robot(
-        robot_name, creator, code, avatar
-    )
+    create_robot(robot_name, creator, code, avatar)
     return {"detail": "Robot created succesfully."}
+
 
 @app.get("/robot/list", tags=["Robots"], status_code=200)
 async def robot_listing(robot_owner: RobotOwner = Depends()):
     if not (user_exists(robot_owner.user_name)):
-        raise HTTPException (
-            status_code=404,
-            detail="No user with such ID"
-        )
+        raise HTTPException(status_code=404, detail="No user with such ID")
 
     res_list = get_robot_list(robot_owner.user_name, robot_owner.detailed)
 
-    if (res_list == []):
-        raise HTTPException(
-            status_code=404,
-            detail="No Robots available"
-        )
+    if res_list == []:
+        raise HTTPException(status_code=404, detail="No Robots available")
 
     return {"Robots": res_list}
+
 
 @app.get("/robot/robot_position", tags=["Robots"], status_code=200)
 async def robot_position(robot_position: Robot = Depends()):
@@ -145,14 +153,15 @@ async def robot_position(robot_position: Robot = Depends()):
         "position_y": robot_position.position_y,
     }
 
+
 # --- Match endpoints ---
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
 
-    if (match_data.robot_id > get_last_robot_id() or match_data.robot_id <= 0):
+    if match_data.robot_id > get_last_robot_id() or match_data.robot_id <= 0:
         raise HTTPException(status_code=404, detail="No robot with such ID")
 
-    if (match_data.creator > get_last_user_id() or match_data.creator <= 0):
+    if match_data.creator > get_last_user_id() or match_data.creator <= 0:
         raise HTTPException(status_code=404, detail="No user with such ID")
 
     if match_data.password == None:
@@ -185,23 +194,21 @@ def match_creation(match_data: TempMatch):
 
     return {"detail": "Match created successfully", "id": match_id}
 
+
 @app.get("/match/list", tags=["Matches"], status_code=200)
 async def match_listing(list_params: MatchListParams = Depends()):
     res_list = get_match_list(list_params.name, list_params.filter)
 
-    if (res_list == []):
-        raise HTTPException(
-            status_code=404,
-            detail="No matches available"
-        )
+    if res_list == []:
+        raise HTTPException(status_code=404, detail="No matches available")
 
     if res_list == ["no_valid_filter"]:
         raise HTTPException(
-            status_code=404,
-            detail=f"Filter {list_params.filter} is not a valid filter"
+            status_code=404, detail=f"Filter {list_params.filter} is not a valid filter"
         )
 
     return {"Matches": res_list}
+
 
 # --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)
@@ -209,7 +216,7 @@ async def user_register(
     username: str = Form(),
     password: str = Form(),
     email: str = Form(),
-    avatar: Optional[str] = Form(None)
+    avatar: Optional[str] = Form(None),
 ):
     """USER REGISTER FUNCTION"""
 
@@ -244,12 +251,7 @@ async def user_register(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="existing username"
         )
     else:
-        create_user(
-            username,
-            email,
-            get_password_hash(password),
-            avatar
-        )
+        create_user(username, email, get_password_hash(password), avatar)
         return {"detail": "User created successfully"}
 
 
@@ -308,7 +310,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "token_type": "bearer",
         "username": user.user_name,
         "id": user.id,
-        "avatar": avatar
+        "avatar": avatar,
     }
 
 
@@ -334,6 +336,11 @@ async def create_sim(sim: SimData):
     if not user_exists(sim.username):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User doesn't exist."
+        )
+    if len(sim.robot_names) < 2:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Minimum amount of robots is 2",
         )
     for i in range(len(sim.robot_names)):
         if not user_has_robot(sim.username, sim.robot_names[i]):
