@@ -205,6 +205,7 @@ def create_robot(robot_name, creator, code, avatar):
     else:
         new_robot.avatar = None
 
+
 @db_session
 def get_robot_list(owner_name, detailed):
     robot_list = Robot.select(lambda r: r.owner.user_name == owner_name)[:]
@@ -282,6 +283,23 @@ def user_has_robot(username, robot_name):
 @db_session
 def get_robot_by_id(id: int):
     return Robot.get(id=id)
+
+
+@db_session
+def get_code_by_robotname(username, robot_name):
+    user = get_user(username)
+    return Robot.get(robot_name=robot_name, owner=user).code
+
+
+@db_session
+def get_robot_by_name(username, robot_name):
+    user = get_user(username)
+    return Robot.get(robot_name=robot_name, owner=user)
+
+
+@db_session
+def get_robot_name_by_id(id):
+    return Robot.get(id=id).robot_name
 
 
 # --- User Functions ---
