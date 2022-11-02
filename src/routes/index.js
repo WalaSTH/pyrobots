@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoute from "./privateRoute";
-import Login from "../screens/Login/Login";
-import MainPage from "../screens/MainPage/MainPage";
+import Login from "../screens/Login/";
+import MainPage from "../screens/MainPage/";
 import NewRobot from "../screens/NewRobot";
-import Register from "../screens/Register/Register";
-import CreateMatch from "../screens/CreateMatch/CreateMatch";
+import Register from "../screens/Register/";
+import CreateMatch from "../screens/CreateMatch/";
 
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
