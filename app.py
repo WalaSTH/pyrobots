@@ -1,4 +1,13 @@
-from fastapi import FastAPI, HTTPException, status, File, UploadFile, Depends, WebSocketDisconnect
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    status,
+    File,
+    UploadFile,
+    Depends,
+    Form,
+    WebSocketDisconnect,
+)
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union, Optional
@@ -22,20 +31,20 @@ MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
 
 
-description = """ 
+description = """
     PyRobots 🤖
-    
+
     This is a game where you can create your own robot and fight against other robots.
-    
+
     ## The FUN is guaranteed! 🎉
-    
+
     ## Functionalities 🛠
-    
+
     * Create a match
     * Create a new user
     * Create a robot
     * Login
-    * Upload a photo    
+    * Upload a photo
     """
 
 origins = [
@@ -65,12 +74,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 manager = ConnectionManager()
 
 # --- WebSocket Endpoints ---
 @app.websocket("/ws/{match_id}")
-async def websocket_endpoint(websocket: WebSocket, match_id : int):
+async def websocket_endpoint(websocket: WebSocket, match_id: int):
     await manager.connect(websocket, match_id)
 
     try:
@@ -88,46 +96,48 @@ async def websocket_endpoint(websocket: WebSocket, match_id : int):
         manager.disconnect(websocket, match_id)
         await manager.broadcast({"message_type": 2, "message_content": "A player has disconnected"})
 
+
 # --- Robot Endpoints ---
 @app.post("/robot/create", tags=["Robots"], status_code=200)
-async def robot_upload(temp_robot: TempRobot = Depends()):
-    if (temp_robot.creator > get_last_user_id() or temp_robot.creator < 1):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID"
-        )
-
-    user_name = get_user_name_by_id(temp_robot.creator)
-    if not (temp_robot.robot_name.replace(" ", "").isalnum()):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid robot name."
-        )
-    if not user_exists(user_name):
+async def robot_upload(
+    robot_name: str = Form(),
+    creator: int = Form(),
+    code: UploadFile = File(),
+    avatar: Optional[str] = Form(None),
+):
+    if not check_user_existance(creator):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="There is no user with such ID.",
         )
-    create_robot(
-        temp_robot.robot_name, temp_robot.creator, temp_robot.code, temp_robot.avatar
-    )
+
+    user_name = get_user_name_by_id(creator)
+    if not (robot_name.replace(" ", "").isalnum()):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid robot name."
+        )
+
+    if robot_exists(robot_name, creator):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"You already own a robot with name {robot_name}.",
+        )
+    create_robot(robot_name, creator, code, avatar)
     return {"detail": "Robot created succesfully."}
+
 
 @app.get("/robot/list", tags=["Robots"], status_code=200)
 async def robot_listing(robot_owner: RobotOwner = Depends()):
     if not (user_exists(robot_owner.user_name)):
-        raise HTTPException (
-            status_code=404,
-            detail="No user with such ID"
-        )
+        raise HTTPException(status_code=404, detail="No user with such ID")
 
     res_list = get_robot_list(robot_owner.user_name, robot_owner.detailed)
 
-    if (res_list == []):
-        raise HTTPException(
-            status_code=404,
-            detail="No Robots available"
-        )
+    if res_list == []:
+        raise HTTPException(status_code=404, detail="No Robots available")
 
     return {"Robots": res_list}
+
 
 @app.get("/robot/robot_position", tags=["Robots"], status_code=200)
 async def robot_position(robot_position: Robot = Depends()):
@@ -144,6 +154,7 @@ async def robot_position(robot_position: Robot = Depends()):
         "position_x": robot_position.position_x,
         "position_y": robot_position.position_y,
     }
+
 
 # --- Match endpoints ---
 @app.post("/match/create", tags=["Matches"], status_code=200)
@@ -224,10 +235,28 @@ async def match_join(
     return {"detail": "You have succesfully joined the match"}
 
 
+@app.get("/match/list", tags=["Matches"], status_code=200)
+async def match_listing(list_params: MatchListParams = Depends()):
+    res_list = get_match_list(list_params.name, list_params.filter)
+
+    if res_list == []:
+        raise HTTPException(status_code=404, detail="No matches available")
+
+    if res_list == ["no_valid_filter"]:
+        raise HTTPException(
+            status_code=404, detail=f"Filter {list_params.filter} is not a valid filter"
+        )
+
+    return {"Matches": res_list}
+
+
 # --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(
-    user_to_reg: UserTemp = Depends(), photo: Optional[UploadFile] = None
+    username: str = Form(),
+    password: str = Form(),
+    email: str = Form(),
+    avatar: Optional[str] = Form(None),
 ):
     """USER REGISTER FUNCTION"""
 
@@ -235,56 +264,48 @@ async def user_register(
         status_code=status.HTTP_401_UNAUTHORIZED, detail="field size is invalid"
     )
     if (
-        len(user_to_reg.username) > MAX_LEN_ALIAS
-        or len(user_to_reg.username) < MIN_LEN_ALIAS
-        or len(user_to_reg.password) > MAX_LEN_PASSWORD
-        or len(user_to_reg.password) <= MIN_LEN_PASSWORD
-        or len(user_to_reg.email) > MAX_LEN_EMAIL
-        or len(user_to_reg.email) < MIN_LEN_EMAIL
+        len(username) > MAX_LEN_ALIAS
+        or len(username) < MIN_LEN_ALIAS
+        or len(password) > MAX_LEN_PASSWORD
+        or len(password) <= MIN_LEN_PASSWORD
+        or len(email) > MAX_LEN_EMAIL
+        or len(email) < MIN_LEN_EMAIL
     ):
         raise invalid_fields
     elif (
-        any(char.isupper() for char in user_to_reg.password) == False
-        or any(char.islower() for char in user_to_reg.password) == False
-        or any(char.isdigit() for char in user_to_reg.password) == False
+        any(char.isupper() for char in password) == False
+        or any(char.islower() for char in password) == False
+        or any(char.isdigit() for char in password) == False
     ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="password must have at least one uppercase, one lowercase and one number",
         )
-    elif email_exists(user_to_reg.email):
+    elif email_exists(email):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="A user with this email already exists",
         )
-    elif user_exists(user_to_reg.username):
+    elif user_exists(username):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="existing username"
         )
     else:
-        create_user(
-            user_to_reg.username,
-            user_to_reg.email,
-            get_password_hash(user_to_reg.password),
-        )
-        if photo != None:
-            upload_photo_db(user_to_reg.username, photo.file.read())
-        else:
-            upload_photo_db(user_to_reg.username, None)
+        create_user(username, email, get_password_hash(password), avatar)
         return {"detail": "User created successfully"}
 
 
 # Upload image
 @app.post("/user/upload_photo", tags=["Users"], status_code=200)
 async def upload_photo(
-    user: User = Depends(), photo: UploadFile = File(decription="Upload a photo")
+    user: User = Depends(), photo: str = Form(decription="Upload a photo")
 ):
     """UPLOAD PHOTO FUNCTION"""
     if not user_exists(user.username):
         raise HTTPException(status_code=401, detail="user does not exist")
     else:
-        upload_photo_db(user.username, photo.file.read())
-        return {"detail": photo.filename + " uploaded successfully"}
+        upload_photo_db(user.username, photo)
+        return {"detail": "Photo uploaded successfully"}
 
 
 @app.delete("/user/delete_user", tags=["Users"])
@@ -299,7 +320,7 @@ async def user_delete(user_name: str):
     """
     if not user_exists(user_name):
         raise HTTPException(status_code=404, detail="user doesn't exist")
- 
+
     else:
         delete_user(user_name)
         return {"user successfully deleted"}
@@ -319,11 +340,17 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
+
+    avatar = None
+    if user.photo is not None:
+        avatar = user.photo.decode()
+
     return {
         "access_token": access_token,
         "token_type": "bearer",
         "username": user.user_name,
         "id": user.id,
+        "avatar": avatar,
     }
 
 
@@ -350,6 +377,11 @@ async def create_sim(sim: SimData):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User doesn't exist."
         )
+    if len(sim.robot_names) < 2:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Minimum amount of robots is 2",
+        )
     for i in range(len(sim.robot_names)):
         if not user_has_robot(sim.username, sim.robot_names[i]):
             raise HTTPException(
@@ -357,4 +389,4 @@ async def create_sim(sim: SimData):
                 detail="User does not have any robot named "
                 + str(sim.robot_names[i] + "."),
             )
-    return run_simulation(sim) 
+    return run_simulation(sim)

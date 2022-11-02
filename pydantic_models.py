@@ -25,6 +25,7 @@ class Token(BaseModel):
     token_type: str
     username: str
     id: int
+    avatar: Optional[str]
 
 
 class TokenData(BaseModel):
@@ -46,15 +47,13 @@ class TempMatch(BaseModel):
     creator: int
     password: Union[str, None] = None
 
-class TempRobot(BaseModel):
-    robot_name: str
-    creator: int
-    code: UploadFile = File(...)
-    avatar: Union[UploadFile, None] = None
-
 class RobotOwner(BaseModel):
     user_name: str
     detailed: bool
+
+class MatchListParams(BaseModel):
+    name: str
+    filter: str
 
 class Robot(BaseModel):
     robot_name: str
