@@ -35,13 +35,16 @@ class TempMatch(BaseModel):
     creator: int
     password: Union[str, None] = None
 
+
 class RobotOwner(BaseModel):
     user_name: str
     detailed: bool
 
+
 class MatchListParams(BaseModel):
     name: str
     filter: str
+
 
 class Robot(BaseModel):
     robot_name: str
@@ -49,7 +52,15 @@ class Robot(BaseModel):
     position_x: int = None
     position_y: int = None
 
+
 class SimData(BaseModel):
     username: str
     n_rounds: int
     robot_names: List[str]
+
+
+class JoiningMatch(BaseModel):
+    username: str
+    robot: str
+    match: int
+    password: Optional[str]
