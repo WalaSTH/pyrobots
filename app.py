@@ -239,6 +239,35 @@ async def match_join(
     return {"detail": "You have succesfully joined the match"}
 
 
+@app.post("/match/leave", tags=["Matches"], status_code=200)
+async def match_leave(
+    match_to_leave: LeavingMatch = Depends()
+):
+
+    if not check_match_existance(match_to_leave.match):
+        raise HTTPException(status_code=404, detail=f"Match id {match_to_leave.match} does not exist")
+
+    if not check_user_connected(match_to_leave.match, match_to_leave.username) != []:
+        raise HTTPException(status_code=409, detail="You are not part of this match")
+
+    user_id = get_user_id(match_to_leave.username)
+    leave_match(match_to_leave.match, user_id)
+
+    join_alert = {
+        "message_type": 2,
+        "message_content": f"User {match_to_leave.username} has left the battle"
+    }
+
+    await manager.broadcast(join_alert, match_to_leave.match)
+    data = {
+        "message_type": 1,
+        "message_content": (get_match_info(match_to_leave.match)) 
+    }
+    await manager.broadcast(data, match_to_leave.match)
+
+    return {"detail": "You have succesfully left the match"}
+
+
 @app.get("/match/list", tags=["Matches"], status_code=200)
 async def match_listing(list_params: MatchListParams = Depends()):
     res_list = get_match_list(list_params.name, list_params.filter)
