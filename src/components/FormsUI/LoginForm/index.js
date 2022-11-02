@@ -5,8 +5,8 @@ import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import TextField from "../FormsUI/TextField";
-import SubmitFormButton from "../FormsUI/SubmitFormButton";
+import TextField from "../TextField";
+import SubmitFormButton from "../SubmitFormButton";
 
 const initialFormState = {
   username: "",
@@ -14,14 +14,15 @@ const initialFormState = {
 };
 
 const formValidation = Yup.object().shape({
-  username: Yup.string().max(250).required(),
+  username: Yup.string()
+    .min(3, "Must be at least 3 characters long")
+    .max(16, "Username can't be longer than 16 characters"),
   password: Yup.string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
       "Must Contain 8 Characters, one Uppercase, one Lowercase and one Number"
     )
-    .max(250)
-    .required("Required"),
+    .max(250),
 });
 
 export default function LoginForm({ handleSubmit }) {
@@ -57,6 +58,7 @@ export default function LoginForm({ handleSubmit }) {
                 name="username"
                 label="Username"
                 autoComplete="off"
+                required
                 data-testid="username-input"
               />
             </Grid>
@@ -67,6 +69,7 @@ export default function LoginForm({ handleSubmit }) {
                 label="Password"
                 type="password"
                 autoComplete="off"
+                required
                 data-testid="password-input"
               />
             </Grid>
