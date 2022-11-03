@@ -251,14 +251,16 @@ async def match_leave(
         raise HTTPException(status_code=409, detail="You are not part of this match")
 
     user_id = get_user_id(match_to_leave.username)
-    leave_match(match_to_leave.match, user_id)
+    
+    if not leave_match(match_to_leave.match, user_id):
+        raise HTTPException(status_code=401, detail="You can't leave, YOU ARE THE OWNER!")
 
-    join_alert = {
+    leave_alert = {
         "message_type": 2,
         "message_content": f"User {match_to_leave.username} has left the battle"
     }
 
-    await manager.broadcast(join_alert, match_to_leave.match)
+    await manager.broadcast(leave_alert, match_to_leave.match)
     data = {
         "message_type": 1,
         "message_content": (get_match_info(match_to_leave.match)) 
