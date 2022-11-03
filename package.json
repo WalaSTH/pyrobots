@@ -23,8 +23,8 @@
     "react-konva": "^18.2.3",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
-    "react-tilt": "^0.1.4",
     "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34",
     "yup": "^0.32.11"
   },
   "scripts": {
