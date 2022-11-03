@@ -45,7 +45,6 @@ export default function SelectRobot({ name, children, handleError }) {
   };
 
   useEffect(() => {
-    console.log("Fetching data");
     getRobots().then((e) => setDataRobot(e));
   }, []);
 
@@ -76,7 +75,8 @@ export default function SelectRobot({ name, children, handleError }) {
       </Box>
 
       <Dialog
-        fullScreen
+        fullWidth
+        maxWidth="sm"
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
