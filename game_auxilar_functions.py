@@ -5,6 +5,8 @@ from cmath import pi
 
 ### Gets an angle as a value between 0 and 359
 def get_angle(angle):
+    if angle < 0:
+        angle = 360 + angle
     return angle - (int(angle / 360) * 360)
 
 
@@ -24,6 +26,7 @@ def calculate_angle(x, y, x_enemy, y_enemy, hypotenuse):
     elif x_enemy > x and y_enemy == y:
         a = 0
     else:
+        hypotenuse = hypotenuse if hypotenuse != 0 else 1
         o_cathetus = abs(y_enemy - y)
         sina = o_cathetus / hypotenuse
         a = math.asin(sina)
