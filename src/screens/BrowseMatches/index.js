@@ -1,5 +1,6 @@
 import { Container, Card, Button } from "@mui/material";
 import { useState } from "react";
+import Snackbar from "../../components/FormsUI/Snackbar";
 import axios from "axios";
 import TableBasic from "../../components/LobbyList";
 import FilterButton from "../../components/FilterButton";
@@ -9,6 +10,9 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 export default function BrowseMatches() {
   const [matches, setMatches] = useState([]);
   const [filter, setFilter] = useState("available");
+  const [open, setOpen] = useState(false);
+  const [body, setBody] = useState("");
+  const [severity, setSeverity] = useState("");
 
   const username = localStorage.getItem("username");
 
@@ -26,7 +30,20 @@ export default function BrowseMatches() {
         const data = response.data;
         console.log(data);
         setMatches(data);
+      })
+      .catch((error) => {
+        setOpen(true);
+        setSeverity("error");
+        setBody(error.response.data["detail"]);
       });
+  }
+
+  function handleClose(reason) {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   }
 
   return (
@@ -46,6 +63,14 @@ export default function BrowseMatches() {
         <FilterButton setFilter={setFilter} endIcon={<FilterListIcon />} />
       </Card>
       <TableBasic matches={matches} getData={getData} filter={filter} />
+      {open && (
+        <Snackbar
+          open={open}
+          body={body}
+          severity={severity}
+          handleClose={handleClose}
+        />
+      )}
     </Container>
   );
 }

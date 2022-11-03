@@ -25,13 +25,11 @@ export default function PasswordDialog({ open, handleClose, id }) {
 
   async function handleSubmit(values) {
     await axios
-      .post(endpoint, null, {
-        params: {
-          username: values.username,
-          robot: values.robot_name,
-          password: values.password,
-          match: values.match,
-        },
+      .post(endpoint, {
+        username: values.username,
+        robot: values.robot_name,
+        password: values.password,
+        match: values.match,
       })
       .then((response) => {
         const data = response.data;
@@ -51,7 +49,6 @@ export default function PasswordDialog({ open, handleClose, id }) {
           initialValues={{
             ...initialFormState,
           }}
-          // validationSchema={formValidation}
           onSubmit={handleSubmit}
         >
           <Form>

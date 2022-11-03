@@ -11,6 +11,7 @@ import TextField from "../FormsUI/TextField";
 import axios from "axios";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
 const endpoint = "http://127.0.0.1:8000/match/join";
 
@@ -23,15 +24,23 @@ export default function PasswordDialog({ open, handleClose, id }) {
   };
   const navigate = useNavigate();
 
+  const formValidation = Yup.object().shape({
+    password: Yup.string()
+      .matches(
+        "^[A-Za-z0-9 ]*$",
+        "Password can only contains letters, numbers or spaces"
+      )
+      .max(64, "Password cant contain more than 64 characters")
+      .required(),
+  });
+
   async function handleSubmit(values) {
     await axios
-      .post(endpoint, null, {
-        params: {
-          username: values.username,
-          robot: values.robot_name,
-          password: values.password,
-          match: values.match,
-        },
+      .post(endpoint, {
+        username: values.username,
+        robot: values.robot_name,
+        password: values.password,
+        match: values.match,
       })
       .then((response) => {
         const data = response.data;
@@ -51,7 +60,7 @@ export default function PasswordDialog({ open, handleClose, id }) {
           initialValues={{
             ...initialFormState,
           }}
-          // validationSchema={formValidation}
+          validationSchema={formValidation}
           onSubmit={handleSubmit}
         >
           <Form>
