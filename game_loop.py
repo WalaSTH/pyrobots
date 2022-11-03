@@ -2,7 +2,7 @@ from Database.Database import *
 from pydantic_models import *
 from game_robot import *
 from game_auxilar_functions import *
-
+import random
 
 @db_session
 def run_simulation(sim: SimData):
@@ -18,14 +18,14 @@ def run_simulation(sim: SimData):
         robot_list.append(load_robot(sim.username, i))
     # initialize every robot
     for i in range(n_robots):
+        set_position_by_index(robot_list[i])
         robot_list[i].initialize()
-        set_position_by_index(robot_list[i], i)
         robot_for_frame = {
             "id": i,
             "robotName": robot_list[i].robot_name,
             "robotPosition": {
                 "x": robot_list[i].x_position,
-                "y": robot_list[i].y_position,
+                "y": 1000 -robot_list[i].y_position,
             },
             "health": robot_list[i].health,
         }
@@ -40,7 +40,10 @@ def run_simulation(sim: SimData):
             robot_list[i].respond()
         # scan for every robot
         for i in range(n_robots):
-            continue
+            other_robots = robot_list.copy()
+            del other_robots[i]
+            # print(other_robots)
+            robot_list[i].scan(other_robots)
         for i in range(n_robots):
             # robot_list[i].shoot_cannon()
             continue
@@ -55,8 +58,8 @@ def run_simulation(sim: SimData):
                 "id": i,
                 "robotName": robot_list[i].robot_name,
                 "robotPosition": {
-                    "x": robot_list[i].x_position,
-                    "y": robot_list[i].y_position,
+                    "x":  robot_list[i].x_position,
+                    "y": 1000 - robot_list[i].y_position,
                 },
                 "health": robot_list[i].health,
             }
@@ -78,19 +81,17 @@ def load_robot(username, robot_name: str):
     size = len(classname)
     classname = classname[: size - 3]
     classname = classname.replace("_", " ").title().replace(" ", "")
+    # print("Class is: " + classname)
     exec_str = "newRobot = " + classname + "(" + str(robot_id) + ")"
-    exec_str = code + exec_str.encode()
+    # exec_str = code + exec_str.encode()
+    exec(open("super_robot_copy.py").read(), globals())
     exec(exec_str, globals())
     return newRobot  # newRobot is defined in exec_str
 
 
-def set_position_by_index(gameRobot, index):
-    match index:
-        case 0:
-            gameRobot.set_position(750, 250)
-        case 1:
-            gameRobot.set_position(250, 250)
-        case 2:
-            gameRobot.set_position(250, 750)
-        case 3:
-            gameRobot.set_position(750, 750)
+def set_position_by_index(gameRobot):
+        x = random.randint(10, 990)
+        y = random.randint(10, 990)
+        gameRobot.set_position(x, y)
+
+
