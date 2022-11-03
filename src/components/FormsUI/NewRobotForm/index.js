@@ -37,7 +37,8 @@ const formValidation = Yup.object().shape({
     .test(
       "codeFileFormat",
       "Unsupported file format",
-      (value) => value && ["text/x-python"].includes(value.type)
+      (value) =>
+        value && ["text/x-python", "text/x-python-script"].includes(value.type)
     ),
   avatar: Yup.mixed()
     .notRequired()

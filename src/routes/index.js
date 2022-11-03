@@ -3,6 +3,7 @@ import PrivateRoute from "./privateRoute";
 import Login from "../screens/Login/";
 import MainPage from "../screens/MainPage/";
 import NewRobot from "../screens/NewRobot";
+import ListRobot from "../screens/ListRobots/ListRobots";
 import CreateSim from "../screens/CreateSim";
 import Register from "../screens/Register/";
 import CreateMatch from "../screens/CreateMatch/";
@@ -30,6 +31,7 @@ export default function RoutesWrapper({ navigate }) {
         element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
       />
       <Route element={<PrivateRoute />}>
+        <Route path="/list-robot" element={<ListRobot />} />
         <Route path="/browse-matches" element={<BrowseMatches />} />
         <Route path="/create-robot" element={<NewRobot userID={userID} />} />
         <Route path="/create-match" element={<CreateMatch userID={userID} />} />

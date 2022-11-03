@@ -6,11 +6,12 @@ import axios from "axios";
 
 const endpoint = "http://127.0.0.1:8000/robot/create";
 
-export default function NewRobot({ userID }) {
+export default function NewRobot() {
   // Snackbar utilities
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
+  const userID = localStorage.getItem("userID");
 
   function handleClose(reason) {
     if (reason === "clickaway") return;
