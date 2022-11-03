@@ -47,6 +47,7 @@ describe("<CreateMatchForm", () => {
     await user.type(robotIdInput, "1");
 
     const button = screen.getByRole("button", { name: /Create-match/i });
+    expect(button).toHaveTextContent(/Create match/i, { exact: false });
     await user.click(button);
 
     expect(nameOfTheMatchInput.value).toBe("diego");
