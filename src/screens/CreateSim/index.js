@@ -27,7 +27,7 @@ export default function CreateSim({ username, navigate }) {
       })
       .then(function (response) {
         const simID = Date.now().toString();
-        localStorage.setItem(simID, response);
+        localStorage.setItem(simID, JSON.stringify(response));
         navigate(`/board/${simID}`);
       })
       .catch(function (error) {
