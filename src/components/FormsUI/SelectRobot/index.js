@@ -12,19 +12,26 @@ import {
   Slide,
   Toolbar,
 } from "@mui/material";
-import getRobots from "../../api/getRobots";
+import getRobots from "../../../api/getRobots";
 import { useField, useFormikContext } from "formik";
+import { Box } from "@mui/system";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ name, children, ...otherProps }) {
-  const [field, meta] = useField(name);
+export default function SelectRobot({ name, children, handleError }) {
   const { setFieldValue } = useFormikContext();
-
+  const [field, meta] = useField(name);
   const [open, setOpen] = useState(false);
   const [dataRobot, setDataRobot] = useState([]);
+  const isError = meta.touched && meta.error;
+
+  useEffect(() => {
+    if (isError) {
+      handleError();
+    }
+  }, [isError]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -41,9 +48,28 @@ export default function FullScreenDialog({ name, children, ...otherProps }) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleOpen} {...otherProps}>
-        {children ? children : "Select Robot"}
-      </Button>
+      <Box sx={{ display: "flex" }}>
+        {field.value ? (
+          <IconButton
+            color="error"
+            onClick={() => {
+              setFieldValue(name, "");
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+
+        <Button
+          variant={field.value ? "contained" : "outlined"}
+          onClick={handleOpen}
+          fullWidth
+          disabled={field.value !== ""}
+          color={isError ? "error" : "primary"}
+        >
+          {children ? field.value || children : field.value || "Select Robot"}
+        </Button>
+      </Box>
 
       <Dialog
         fullScreen
