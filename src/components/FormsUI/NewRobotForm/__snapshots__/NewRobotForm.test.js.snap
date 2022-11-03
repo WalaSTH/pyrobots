@@ -110,6 +110,7 @@ exports[`NewRobotForm rendering snapshot 1`] = `
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-hzys1r-MuiGrid-root"
       >
         <input
+          accept=".py"
           data-testid="robotCodeInput"
           hidden={true}
           id="code"
@@ -120,7 +121,6 @@ exports[`NewRobotForm rendering snapshot 1`] = `
           className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
           htmlFor="code"
           onBlur={[Function]}
-          onClick={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
           onFocus={[Function]}
@@ -159,6 +159,7 @@ exports[`NewRobotForm rendering snapshot 1`] = `
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-hzys1r-MuiGrid-root"
       >
         <input
+          accept="image/png,image/jpg,image/jpeg"
           data-testid="robotAvatar"
           hidden={true}
           id="avatar"

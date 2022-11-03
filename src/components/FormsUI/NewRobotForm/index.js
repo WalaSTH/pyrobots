@@ -154,15 +154,11 @@ export default function NewRobotForm({ onSubmit }) {
 
               <FileUploadInput
                 name="code"
-                // accept=".py"
+                accept=".py"
                 data-testid="robotCodeInput"
               />
 
-              <FileUploadButton
-                onClick={() => console.log("corneta")}
-                name="code"
-                startIcon={<FileUploadIcon />}
-              >
+              <FileUploadButton name="code" startIcon={<FileUploadIcon />}>
                 Select file
               </FileUploadButton>
             </Grid>
@@ -180,7 +176,7 @@ export default function NewRobotForm({ onSubmit }) {
             >
               <FileUploadInput
                 name="avatar"
-                // accept="image/png,image/jpg,image/jpeg"
+                accept="image/png,image/jpg,image/jpeg"
                 data-testid="robotAvatar"
               />
 
