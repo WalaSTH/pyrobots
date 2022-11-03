@@ -1,9 +1,8 @@
 import { Grid, List, LinearProgress, Container, Box } from "@mui/material";
-// import {} from "@mui/system";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
-import Missile from "../../components/Game/Missile";
+// import Missile from "../../components/Game/Missile";
 import frames from "./prueba.json";
 
 export default function Board() {
