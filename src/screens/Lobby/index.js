@@ -72,9 +72,7 @@ export default function Lobby() {
   // Manage connection with websocket
   useEffect(() => {
     const client = new W3CWebSocket(`ws://localhost:8000/ws/${params.matchID}`);
-    client.onopen = function () {
-      console.log("WebSocket Client Connected");
-    };
+    client.onopen = function () {};
     client.onmessage = function (message) {
       if (message.data) {
         const msgData = JSON.parse(message.data);
@@ -96,9 +94,7 @@ export default function Lobby() {
         }
       }
     };
-    client.onerror = function () {
-      console.log("Connection Error");
-    };
+    client.onerror = function () {};
     return () => {
       client.close();
     };
