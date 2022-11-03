@@ -23,4 +23,4 @@ class ConnectionManager:
 
     async def broadcast(self, message: str, room_id : int):
         for connection in self.connections[room_id]:
-            await connection.send_text(message)
+            await connection.send_json(message)

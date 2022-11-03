@@ -64,3 +64,7 @@ class JoiningMatch(BaseModel):
     robot: str
     match: int
     password: Optional[str]
+
+class LeavingMatch(BaseModel):
+    username: str
+    match: int

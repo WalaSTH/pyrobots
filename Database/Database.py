@@ -223,6 +223,15 @@ def join_match(m_id, u_id, r_id):
     Match[m_id].fighters.add(Robot[r_id])
     Match[m_id].current_players += 1
 
+@db_session
+def leave_match(m_id, u_id):
+    if Match[m_id].creator.id == u_id:
+        return False
+    rob = get(r for r in Match[m_id].fighters if r.owner.id == u_id)
+    Match[m_id].participants.remove(User[u_id])
+    Match[m_id].fighters.remove(rob)
+    Match[m_id].current_players -= 1
+    return True
 
 # --- Robot functions ---
 

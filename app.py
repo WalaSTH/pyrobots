@@ -94,7 +94,7 @@ async def websocket_endpoint(websocket: WebSocket, match_id: int):
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket, match_id)
-        await manager.broadcast({"message_type": 2, "message_content": "A player has disconnected"})
+        await manager.broadcast({"message_type": 2, "message_content": "A player has disconnected"}, match_id)
 
 
 # --- Robot Endpoints ---
@@ -237,6 +237,37 @@ async def match_join(
     await manager.broadcast(data, match_to_join.match)
 
     return {"detail": "You have succesfully joined the match"}
+
+
+@app.post("/match/leave", tags=["Matches"], status_code=200)
+async def match_leave(
+    match_to_leave: LeavingMatch = Depends()
+):
+
+    if not check_match_existance(match_to_leave.match):
+        raise HTTPException(status_code=404, detail=f"Match id {match_to_leave.match} does not exist")
+
+    if not check_user_connected(match_to_leave.match, match_to_leave.username) != []:
+        raise HTTPException(status_code=409, detail="You are not part of this match")
+
+    user_id = get_user_id(match_to_leave.username)
+    
+    if not leave_match(match_to_leave.match, user_id):
+        raise HTTPException(status_code=401, detail="You can't leave, YOU ARE THE OWNER!")
+
+    leave_alert = {
+        "message_type": 2,
+        "message_content": f"User {match_to_leave.username} has left the battle"
+    }
+
+    await manager.broadcast(leave_alert, match_to_leave.match)
+    data = {
+        "message_type": 1,
+        "message_content": (get_match_info(match_to_leave.match)) 
+    }
+    await manager.broadcast(data, match_to_leave.match)
+
+    return {"detail": "You have succesfully left the match"}
 
 
 @app.get("/match/list", tags=["Matches"], status_code=200)
