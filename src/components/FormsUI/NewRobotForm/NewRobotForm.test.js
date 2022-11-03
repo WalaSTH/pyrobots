@@ -3,7 +3,7 @@ import "@testing-library/jest-dom/extend-expect";
 import renderer from "react-test-renderer";
 import userEvent from "@testing-library/user-event";
 import { screen, render } from "@testing-library/react";
-import NewRobotForm from ".";
+import NewRobotForm from "./";
 
 describe("NewRobotForm", () => {
   const user = userEvent.setup();

@@ -17,6 +17,7 @@ import SmartToyIcon from "@mui/icons-material/SmartToy";
 import SmartToyTwoToneIcon from "@mui/icons-material/SmartToyTwoTone";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import IconButton from "@mui/material/IconButton";
 
 const theme = createTheme({
@@ -33,6 +34,7 @@ export default function DrawerWrapper({
   ...otherProps
 }) {
   const username = localStorage.getItem("username");
+  const avatar = localStorage.getItem("avatar");
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -77,9 +79,14 @@ export default function DrawerWrapper({
               }}
             >
               <Avatar
-                src="null"
+                src={avatar}
                 alt={username}
-                sx={{ color: "#fff", marginBottom: "3px" }}
+                sx={{
+                  color: "#fff",
+                  marginBottom: "3px",
+                  height: "60px",
+                  width: "60px",
+                }}
               />
               <Typography>{username}</Typography>
             </Box>
@@ -97,6 +104,14 @@ export default function DrawerWrapper({
                   <AddCircleIcon sx={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Create match" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/create-simulation")}>
+                <ListItemIcon>
+                  <PlayCircleIcon sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Create simulation" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
