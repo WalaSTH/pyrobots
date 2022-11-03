@@ -401,10 +401,10 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 
 # --- Simulation Endpoints ---
 
-@app.post("/simulation/start")
+@app.post("/simulation/start", tags=["simulation"], status_code=200)
 async def create_sim(sim: SimData):
     # do some validation checks
-    if sim.n_rounds < 1 or sim.n_rounds > 100000:
+    if sim.n_rounds < 1 or sim.n_rounds > 10000:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect number of rounds.",
