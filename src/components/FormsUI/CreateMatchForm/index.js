@@ -64,7 +64,6 @@ export default function CreateMatchForm({ UserID }) {
     robot_id: "",
     creator: UserID,
   };
-
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
@@ -73,7 +72,6 @@ export default function CreateMatchForm({ UserID }) {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 

@@ -17,7 +17,7 @@ import * as Yup from "yup";
 
 const endpoint = "http://127.0.0.1:8000/match/join";
 
-export default function PasswordDialog({ open, handleClose, id }) {
+export default function RobotDialog({ open, handleClose, id }) {
   const navigate = useNavigate();
   const [isSelectError, setIsSelectError] = useState(false);
 
@@ -41,7 +41,6 @@ export default function PasswordDialog({ open, handleClose, id }) {
         match: values.match,
       })
       .then((response) => {
-        const data = response.data;
         navigate(`/lobby/${id}`);
       });
   }
