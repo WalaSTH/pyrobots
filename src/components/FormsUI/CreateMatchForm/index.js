@@ -72,12 +72,10 @@ export default function CreateMatchForm({ UserID }) {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
   async function handleSubmit(values) {
-    console.log(values);
     await axios
       .post("http://127.0.0.1:8000/match/create", values)
       .then(function (response) {

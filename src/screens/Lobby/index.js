@@ -330,33 +330,31 @@ export default function Lobby() {
           </Card>
         </Grid>
 
-        {match && match.creator ? (
-          username !== match.creator ? (
-            <Grid
-              item
-              xs={12}
-              md={10}
-              lg={12}
+        {match && match.creator && username !== match.creator ? (
+          <Grid
+            item
+            xs={12}
+            md={10}
+            lg={12}
+            sx={{
+              display: { xs: "flex", lg: "none" },
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <Button
+              size="large"
+              variant="outlined"
+              color="error"
+              onClick={handleLeave}
               sx={{
-                display: { xs: "flex", lg: "none" },
-                flexDirection: "column",
-                alignItems: "flex-start",
+                width: 250,
+                marginBottom: 2,
               }}
             >
-              <Button
-                size="large"
-                variant="outlined"
-                color="error"
-                onClick={handleLeave}
-                sx={{
-                  width: 250,
-                  marginBottom: 2,
-                }}
-              >
-                Leave match
-              </Button>
-            </Grid>
-          ) : null
+              Leave match
+            </Button>
+          </Grid>
         ) : null}
       </Grid>
 

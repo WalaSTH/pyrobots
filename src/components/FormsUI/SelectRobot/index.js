@@ -40,8 +40,7 @@ export default function SelectRobot({
     if (isError) {
       handleError();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isError]);
+  }, [isError, handleError]);
 
   const handleOpen = () => {
     setOpen(true);
