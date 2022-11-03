@@ -37,7 +37,7 @@ export default function SelectRobot({
   const isError = meta.touched && meta.error;
 
   useEffect(() => {
-    if (isError) {
+    if (isError && handleError) {
       handleError();
     }
   }, [isError, handleError]);

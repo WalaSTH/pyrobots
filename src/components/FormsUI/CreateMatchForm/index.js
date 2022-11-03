@@ -49,7 +49,7 @@ const formValidation = Yup.object().shape({
     .typeError("Insert a number")
     .positive()
     .max(10000),
-  robot_id: Yup.number().integer().positive(),
+  robot_id: Yup.number().integer().positive().required(),
 });
 
 export default function CreateMatchForm({ UserID }) {
@@ -82,13 +82,16 @@ export default function CreateMatchForm({ UserID }) {
         navigate(`/lobby/${response.data["id"]}`);
       })
       .catch(function (error) {
-        setSeverity("error");
-        if (error.response) {
+        if (
+          error.response &&
+          typeof error.response.data["detail"] != "object"
+        ) {
           setBody(error.response.data["detail"]);
         } else {
           setBody("Unknown error");
         }
         setOpen(true);
+        setSeverity("error");
       });
   }
 
