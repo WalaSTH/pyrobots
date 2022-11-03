@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Container } from "@mui/material";
-import CreateSimForm from "../../components/CreateSimForm";
+import CreateSimForm from "../../components/FormsUI/CreateSimForm";
 import axios from "axios";
 import Snackbar from "../../components/FormsUI/Snackbar";
 

@@ -3,30 +3,20 @@ import * as Yup from "yup";
 import { Form, Formik } from "formik";
 
 // Custom components for form input with formik and MUI
-import TextField from "../FormsUI/TextField";
-import SubmitFormButton from "../FormsUI/SubmitFormButton";
+import TextField from "../TextField";
+import SubmitFormButton from "../SubmitFormButton";
+import SelectRobot from "../SelectRobot";
 
 // MUI components
-import { Card, Grid, Typography } from "@mui/material";
-import SelectRobot from "../FormsUI/Select";
+import { Card, FormHelperText, Grid, Typography } from "@mui/material";
+import { useState } from "react";
 
 const initialFormState = {
   rounds: "",
-  robotNames: ["", "", "", ""],
+  robots: ["", "", "", ""],
 };
 
-// const count = arr.reduce((accumulator, value) => {
-//   return accumulator + (value !== "" ? 1 : 0);
-// }, 0);
-
-function countRobots(arr) {
-  var accumulator = 0;
-  arr.forEach((element) => {
-    accumulator = accumulator + (element ? 1 : 0);
-  });
-  console.log(accumulator);
-  return accumulator;
-}
+const MIN_ROBOTS_ERROR = "Select at least 2 robots";
 
 const formValidation = Yup.object().shape({
   rounds: Yup.number()
@@ -35,16 +25,18 @@ const formValidation = Yup.object().shape({
     .positive("Must be a positive number")
     .max(10000, "Max number of rounds is 10000")
     .required("Required"),
-  robotNames: Yup.array()
-    .of(Yup.string().required())
-    .test(
-      "minRobots",
-      "Select more than one robot",
-      (value) => countRobots(value) > 1
-    ),
+  robots: Yup.array().test("minRobots", MIN_ROBOTS_ERROR, (array) => {
+    return array.filter((e) => e != null).length > 1;
+  }),
 });
 
 export default function CreateSimForm({ onSubmit }) {
+  const [isSelectError, setIsSelectError] = useState(false);
+
+  function handleError() {
+    setIsSelectError(true);
+  }
+
   return (
     <Card
       variant="outlined"
@@ -60,21 +52,12 @@ export default function CreateSimForm({ onSubmit }) {
         onSubmit={onSubmit}
       >
         <Form>
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
+          <Grid container spacing={2}>
             <Grid
               item
               xs={12}
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                textAlign: "center",
               }}
             >
               <Typography
@@ -88,15 +71,7 @@ export default function CreateSimForm({ onSubmit }) {
               </Typography>
             </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gridGap: "13px",
-              }}
-            >
+            <Grid item xs={12} mb={-1}>
               <Typography
                 sx={{
                   fontSize: { xs: "0.9rem", md: "1rem" },
@@ -105,7 +80,9 @@ export default function CreateSimForm({ onSubmit }) {
               >
                 Number of rounds
               </Typography>
+            </Grid>
 
+            <Grid item xs={12}>
               <TextField
                 name="rounds"
                 label="Rounds"
@@ -115,15 +92,7 @@ export default function CreateSimForm({ onSubmit }) {
               />
             </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gridGap: "13px",
-              }}
-            >
+            <Grid item xs={12} mb={-1}>
               <Typography
                 sx={{
                   fontSize: { xs: "0.9rem", md: "1rem" },
@@ -132,21 +101,41 @@ export default function CreateSimForm({ onSubmit }) {
               >
                 Select robots
               </Typography>
-              <SelectRobot name={"robotNames[0]"} />
-              <SelectRobot name={"robotNames[1]"} />
-              <SelectRobot name={"robotNames[2]"} />
-              <SelectRobot name={"robotNames[3]"} />
             </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
+            {isSelectError ? (
+              <Grid item xs={12}>
+                <FormHelperText error={isSelectError}>
+                  {MIN_ROBOTS_ERROR}
+                </FormHelperText>
+              </Grid>
+            ) : null}
+
+            <Grid item xs={12} mb={-1}>
+              <SelectRobot name="robots[0]" handleError={handleError}>
+                Select robot 1
+              </SelectRobot>
+            </Grid>
+
+            <Grid item xs={12} mb={-1}>
+              <SelectRobot name="robots[1]" handleError={handleError}>
+                Select robot 2
+              </SelectRobot>
+            </Grid>
+
+            <Grid item xs={12} mb={-1}>
+              <SelectRobot name="robots[2]" handleError={handleError}>
+                Select robot 3
+              </SelectRobot>
+            </Grid>
+
+            <Grid item xs={12} mb={-1}>
+              <SelectRobot name="robots[3]" handleError={handleError}>
+                Select robot 4
+              </SelectRobot>
+            </Grid>
+
+            <Grid item xs={12}>
               <SubmitFormButton>Run simulation</SubmitFormButton>
             </Grid>
           </Grid>
