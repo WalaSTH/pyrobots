@@ -18,7 +18,11 @@ export default function Elevation() {
     return (
       <Grid
         item
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+        }}
       >
         <Alert severity="warning">You dont have any robots!</Alert>
       </Grid>
