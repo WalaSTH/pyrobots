@@ -20,6 +20,8 @@ import {
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import axios from "axios";
+import Snackbar from "../../components/FormsUI/Snackbar";
 
 function ParticipantSkeleton() {
   return (
@@ -57,6 +59,16 @@ export default function Lobby() {
   const params = useParams();
   const navigate = useNavigate();
 
+  // Snackbar utilities
+  const [open, setOpen] = useState(false);
+  const [body, setBody] = useState("");
+  const [severity, setSeverity] = useState("");
+
+  function handleClose(reason) {
+    if (reason === "clickaway") return;
+    setOpen(false);
+  }
+
   // Manage connection with websocket
   useEffect(() => {
     const client = new W3CWebSocket(`ws://localhost:8000/ws/${params.matchID}`);
@@ -76,9 +88,10 @@ export default function Lobby() {
             navigate("/");
           }
         } else if (msgData.message_type === 2) {
-          console.log(msgData.message_content);
+          setOpen(true);
+          setSeverity("success");
+          setBody(msgData.message_content);
         } else if (msgData.message_type === 3) {
-          console.log(msgData.message_content);
           navigate("/");
         }
       }
@@ -90,6 +103,30 @@ export default function Lobby() {
       client.close();
     };
   }, [params.matchID, navigate, username]);
+
+  // Leave match
+  async function handleLeave() {
+    return await axios
+      .post("http://127.0.0.1:8000/match/leave", {
+        username: username,
+        match: params.matchID,
+      })
+      .then(function () {
+        navigate("/browse-matches");
+      })
+      .catch(function (error) {
+        setSeverity("error");
+        if (
+          error.response &&
+          typeof error.response.data["detail"] != "object"
+        ) {
+          setBody(error.response.data["detail"]);
+        } else {
+          setBody("Unknown error");
+        }
+        setOpen(true);
+      });
+  }
 
   const listParticipants = match.participants ? (
     <List>
@@ -238,6 +275,7 @@ export default function Lobby() {
                 size="large"
                 variant="outlined"
                 color="error"
+                onClick={handleLeave}
                 sx={{
                   width: 250,
                   marginTop: 2,
@@ -313,6 +351,7 @@ export default function Lobby() {
                 size="large"
                 variant="outlined"
                 color="error"
+                onClick={handleLeave}
                 sx={{
                   width: 250,
                   marginBottom: 2,
@@ -324,6 +363,15 @@ export default function Lobby() {
           ) : null
         ) : null}
       </Grid>
+
+      {open && (
+        <Snackbar
+          open={open}
+          body={body}
+          severity={severity}
+          handleClose={handleClose}
+        />
+      )}
     </Container>
   );
 }
