@@ -15,6 +15,7 @@ export default function LobbyList({ matches, getData, filter }) {
 
   const columns = [
     { field: "id", hide: true, filterable: false },
+    { field: "playersList", hide: true, filterable: false },
     { field: "name", headerName: "Name", minWidth: 200, flex: 1 },
     {
       field: "isPrivate",
@@ -88,6 +89,7 @@ export default function LobbyList({ matches, getData, filter }) {
     ? matches["Matches"].map((value) => {
         return {
           id: value[0],
+          playersList: value[8],
           password: value[1],
           name: value[2],
           players: value[3],
@@ -114,11 +116,17 @@ export default function LobbyList({ matches, getData, filter }) {
       disableColumnSelector
       disableSelectionOnClick
       density="comfortable"
+      localeText={{
+        noRowsLabel: "No matches available",
+      }}
       componentsProps={{
         panel: {
           sx: {
             top: "-75px !important",
           },
+        },
+        pagination: {
+          labelRowsPerPage: "Matches per page",
         },
       }}
       sx={{
