@@ -45,7 +45,6 @@ export default function SelectRobot({ name, children, handleError }) {
   };
 
   useEffect(() => {
-    console.log("Fetching data");
     getRobots().then((e) => setDataRobot(e));
   }, []);
 

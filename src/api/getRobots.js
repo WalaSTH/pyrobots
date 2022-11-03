@@ -9,10 +9,5 @@ export default async function getRobots() {
     })
     .then((response) => {
       return response.data["Robots"];
-    })
-    .catch(function (error) {
-      if (error.response) {
-        console.log(error.response);
-      }
     });
 }
