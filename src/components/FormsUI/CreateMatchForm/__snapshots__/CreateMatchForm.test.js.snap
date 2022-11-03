@@ -31,12 +31,19 @@ exports[`<CreateMatchForm component rendering 1`] = `
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor=":r0:"
               id=":r0:-label"
             >
               Name of the match
+              <span
+                aria-hidden={true}
+                className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -54,7 +61,7 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 onBlur={[Function]}
                 onChange={[Function]}
                 onFocus={[Function]}
-                required={false}
+                required={true}
                 type="text"
                 value=""
               />
@@ -67,6 +74,8 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 >
                   <span>
                     Name of the match
+                     
+                    *
                   </span>
                 </legend>
               </fieldset>
@@ -130,12 +139,19 @@ exports[`<CreateMatchForm component rendering 1`] = `
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor=":r2:"
               id=":r2:-label"
             >
               Min players
+              <span
+                aria-hidden={true}
+                className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -154,7 +170,7 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 onChange={[Function]}
                 onFocus={[Function]}
                 placeholder="2"
-                required={false}
+                required={true}
                 type="text"
                 value=""
               />
@@ -167,6 +183,8 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 >
                   <span>
                     Min players
+                     
+                    *
                   </span>
                 </legend>
               </fieldset>
@@ -180,12 +198,19 @@ exports[`<CreateMatchForm component rendering 1`] = `
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor=":r3:"
               id=":r3:-label"
             >
               Max players
+              <span
+                aria-hidden={true}
+                className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -204,7 +229,7 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 onChange={[Function]}
                 onFocus={[Function]}
                 placeholder="4"
-                required={false}
+                required={true}
                 type="text"
                 value=""
               />
@@ -217,6 +242,8 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 >
                   <span>
                     Max players
+                     
+                    *
                   </span>
                 </legend>
               </fieldset>
@@ -230,12 +257,19 @@ exports[`<CreateMatchForm component rendering 1`] = `
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor=":r4:"
               id=":r4:-label"
             >
               Games
+              <span
+                aria-hidden={true}
+                className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -254,7 +288,7 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 onChange={[Function]}
                 onFocus={[Function]}
                 placeholder="200"
-                required={false}
+                required={true}
                 type="text"
                 value=""
               />
@@ -267,6 +301,8 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 >
                   <span>
                     Games
+                     
+                    *
                   </span>
                 </legend>
               </fieldset>
@@ -280,12 +316,19 @@ exports[`<CreateMatchForm component rendering 1`] = `
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor=":r5:"
               id=":r5:-label"
             >
               Rounds
+              <span
+                aria-hidden={true}
+                className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -304,7 +347,7 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 onChange={[Function]}
                 onFocus={[Function]}
                 placeholder="10000"
-                required={false}
+                required={true}
                 type="text"
                 value=""
               />
@@ -317,6 +360,8 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 >
                   <span>
                     Rounds
+                     
+                    *
                   </span>
                 </legend>
               </fieldset>
@@ -335,12 +380,19 @@ exports[`<CreateMatchForm component rendering 1`] = `
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor=":r6:"
               id=":r6:-label"
             >
               Robot ID
+              <span
+                aria-hidden={true}
+                className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -358,7 +410,7 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 onBlur={[Function]}
                 onChange={[Function]}
                 onFocus={[Function]}
-                required={false}
+                required={true}
                 type="text"
                 value=""
               />
@@ -371,6 +423,8 @@ exports[`<CreateMatchForm component rendering 1`] = `
                 >
                   <span>
                     Robot ID
+                     
+                    *
                   </span>
                 </legend>
               </fieldset>

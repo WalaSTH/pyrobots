@@ -3,7 +3,7 @@ import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
-import LoginForm from "./LoginForm";
+import LoginForm from "./";
 
 describe("<LoginForm", () => {
   const user = userEvent.setup();
@@ -28,8 +28,8 @@ describe("<LoginForm", () => {
     const mockHandler = jest.fn();
     render(<LoginForm handleSubmit={mockHandler} />);
 
-    const usernameInput = screen.getByLabelText("Username");
-    const passwordInput = screen.getByLabelText("Password");
+    const usernameInput = screen.getByLabelText(/Username/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
 
     await user.type(usernameInput, "diego");
     await user.type(passwordInput, "Diego123_");

@@ -30,12 +30,19 @@ exports[`<LoginForm component rendering 1`] = `
           data-testid="username-input"
         >
           <label
-            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink={false}
             htmlFor=":r0:"
             id=":r0:-label"
           >
             Username
+            <span
+              aria-hidden={true}
+              className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+            >
+               
+              *
+            </span>
           </label>
           <div
             className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -53,7 +60,7 @@ exports[`<LoginForm component rendering 1`] = `
               onBlur={[Function]}
               onChange={[Function]}
               onFocus={[Function]}
-              required={false}
+              required={true}
               type="text"
               value=""
             />
@@ -66,6 +73,8 @@ exports[`<LoginForm component rendering 1`] = `
               >
                 <span>
                   Username
+                   
+                  *
                 </span>
               </legend>
             </fieldset>
@@ -80,12 +89,19 @@ exports[`<LoginForm component rendering 1`] = `
           data-testid="password-input"
         >
           <label
-            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink={false}
             htmlFor=":r1:"
             id=":r1:-label"
           >
             Password
+            <span
+              aria-hidden={true}
+              className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+            >
+               
+              *
+            </span>
           </label>
           <div
             className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
@@ -103,7 +119,7 @@ exports[`<LoginForm component rendering 1`] = `
               onBlur={[Function]}
               onChange={[Function]}
               onFocus={[Function]}
-              required={false}
+              required={true}
               type="password"
               value=""
             />
@@ -116,6 +132,8 @@ exports[`<LoginForm component rendering 1`] = `
               >
                 <span>
                   Password
+                   
+                  *
                 </span>
               </legend>
             </fieldset>

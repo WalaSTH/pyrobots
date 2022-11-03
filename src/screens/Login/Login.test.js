@@ -1,7 +1,7 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import renderer from "react-test-renderer";
-import Login from "./Login";
+import Login from "./";
 
 describe("<Login", () => {
   it("component rendering", async () => {
