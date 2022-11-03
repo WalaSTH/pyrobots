@@ -69,6 +69,7 @@ export default function SelectRobot({
 
         <Button
           variant={field.value ? "contained" : "outlined"}
+          aria-label="robotSelect"
           onClick={handleOpen}
           fullWidth
           disabled={field.value !== ""}
