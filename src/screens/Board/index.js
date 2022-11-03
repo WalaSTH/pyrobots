@@ -5,13 +5,6 @@ import Robot from "../../components/Game/Robot";
 import { useParams, useNavigate } from "react-router-dom";
 // import Missile from "../../components/Game/Missile";
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-async function cleanAll(localID) {
-  await delay(5000);
-  localStorage.removeItem(localID);
-}
-
 export default function Board() {
   var [finished, setFinished] = useState(false);
   const navigate = useNavigate();
@@ -46,7 +39,7 @@ export default function Board() {
     if (finished) {
       clearInterval(intervalRef.current);
       setPosition(frames.length - 1);
-      cleanAll(params.simID);
+      localStorage.removeItem(params.simID);
       navigate("/");
 
       // alert(
@@ -58,6 +51,7 @@ export default function Board() {
       clearInterval(intervalRef.current);
       window.removeEventListener("resize", fitStageIntoParentContainer);
     };
+    //eslint-disable-next-line
   }, [finished]);
 
   function getInterval() {

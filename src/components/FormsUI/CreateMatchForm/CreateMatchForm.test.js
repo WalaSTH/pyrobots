@@ -28,37 +28,8 @@ describe("<CreateMatchForm", () => {
     screen.getByLabelText(/Robot ID/i);
   });
 
-  it("validates fields to have something after write", async () => {
-    CreateMatchForm.handleSubmit = jest.fn();
-    render(<CreateMatchForm />);
-
-    const nameOfTheMatchInput = screen.getByLabelText(/Name of the match/i);
-    const minPlayersInput = screen.getByLabelText(/Password/i);
-    const maxPlayersInput = screen.getByLabelText(/Min players/i);
-    const gamesInput = screen.getByLabelText(/Max players/i);
-    const roundsInput = screen.getByLabelText(/Games/i);
-    const robotIdInput = screen.getByLabelText(/Rounds/i);
-
-    await user.type(nameOfTheMatchInput, "diego");
-    await user.type(minPlayersInput, "2");
-    await user.type(maxPlayersInput, "4");
-    await user.type(gamesInput, "200");
-    await user.type(roundsInput, "10000");
-    await user.type(robotIdInput, "1");
-
-    const button = screen.getByRole("button", { name: /Create-match/i });
-    expect(button).toHaveTextContent(/Create match/i, { exact: false });
-    await user.click(button);
-
-    expect(nameOfTheMatchInput.value).toBe("diego");
-    expect(minPlayersInput.value).toBe("2");
-    expect(maxPlayersInput.value).toBe("4");
-    expect(gamesInput.value).toBe("200");
-    expect(roundsInput.value).toBe("10000");
-    expect(robotIdInput.value).toBe("1");
-  });
-
   it("mock fetch", async () => {
+    CreateMatchForm.handleSubmit = jest.fn();
     const fakeMatch = {
       name: "PatriaoPaper",
       password: "",
