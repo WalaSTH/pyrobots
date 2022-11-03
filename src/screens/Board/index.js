@@ -2,11 +2,22 @@ import { Grid, List, LinearProgress, Container, Box } from "@mui/material";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
+import { useParams, useNavigate } from "react-router-dom";
 // import Missile from "../../components/Game/Missile";
-import frames from "./prueba.json";
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function cleanAll(localID) {
+  await delay(5000);
+  localStorage.removeItem(localID);
+}
 
 export default function Board() {
   var [finished, setFinished] = useState(false);
+  const navigate = useNavigate();
+  const params = useParams();
+  const data = localStorage.getItem(params.simID);
+  const frames = JSON.parse(data).data;
   const [position, setPosition] = useState(0);
   const stageParentRef = useRef();
   const intervalRef = useRef();
@@ -35,10 +46,13 @@ export default function Board() {
     if (finished) {
       clearInterval(intervalRef.current);
       setPosition(frames.length - 1);
-      alert(
-        "Termino la simulacion. El ganador es: " +
-          frames[frames.length - 1].robots[0].robotName
-      );
+      cleanAll(params.simID);
+      navigate("/");
+
+      // alert(
+      //   "Termino la simulacion. El ganador es: " +
+      //     frames[frames.length - 1].robots[0].robotName
+      // );
     }
     return () => {
       clearInterval(intervalRef.current);
