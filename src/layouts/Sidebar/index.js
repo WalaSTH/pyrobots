@@ -20,6 +20,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 import ScienceIcon from "@mui/icons-material/Science";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
 
 const theme = createTheme({
   typography: {
@@ -129,6 +130,14 @@ export default function DrawerWrapper({
                   <SmartToyTwoToneIcon sx={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Create robot" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/list-robot")}>
+                <ListItemIcon>
+                  <RecentActorsIcon sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="List robots" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
