@@ -28,7 +28,6 @@ export default function BrowseMatches() {
       })
       .then((response) => {
         const data = response.data;
-        console.log(data);
         setMatches(data);
       })
       .catch((error) => {

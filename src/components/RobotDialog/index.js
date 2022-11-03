@@ -42,7 +42,6 @@ export default function PasswordDialog({ open, handleClose, id }) {
       })
       .then((response) => {
         const data = response.data;
-        console.log(data);
         navigate(`/lobby/${id}`);
       });
   }
