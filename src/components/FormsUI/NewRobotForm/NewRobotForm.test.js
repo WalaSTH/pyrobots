@@ -22,7 +22,7 @@ describe("NewRobotForm", () => {
     screen.getByText(/Create Robot/i);
   });
 
-  it("checks security of not letting create new robot withoute necessary data", async () => {
+  it("checks security of not letting create new robot withou the necessary data", async () => {
     const mockHandler = jest.fn();
     render(<NewRobotForm onSubmit={mockHandler} />);
     const button = screen.getByTestId("submitButton");
