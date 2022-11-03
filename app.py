@@ -198,7 +198,7 @@ def match_creation(match_data: TempMatch):
 
 @app.post("/match/join", tags=["Matches"], status_code=200)
 async def match_join(
-    match_to_join: JoiningMatch = Depends()
+    match_to_join: JoiningMatch
 ):
 
     if not check_match_existance(match_to_join.match):
@@ -241,7 +241,7 @@ async def match_join(
 
 @app.post("/match/leave", tags=["Matches"], status_code=200)
 async def match_leave(
-    match_to_leave: LeavingMatch = Depends()
+    match_to_leave: LeavingMatch
 ):
 
     if not check_match_existance(match_to_leave.match):

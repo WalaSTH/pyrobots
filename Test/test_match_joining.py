@@ -93,94 +93,94 @@ assert m_res.status_code == 200
 
 # Incorrect match id.
 def test_match_does_not_exist():
-    test_params = {
+    test_json = {
         "username": user2,
         "robot": robot2,
         "match": get_last_match_id()+1,
         "password": password
     }
 
-    response = client.post("/match/join", params=test_params)
-    m_id = test_params["match"]
+    response = client.post("/match/join", json=test_json)
+    m_id = test_json["match"]
     assert response.json() == {"detail": f"Match id {m_id} does not exist"}
     assert response.status_code == 404
 
 # Incorrect user name.
 def test_user_does_not_exist():
-    test_params = {
+    test_json = {
         "username": "Ramon2",
         "robot": robot2,
         "match": test_match,
         "password": password
     }
 
-    response = client.post("/match/join", params=test_params)
-    u_id = test_params["username"]
+    response = client.post("/match/join", json=test_json)
+    u_id = test_json["username"]
     assert response.json() == {"detail": f"User {u_id} is not a user"}
     assert response.status_code == 404
 
 # Incorrect robot.
 def test_robot_does_not_exist_or_belongs():
-    test_params = {
+    test_json = {
         "username": user2,
         "robot": robot3,
         "match": test_match,
         "password": password
     }
 
-    response = client.post("/match/join", params=test_params)
-    r_id = test_params["robot"]
+    response = client.post("/match/join", json=test_json)
+    r_id = test_json["robot"]
     assert response.json() == {"detail": f"Robot {r_id} does not exist or does not belong to you"}
     assert response.status_code == 404
 
 # Wrong password.
 def test_wrong_password():
-    test_params = {
+    test_json = {
         "username": user2,
         "robot": robot2,
         "match": test_match,
         "password": "JIJIJIJA"
     }
 
-    response = client.post("/match/join", params=test_params)
+    response = client.post("/match/join", json=test_json)
     assert response.json() == {"detail": "Incorrect password"}
     assert response.status_code == 401
 
 # Join succesfuly.
 def test_join_match():
-    test_params = {
+    test_json = {
         "username": user2,
         "robot": robot2,
         "match": test_match,
         "password": password
     }
 
-    response = client.post("/match/join", params=test_params)
+    response = client.post("/match/join", json=test_json)
     assert response.json() == {"detail": "You have succesfully joined the match"}
     assert response.status_code == 200
 
 # Join again.
 def test_already_joined():
-    test_params = {
+    test_json = {
         "username": user2,
         "robot": robot2,
         "match": test_match,
         "password": password
     }
 
-    response = client.post("/match/join", params=test_params)
+    response = client.post("/match/join", json=test_json)
     assert response.json() == {"detail": "You have already joined this match"}
     assert response.status_code == 409
 
 # Join full match.
 def test_match_is_full():
-    test_params = {
+    test_json = {
         "username": user3,
         "robot": robot3,
         "match": test_match,
         "password": password
     }
 
-    response = client.post("/match/join", params=test_params)
+    response = client.post("/match/join", json=test_json)
     assert response.json() == {"detail": "The match you tried joining is already full"}
     assert response.status_code == 409

@@ -92,57 +92,57 @@ test_match = get_last_match_id()
 assert m_res.status_code == 200
 
 # Join by User2.
-join_params = {
+join_json = {
         "username": user2,
         "robot": robot2,
         "match": test_match,
         "password": password
     }
-response = client.post("/match/join", params=join_params)
+response = client.post("/match/join", json=join_json)
 assert response.status_code == 200
 
 
 # Incorrect match id.
 def test_match_does_not_exist():
-    test_params = {
+    test_json = {
         "username": user2,
         "match": get_last_match_id()+1,
     }
 
-    response = client.post("/match/leave", params=test_params)
-    m_id = test_params["match"]
+    response = client.post("/match/leave", json=test_json)
+    m_id = test_json["match"]
     assert response.json() == {"detail": f"Match id {m_id} does not exist"}
     assert response.status_code == 404
 
 # User does not belong.
 def test_user_does_not_belong():
-    test_params = {
+    test_json = {
         "username": user3,
         "match": test_match,
     }
 
-    response = client.post("/match/leave", params=test_params)
+    response = client.post("/match/leave", json=test_json)
     assert response.json() == {"detail": "You are not part of this match"}
     assert response.status_code == 409
 
 # Stupid owner.
 def test_user_owns_match():
-    test_params = {
+    test_json = {
         "username": user1,
         "match": test_match,
     }
 
-    response = client.post("/match/leave", params=test_params)
+    response = client.post("/match/leave", json=test_json)
     assert response.json() == {"detail": "You can't leave, YOU ARE THE OWNER!"}
     assert response.status_code == 401
 
 # Succesfully leave.
 def test_end_in_succes():
-    test_params = {
+    test_json = {
         "username": user2,
         "match": test_match
     }
 
-    response = client.post("/match/leave", params=test_params)
+    response = client.post("/match/leave", json=test_json)
     assert response.json() == {"detail": "You have succesfully left the match"}
     assert response.status_code == 200
