@@ -94,7 +94,7 @@ async def websocket_endpoint(websocket: WebSocket, match_id: int):
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket, match_id)
-        await manager.broadcast({"message_type": 2, "message_content": "A player has disconnected"})
+        await manager.broadcast({"message_type": 2, "message_content": "A player has disconnected"}, match_id)
 
 
 # --- Robot Endpoints ---
