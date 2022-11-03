@@ -110,25 +110,41 @@ export default function CreateSimForm({ onSubmit }) {
             ) : null}
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[0]" handleError={handleError}>
+              <SelectRobot
+                name="robots[0]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 1
               </SelectRobot>
             </Grid>
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[1]" handleError={handleError}>
+              <SelectRobot
+                name="robots[1]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 2
               </SelectRobot>
             </Grid>
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[2]" handleError={handleError}>
+              <SelectRobot
+                name="robots[2]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 3
               </SelectRobot>
             </Grid>
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[3]" handleError={handleError}>
+              <SelectRobot
+                name="robots[3]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 4
               </SelectRobot>
             </Grid>

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const formValidation = Yup.object().shape({
   name: Yup.string()
@@ -52,6 +53,7 @@ const formValidation = Yup.object().shape({
 });
 
 export default function CreateMatchForm({ UserID }) {
+  const navigate = useNavigate();
   const initialFormState = {
     name: "",
     password: "",
@@ -79,9 +81,7 @@ export default function CreateMatchForm({ UserID }) {
     await axios
       .post("http://127.0.0.1:8000/match/create", values)
       .then(function (response) {
-        setOpen(true);
-        setSeverity("success");
-        setBody(response.data["detail"]);
+        navigate(`/lobby/${response.data["id"]}`);
       })
       .catch(function (error) {
         setSeverity("error");

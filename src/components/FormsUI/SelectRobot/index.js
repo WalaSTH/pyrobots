@@ -63,6 +63,7 @@ export default function SelectRobot({
             color="error"
             onClick={() => {
               setFieldValue(name, "");
+              setRobotChoice("");
             }}
           >
             <CloseIcon />
@@ -107,7 +108,7 @@ export default function SelectRobot({
 
         <List>
           {dataRobot
-            ? dataRobot.map((robot, i) => (
+            ? dataRobot.map((robot) => (
                 <ListItem
                   button
                   key={robot[1]}
