@@ -160,10 +160,10 @@ async def robot_position(robot_position: Robot = Depends()):
 @app.post("/match/create", tags=["Matches"], status_code=200)
 def match_creation(match_data: TempMatch):
 
-    if match_data.robot_id > get_last_robot_id() or match_data.robot_id <= 0:
+    if  not check_robot_existance(match_data.robot_id):
         raise HTTPException(status_code=404, detail="No robot with such ID")
 
-    if match_data.creator > get_last_user_id() or match_data.creator <= 0:
+    if not check_user_existance(match_data.creator):
         raise HTTPException(status_code=404, detail="No user with such ID")
 
     if match_data.password == None:
