@@ -136,6 +136,7 @@ export default function CreateMatchForm({ navigate, UserID }) {
                   name="password"
                   label="Password (Optional)"
                   type="password"
+                  data-testid="passwordInput"
                   autoComplete="off"
                 />
               </Grid>
@@ -191,7 +192,9 @@ export default function CreateMatchForm({ navigate, UserID }) {
               </Grid>
 
               <Grid item xs={12}>
-                <SubmitFormButton>Create match</SubmitFormButton>
+                <SubmitFormButton aria-label="Create-match">
+                  Create match
+                </SubmitFormButton>
               </Grid>
             </Grid>
           </Card>

@@ -7,6 +7,7 @@ import CreateSim from "../screens/CreateSim";
 import Register from "../screens/Register/";
 import CreateMatch from "../screens/CreateMatch/";
 import Lobby from "../screens/Lobby";
+import Board from "../screens/Board";
 
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
@@ -37,6 +38,7 @@ export default function RoutesWrapper({ navigate }) {
           path="/create-simulation"
           element={<CreateSim username={username} navigate={navigate} />}
         />
+        <Route path="/board/:simID" element={<Board />} />
         <Route path="/browse-matches" element={<></>} />
         <Route path="/match-history" element={<></>} />
         <Route path="/lobby/:matchID" element={<Lobby />} />
