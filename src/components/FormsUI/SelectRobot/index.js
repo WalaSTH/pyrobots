@@ -23,17 +23,24 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function SelectRobot({ name, children, handleError }) {
+export default function SelectRobot({
+  name,
+  getRobotName,
+  children,
+  handleError,
+}) {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(name);
   const [open, setOpen] = useState(false);
   const [dataRobot, setDataRobot] = useState([]);
+  const [robotChoice, setRobotChoice] = useState("");
   const isError = meta.touched && meta.error;
 
   useEffect(() => {
     if (isError) {
       handleError();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError]);
 
   const handleOpen = () => {
@@ -56,6 +63,7 @@ export default function SelectRobot({ name, children, handleError }) {
             color="error"
             onClick={() => {
               setFieldValue(name, "");
+              setRobotChoice("");
             }}
           >
             <CloseIcon />
@@ -70,7 +78,7 @@ export default function SelectRobot({ name, children, handleError }) {
           disabled={field.value !== ""}
           color={isError ? "error" : "primary"}
         >
-          {children ? field.value || children : field.value || "Select Robot"}
+          {children ? robotChoice || children : robotChoice || "Select Robot"}
         </Button>
       </Box>
 
@@ -100,12 +108,13 @@ export default function SelectRobot({ name, children, handleError }) {
 
         <List>
           {dataRobot
-            ? dataRobot.map((robot, i) => (
+            ? dataRobot.map((robot) => (
                 <ListItem
                   button
                   key={robot[1]}
                   onClick={() => {
-                    setFieldValue(name, robot[1]);
+                    setFieldValue(name, robot[getRobotName]);
+                    setRobotChoice(robot[1]);
                     handleClose();
                   }}
                 >

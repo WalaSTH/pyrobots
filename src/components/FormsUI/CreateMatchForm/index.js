@@ -2,10 +2,12 @@ import { Card, Grid, Typography, Box } from "@mui/material";
 import TextField from "../TextField";
 import SubmitFormButton from "../SubmitFormButton";
 import Snackbar from "../Snackbar";
+import SelectRobot from "../SelectRobot";
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const formValidation = Yup.object().shape({
   name: Yup.string()
@@ -51,6 +53,7 @@ const formValidation = Yup.object().shape({
 });
 
 export default function CreateMatchForm({ UserID }) {
+  const navigate = useNavigate();
   const initialFormState = {
     name: "",
     password: "",
@@ -78,9 +81,7 @@ export default function CreateMatchForm({ UserID }) {
     await axios
       .post("http://127.0.0.1:8000/match/create", values)
       .then(function (response) {
-        setOpen(true);
-        setSeverity("success");
-        setBody(response.data["detail"]);
+        navigate(`/lobby/${response.data["id"]}`);
       })
       .catch(function (error) {
         setSeverity("error");
@@ -116,7 +117,7 @@ export default function CreateMatchForm({ UserID }) {
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{ textAlign: "center" }}>
-                <Typography sx={{ fontSize: 18, fontWeight: 500 }}>
+                <Typography component="h1" variant="h5">
                   Create Match
                 </Typography>
               </Grid>
@@ -181,13 +182,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={12} textAlign="center">
-                <Typography>Choose your robot!</Typography>
-                <TextField
-                  name="robot_id"
-                  label="Robot ID"
-                  autoComplete="off"
-                  required
-                />
+                <SelectRobot name="robot_id" getRobotName="0" />
               </Grid>
 
               <Grid item xs={12}>

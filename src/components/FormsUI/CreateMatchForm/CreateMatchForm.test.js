@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import CreateMatchForm from "./";
+import { BrowserRouter } from "react-router-dom";
 
 describe("<CreateMatchForm", () => {
   const user = userEvent.setup();
@@ -12,20 +13,27 @@ describe("<CreateMatchForm", () => {
   });
 
   it("component rendering", async () => {
-    const component = renderer.create(<CreateMatchForm />);
+    const component = renderer.create(
+      <BrowserRouter>
+        <CreateMatchForm />
+      </BrowserRouter>
+    );
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it("component renders with all the components", () => {
-    render(<CreateMatchForm />);
+    render(
+      <BrowserRouter>
+        <CreateMatchForm />
+      </BrowserRouter>
+    );
     screen.getByLabelText(/Name of the match/i);
     screen.getByLabelText(/Password/i);
     screen.getByLabelText(/Min players/i);
     screen.getByLabelText(/Max players/i);
     screen.getByLabelText(/Games/i);
     screen.getByLabelText(/Rounds/i);
-    screen.getByLabelText(/Robot ID/i);
   });
 
   it("mock fetch", async () => {

@@ -64,13 +64,7 @@ export default function CreateSimForm({ onSubmit }) {
                 textAlign: "center",
               }}
             >
-              <Typography
-                mt={1}
-                mb={1}
-                sx={{
-                  fontSize: { xs: "1.25rem", md: "1.50rem" },
-                }}
-              >
+              <Typography mt={1} mb={1} component="h1" variant="h5">
                 Create Simulation
               </Typography>
             </Grid>
@@ -116,25 +110,41 @@ export default function CreateSimForm({ onSubmit }) {
             ) : null}
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[0]" handleError={handleError}>
+              <SelectRobot
+                name="robots[0]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 1
               </SelectRobot>
             </Grid>
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[1]" handleError={handleError}>
+              <SelectRobot
+                name="robots[1]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 2
               </SelectRobot>
             </Grid>
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[2]" handleError={handleError}>
+              <SelectRobot
+                name="robots[2]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 3
               </SelectRobot>
             </Grid>
 
             <Grid item xs={12} mb={-1}>
-              <SelectRobot name="robots[3]" handleError={handleError}>
+              <SelectRobot
+                name="robots[3]"
+                getRobotName="1"
+                handleError={handleError}
+              >
                 Select robot 4
               </SelectRobot>
             </Grid>
