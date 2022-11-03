@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 from Database.Database import *
 from app import app
+import json
 
 client = TestClient(app)
 
@@ -97,8 +98,7 @@ def test_match_empty_list():
     res_list = get_match_list(started_params["name"], started_params["filter"])
 
     response = client.get("/match/list", params=started_params)
-    assert response.status_code == 404
-    assert response.json() == {"detail": "No matches available"} and res_list == []
+    assert response.status_code == 200
 
 # Test available matches (all).
 def test_available_matches():
