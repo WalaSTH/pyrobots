@@ -3,12 +3,12 @@ import * as Yup from "yup";
 import { Form, Formik } from "formik";
 
 // Custom components for form input with formik and MUI
-import AvatarPreview from "../FormsUI/AvatarPreview";
-import FilePreview from "../FormsUI/FilePreview";
-import FileUploadInput from "../FormsUI/FileUploadInput";
-import FileUploadButton from "../FormsUI/FileUploadButton";
-import SubmitFormButton from "../FormsUI/SubmitFormButton";
-import TextField from "../FormsUI/TextField";
+import AvatarPreview from "../AvatarPreview";
+import FilePreview from "../FilePreview";
+import FileUploadInput from "../FileUploadInput";
+import FileUploadButton from "../FileUploadButton";
+import SubmitFormButton from "../SubmitFormButton";
+import TextField from "../TextField";
 
 // MUI components
 import { Card, Grid, Typography } from "@mui/material";
@@ -29,8 +29,8 @@ const initialFormState = {
 const formValidation = Yup.object().shape({
   name: Yup.string()
     .required("A name is required")
-    .min(2, "Must be at least 2 characters long")
-    .max(20, "Must be at most 20 characters long")
+    .min(3, "Must be at least 3 characters long")
+    .max(16, "Must be at most 16 characters long")
     .matches(/^[0-9a-z ]+$/i, "Invalid characters"),
   code: Yup.mixed()
     .required("No file selected")
@@ -83,11 +83,7 @@ export default function NewRobotForm({ onSubmit }) {
               item
               xs={12}
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginTop: -0.5,
-                marginBottom: -0.5,
+                textAlign: "center",
               }}
             >
               <Typography component="h1" variant="h5">
@@ -100,8 +96,7 @@ export default function NewRobotForm({ onSubmit }) {
               xs={12}
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                justifyContent: "center",
                 marginTop: -0.5,
                 marginBottom: -0.5,
               }}
