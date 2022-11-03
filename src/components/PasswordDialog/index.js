@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import TextField from "../FormsUI/TextField";
+import SelectRobot from "../FormsUI/SelectRobot";
 import axios from "axios";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +55,8 @@ export default function PasswordDialog({ open, handleClose, id }) {
       <DialogTitle>Join match</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          To join to this match, please enter the lobby password.
+          To join to this match, please enter the lobby password and select a
+          robot.
         </DialogContentText>
         <Formik
           initialValues={{
@@ -65,27 +67,21 @@ export default function PasswordDialog({ open, handleClose, id }) {
         >
           <Form>
             <TextField
-              name="robot_name"
-              label="Robot ID"
-              autoComplete="off"
-              variant="standard"
-            />
-            <TextField
               name="password"
               label="Password"
               type="password"
               autoComplete="off"
               variant="standard"
+              sx={{ marginBottom: "10px" }}
             />
+            <SelectRobot name="robot_name" getRobotName="1" />
 
             <DialogActions>
               <Box display="flex" width="100%" justifyContent="space-between">
                 <Button onClick={handleClose} color="error">
                   Cancel
                 </Button>
-                <Button onClick={handleClose} type="submit">
-                  Join
-                </Button>
+                <Button type="submit">Join</Button>
               </Box>
             </DialogActions>
           </Form>

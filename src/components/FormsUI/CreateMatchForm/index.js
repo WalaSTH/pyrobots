@@ -2,6 +2,7 @@ import { Card, Grid, Typography, Box } from "@mui/material";
 import TextField from "../TextField";
 import SubmitFormButton from "../SubmitFormButton";
 import Snackbar from "../Snackbar";
+import SelectRobot from "../SelectRobot";
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -180,13 +181,7 @@ export default function CreateMatchForm({ UserID }) {
               </Grid>
 
               <Grid item xs={12} textAlign="center">
-                <Typography>Choose your robot!</Typography>
-                <TextField
-                  name="robot_id"
-                  label="Robot ID"
-                  autoComplete="off"
-                  required
-                />
+                <SelectRobot name="robot_id" getRobotName="0" />
               </Grid>
 
               <Grid item xs={12}>

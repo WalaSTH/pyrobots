@@ -23,7 +23,12 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function SelectRobot({ name, children, handleError }) {
+export default function SelectRobot({
+  name,
+  getRobotName,
+  children,
+  handleError,
+}) {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(name);
   const [open, setOpen] = useState(false);
@@ -104,7 +109,7 @@ export default function SelectRobot({ name, children, handleError }) {
                   button
                   key={robot[1]}
                   onClick={() => {
-                    setFieldValue(name, robot[1]);
+                    setFieldValue(name, robot[getRobotName]);
                     handleClose();
                   }}
                 >
