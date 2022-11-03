@@ -10,6 +10,7 @@ import { Alert, CircularProgress } from "@mui/material";
 
 const fetchData = async () => {
   let token, decoded, username;
+  let data, status, statusText, detail;
 
   try {
     token = localStorage.getItem("token");
@@ -24,15 +25,27 @@ const fetchData = async () => {
     return [];
   }
 
-  const { data, status, statusText } = await axios.get(
-    "http://localhost:8000/robot/list",
-    {
-      params: { user_name: username, detailed: true },
-    }
-  );
+  try{
+    const response = await axios.get(
+      "http://localhost:8000/robot/list",
+      {
+        params: { user_name: username, detailed: true },
+      }
+    );
+    data = response.data;
+    status = response.status;
+    statusText = response.statusText;
+    detail = response.detail;
+  } catch (err){
+    console.log("asd")
+  }
 
   if (status !== 200) {
     console.log(statusText);
+    return [];
+  }
+
+  if (detail === "No Robots available") {
     return [];
   }
 
@@ -52,11 +65,21 @@ export default function Elevation() {
   }, []);
 
   if(loader){
-    return <CircularProgress />
+    return (
+      <Grid container>
+        <Grid item sx={{position: "absolute", top: "50%", left: "50%"}}>
+          <CircularProgress />
+        </Grid>
+      </Grid>
+    );
   }
 
   if (dataRobot.length === 0){
-    return <Alert severity="warning">Not robots available!</Alert>
+    return(
+      <Grid item sx={{position: "absolute", top: "50%", left: "50%"}}>
+        <Alert severity="warning">Not robots available!</Alert>
+      </Grid>
+    );
   }
 
   return (
