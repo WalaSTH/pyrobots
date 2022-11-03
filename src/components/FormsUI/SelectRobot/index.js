@@ -75,7 +75,8 @@ export default function SelectRobot({ name, children, handleError }) {
       </Box>
 
       <Dialog
-        fullScreen
+        fullWidth
+        maxWidth="sm"
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
