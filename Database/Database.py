@@ -256,10 +256,14 @@ def get_robot_list(owner_name, detailed):
     res_list = []
 
     for r in robot_list:
+        r_avatar = None
+        if r.avatar is not None:
+            r_avatar = r.avatar.decode()
+        
         if detailed:
-            res_list.append([r.id, r.robot_name, r.code])
+            res_list.append([r.id, r.robot_name, r.code, r_avatar])
         else:
-            res_list.append([r.id, r.robot_name])
+            res_list.append([r.id, r.robot_name, r_avatar])
 
     return res_list
 
