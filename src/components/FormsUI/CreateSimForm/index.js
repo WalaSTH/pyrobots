@@ -64,13 +64,7 @@ export default function CreateSimForm({ onSubmit }) {
                 textAlign: "center",
               }}
             >
-              <Typography
-                mt={1}
-                mb={1}
-                sx={{
-                  fontSize: { xs: "1.25rem", md: "1.50rem" },
-                }}
-              >
+              <Typography mt={1} mb={1} component="h1" variant="h5">
                 Create Simulation
               </Typography>
             </Grid>

@@ -33,12 +33,14 @@ export default function SelectRobot({
   const [field, meta] = useField(name);
   const [open, setOpen] = useState(false);
   const [dataRobot, setDataRobot] = useState([]);
+  const [robotChoice, setRobotChoice] = useState("");
   const isError = meta.touched && meta.error;
 
   useEffect(() => {
     if (isError) {
       handleError();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError]);
 
   const handleOpen = () => {
@@ -75,7 +77,7 @@ export default function SelectRobot({
           disabled={field.value !== ""}
           color={isError ? "error" : "primary"}
         >
-          {children ? field.value || children : field.value || "Select Robot"}
+          {children ? robotChoice || children : robotChoice || "Select Robot"}
         </Button>
       </Box>
 
@@ -111,6 +113,7 @@ export default function SelectRobot({
                   key={robot[1]}
                   onClick={() => {
                     setFieldValue(name, robot[getRobotName]);
+                    setRobotChoice(robot[1]);
                     handleClose();
                   }}
                 >

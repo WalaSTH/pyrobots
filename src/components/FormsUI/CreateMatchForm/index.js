@@ -117,7 +117,7 @@ export default function CreateMatchForm({ UserID }) {
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{ textAlign: "center" }}>
-                <Typography sx={{ fontSize: 18, fontWeight: 500 }}>
+                <Typography component="h1" variant="h5">
                   Create Match
                 </Typography>
               </Grid>
