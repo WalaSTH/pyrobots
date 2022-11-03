@@ -26,7 +26,11 @@ const formValidation = Yup.object().shape({
     .max(10000, "Max number of rounds is 10000")
     .required("Required"),
   robots: Yup.array().test("minRobots", MIN_ROBOTS_ERROR, (array) => {
-    return array.filter((e) => e != null).length > 1;
+    return (
+      array.filter(function (e) {
+        return e;
+      }).length > 1
+    );
   }),
 });
 

@@ -4,10 +4,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { forwardRef, useEffect, useState } from "react";
 import {
   AppBar,
+  Avatar,
   Button,
   Dialog,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
   Slide,
   Toolbar,
@@ -15,6 +17,7 @@ import {
 import getRobots from "../../../api/getRobots";
 import { useField, useFormikContext } from "formik";
 import { Box } from "@mui/system";
+import { SmartToy as SmartToyIcon } from "@mui/icons-material";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -105,6 +108,11 @@ export default function SelectRobot({ name, children, handleError }) {
                     handleClose();
                   }}
                 >
+                  <ListItemAvatar>
+                    <Avatar alt={robot[1]} src={robot[2]}>
+                      <SmartToyIcon />
+                    </Avatar>
+                  </ListItemAvatar>
                   <ListItemText primary={robot[1]} />
                 </ListItem>
               ))

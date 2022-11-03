@@ -17,21 +17,18 @@ export default function CreateSim({ username, navigate }) {
 
   // Connection with endpoint
   async function handleSubmit(values) {
-    console.log(values);
-
     return await axios
-      .get("http://127.0.0.1:8000/simulation/start", {
-        params: {
-          username: username,
-          n_rounds: values.rounds,
-          robot_list: values.robotNames,
-        },
+      .post("http://127.0.0.1:8000/simulation/start", {
+        username: username,
+        n_rounds: values.rounds,
+        robot_names: values.robots.filter(function (e) {
+          return e;
+        }),
       })
       .then(function (response) {
-        setOpen(true);
-        setSeverity("success");
-        setBody(response.data["detail"]);
-        navigate("/board");
+        const simID = Date.now().toString();
+        localStorage.setItem(simID, response);
+        navigate(`/board/${simID}`);
       })
       .catch(function (error) {
         setSeverity("error");
