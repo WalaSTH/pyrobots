@@ -400,6 +400,7 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 
 
 # --- Simulation Endpoints ---
+
 @app.post("/simulation/start")
 async def create_sim(sim: SimData):
     # do some validation checks
@@ -412,10 +413,10 @@ async def create_sim(sim: SimData):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User doesn't exist."
         )
-    if len(sim.robot_names) < 2:
+    if len(sim.robot_names) < 2 or len(sim.robot_names) > 4:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Minimum amount of robots is 2",
+            detail="Minimum amount of robots is 2 and maximum is 4.",
         )
     for i in range(len(sim.robot_names)):
         if not user_has_robot(sim.username, sim.robot_names[i]):
