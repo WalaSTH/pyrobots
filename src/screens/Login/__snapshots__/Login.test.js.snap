@@ -180,6 +180,39 @@ exports[`<Login component rendering 1`] = `
             Don't have an account? Sign Up
           </a>
         </div>
+        <div
+          className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+        >
+          <div
+            className="MuiBox-root css-1l4w6pd"
+          >
+            <div
+              className="MuiBox-root css-12z0wuy"
+            >
+              <a
+                className="MuiTypography-root MuiTypography-body2 MuiLink-root MuiLink-underlineAlways css-101ca9i-MuiTypography-root-MuiLink-root"
+                href="/recover?type=username"
+                onBlur={[Function]}
+                onFocus={[Function]}
+              >
+                Forgot username?
+              </a>
+            </div>
+            ·
+            <div
+              className="MuiBox-root css-1isemmb"
+            >
+              <a
+                className="MuiTypography-root MuiTypography-body2 MuiLink-root MuiLink-underlineAlways css-101ca9i-MuiTypography-root-MuiLink-root"
+                href="/recover?type=password"
+                onBlur={[Function]}
+                onFocus={[Function]}
+              >
+                Forgot password?
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </form>
   </div>

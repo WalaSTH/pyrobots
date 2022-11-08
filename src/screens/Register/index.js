@@ -9,6 +9,7 @@ const endpoint = "http://127.0.0.1:8000/user/signup";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
+
   // Snackbar utilities
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
