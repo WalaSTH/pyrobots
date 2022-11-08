@@ -10,6 +10,7 @@ import CreateMatch from "../screens/CreateMatch/";
 import Lobby from "../screens/Lobby";
 import BrowseMatches from "../screens/BrowseMatches";
 import Board from "../screens/Board";
+import Recover from "../screens/Recover";
 
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
@@ -30,7 +31,7 @@ export default function RoutesWrapper({ navigate }) {
         path="/login"
         element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
       />
-      <Route path="/recover" element={<></>} />
+      <Route path="/recover" element={<Recover />} />
       <Route element={<PrivateRoute />}>
         <Route path="/list-robot" element={<ListRobot />} />
         <Route path="/browse-matches" element={<BrowseMatches />} />
