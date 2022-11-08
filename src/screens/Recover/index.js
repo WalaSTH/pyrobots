@@ -27,15 +27,15 @@ export default function Recover() {
   // Email sent dialog
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  function handleSnackbarClose(reason) {
-    if (reason === "clickaway") return;
-    setSnackbarOpen(false);
-  }
-
   // Snackbar utilities
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
+
+  function handleSnackbarClose(reason) {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
+  }
 
   // Connection with endpoint
   async function handleSubmit(values) {

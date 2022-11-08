@@ -43,7 +43,6 @@ export default function RecoverForm({ handleSubmit, type }) {
                     ? "Reset your password"
                     : "Recover your username"
                 }
-                data-testid="typography-signin"
               />
             </Grid>
 
