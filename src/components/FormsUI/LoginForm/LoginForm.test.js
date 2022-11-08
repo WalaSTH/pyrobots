@@ -22,6 +22,21 @@ describe("<LoginForm", () => {
     screen.getByLabelText(/Username/i);
     screen.getByLabelText(/Password/i);
     screen.getByTestId(/login-button/i);
+    screen.getByText("Don't have an account? Sign Up");
+    screen.getByText("Forgot username?");
+    screen.getByText("Forgot password?");
+    expect(screen.getByText("Don't have an account? Sign Up")).toHaveAttribute(
+      "href",
+      "/register"
+    );
+    expect(screen.getByText("Forgot username?")).toHaveAttribute(
+      "href",
+      "/recover?type=username"
+    );
+    expect(screen.getByText("Forgot password?")).toHaveAttribute(
+      "href",
+      "/recover?type=password"
+    );
   });
 
   it("validates username and password field to be not empty after write", async () => {

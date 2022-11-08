@@ -30,6 +30,7 @@ export default function RoutesWrapper({ navigate }) {
         path="/login"
         element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
       />
+      <Route path="/recover" element={<></>} />
       <Route element={<PrivateRoute />}>
         <Route path="/list-robot" element={<ListRobot />} />
         <Route path="/browse-matches" element={<BrowseMatches />} />

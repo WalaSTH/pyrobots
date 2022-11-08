@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-import { Card } from "@mui/material";
+import { Card, Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
@@ -80,8 +80,23 @@ export default function LoginForm({ handleSubmit }) {
             </Grid>
             <Grid item xs={12}>
               <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+                Don't have an account? Sign Up
               </Link>
+            </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Box sx={{ marginRight: 1 }}>
+                  <Link href="/recover?type=username" variant="body2">
+                    Forgot username?
+                  </Link>
+                </Box>
+                ·
+                <Box sx={{ marginLeft: 1 }}>
+                  <Link href="/recover?type=password" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Box>
+              </Box>
             </Grid>
           </Grid>
         </Form>
