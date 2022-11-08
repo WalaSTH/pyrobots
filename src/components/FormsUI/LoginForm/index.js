@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-import { Card, Box } from "@mui/material";
+import Card from "@mui/material/Card";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
