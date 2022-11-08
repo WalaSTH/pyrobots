@@ -57,7 +57,11 @@ export default function RegisterForm() {
   }
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ marginTop: 10 }}>
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ display: "flex", alignItems: "center", marginTop: 3 }}
+    >
       <RegisterUserForm handleSubmit={handleSubmit} />
       {open && (
         <Snackbar

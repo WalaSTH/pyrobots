@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<LoginForm component rendering 1`] = `
+exports[`<RecoverForm component rendering 1`] = `
 <div
   className="MuiPaper-root MuiPaper-outlined MuiPaper-rounded MuiCard-root css-he3bwl-MuiPaper-root-MuiCard-root"
 >
@@ -19,7 +19,7 @@ exports[`<LoginForm component rendering 1`] = `
           className="MuiTypography-root MuiTypography-h5 css-ag7rrr-MuiTypography-root"
           data-testid="typography-signin"
         >
-          Sign in
+          Recover your username
         </h1>
       </div>
       <div
@@ -27,7 +27,6 @@ exports[`<LoginForm component rendering 1`] = `
       >
         <div
           className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
-          data-testid="username-input"
         >
           <label
             className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
@@ -35,7 +34,7 @@ exports[`<LoginForm component rendering 1`] = `
             htmlFor=":r0:"
             id=":r0:-label"
           >
-            Username
+            Email
             <span
               aria-hidden={true}
               className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
@@ -55,7 +54,7 @@ exports[`<LoginForm component rendering 1`] = `
               className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
               disabled={false}
               id=":r0:"
-              name="username"
+              name="email"
               onAnimationStart={[Function]}
               onBlur={[Function]}
               onChange={[Function]}
@@ -72,66 +71,7 @@ exports[`<LoginForm component rendering 1`] = `
                 className="css-yjsfm1"
               >
                 <span>
-                  Username
-                   
-                  *
-                </span>
-              </legend>
-            </fieldset>
-          </div>
-        </div>
-      </div>
-      <div
-        className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
-      >
-        <div
-          className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
-          data-testid="password-input"
-        >
-          <label
-            className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
-            data-shrink={false}
-            htmlFor=":r1:"
-            id=":r1:-label"
-          >
-            Password
-            <span
-              aria-hidden={true}
-              className="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
-            >
-               
-              *
-            </span>
-          </label>
-          <div
-            className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
-            onClick={[Function]}
-          >
-            <input
-              aria-invalid={false}
-              autoComplete="off"
-              autoFocus={false}
-              className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-              disabled={false}
-              id=":r1:"
-              name="password"
-              onAnimationStart={[Function]}
-              onBlur={[Function]}
-              onChange={[Function]}
-              onFocus={[Function]}
-              required={true}
-              type="password"
-              value=""
-            />
-            <fieldset
-              aria-hidden={true}
-              className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
-            >
-              <legend
-                className="css-yjsfm1"
-              >
-                <span>
-                  Password
+                  Email
                    
                   *
                 </span>
@@ -145,7 +85,7 @@ exports[`<LoginForm component rendering 1`] = `
       >
         <button
           className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth css-189e9pj-MuiButtonBase-root-MuiButton-root"
-          data-testid="login-button"
+          data-testid="recover-button"
           disabled={false}
           onBlur={[Function]}
           onContextMenu={[Function]}
@@ -162,52 +102,19 @@ exports[`<LoginForm component rendering 1`] = `
           tabIndex={0}
           type="submit"
         >
-          Login
+          Recover Username
         </button>
-      </div>
-      <div
-        className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
-      >
-        <div
-          className="MuiBox-root css-1l4w6pd"
-        >
-          <div
-            className="MuiBox-root css-12z0wuy"
-          >
-            <a
-              className="MuiTypography-root MuiTypography-body2 MuiLink-root MuiLink-underlineAlways css-101ca9i-MuiTypography-root-MuiLink-root"
-              href="/recover?type=username"
-              onBlur={[Function]}
-              onFocus={[Function]}
-            >
-              Forgot username?
-            </a>
-          </div>
-          ·
-          <div
-            className="MuiBox-root css-1isemmb"
-          >
-            <a
-              className="MuiTypography-root MuiTypography-body2 MuiLink-root MuiLink-underlineAlways css-101ca9i-MuiTypography-root-MuiLink-root"
-              href="/recover?type=password"
-              onBlur={[Function]}
-              onFocus={[Function]}
-            >
-              Forgot password?
-            </a>
-          </div>
-        </div>
       </div>
       <div
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
       >
         <a
           className="MuiTypography-root MuiTypography-body2 MuiLink-root MuiLink-underlineAlways css-101ca9i-MuiTypography-root-MuiLink-root"
-          href="/register"
+          href="/login"
           onBlur={[Function]}
           onFocus={[Function]}
         >
-          Don't have an account? Sign Up
+          Return to login
         </a>
       </div>
     </div>

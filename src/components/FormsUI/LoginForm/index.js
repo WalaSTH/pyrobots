@@ -80,11 +80,6 @@ export default function LoginForm({ handleSubmit }) {
               </SubmitFormButton>
             </Grid>
             <Grid item xs={12}>
-              <Link href="/register" variant="body2">
-                Don't have an account? Sign Up
-              </Link>
-            </Grid>
-            <Grid item xs={12}>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Box sx={{ marginRight: 1 }}>
                   <Link href="/recover?type=username" variant="body2">
@@ -98,6 +93,11 @@ export default function LoginForm({ handleSubmit }) {
                   </Link>
                 </Box>
               </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Link href="/register" variant="body2">
+                Don't have an account? Sign Up
+              </Link>
             </Grid>
           </Grid>
         </Form>
