@@ -2,7 +2,7 @@ import { Container, Card, Button } from "@mui/material";
 import { useState } from "react";
 import Snackbar from "../../components/FormsUI/Snackbar";
 import axios from "axios";
-import LobbyList from "../../components/LobbyList";
+import MatchHistoryList from "../../components/MatchHistoryList";
 import FilterButton from "../../components/FilterButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -61,7 +61,7 @@ export default function BrowseMatches() {
         </Button>
         <FilterButton setFilter={setFilter} endIcon={<FilterListIcon />} />
       </Card>
-      <LobbyList matches={matches} getData={getData} filter={filter} />
+      <MatchHistoryList matches={matches} getData={getData} filter={filter} />
       {open && (
         <Snackbar
           open={open}

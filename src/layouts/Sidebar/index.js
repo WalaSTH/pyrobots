@@ -21,6 +21,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 import ScienceIcon from "@mui/icons-material/Science";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import HistoryIcon from "@mui/icons-material/History";
 
 const theme = createTheme({
   typography: {
@@ -122,6 +123,14 @@ export default function DrawerWrapper({
                   <ScienceIcon sx={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Create simulation" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/match-history")}>
+                <ListItemIcon>
+                  <HistoryIcon sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Match history" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
