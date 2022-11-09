@@ -13,6 +13,7 @@ import Board from "../screens/Board";
 import ResetPassword from "../screens/ResetPassword";
 import Recover from "../screens/Recover";
 import ValidateAccount from "../screens/ValidateAccount";
+import Profile from "../screens/Profile";
 
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
@@ -53,6 +54,7 @@ export default function RoutesWrapper({ navigate }) {
         <Route path="/board/:simID" element={<Board />} />
         <Route path="/match-history" element={<></>} />
         <Route path="/lobby/:matchID" element={<Lobby />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
