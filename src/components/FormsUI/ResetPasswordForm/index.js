@@ -54,6 +54,7 @@ export default function ResetPasswordForm({ handleSubmit }) {
             <Grid item xs={12}>
               <TextField
                 name="password"
+                data-testid="Password"
                 label="Password"
                 type="password"
                 autoComplete="off"
@@ -64,6 +65,7 @@ export default function ResetPasswordForm({ handleSubmit }) {
             <Grid item xs={12}>
               <TextField
                 name="passwordConfirmation"
+                data-testid="passwordConfirmation"
                 label="Confirm your password"
                 type="password"
                 autoComplete="off"
