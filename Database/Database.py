@@ -19,7 +19,8 @@ class User(db.Entity):
     owned_matches = Set("Match", reverse="creator")
     ongoing_matches = Set("Match", reverse="participants")
     owned_robots = Set("Robot", reverse="owner")
-
+    matches_played = Required(int)
+    matches_won = Required(int)
 
 class Robot(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -29,6 +30,8 @@ class Robot(db.Entity):
     code = Required(bytes)
     robot_class_name = Required(str)
     avatar = Optional(bytes)
+    matches_played = Required(int)
+    matches_won = Required(int)
 
 
 class Match(db.Entity):
@@ -243,6 +246,8 @@ def create_robot(robot_name, creator, code, avatar):
         code=code.file.read(),
         robot_class_name=code.filename,
         owner=creator,
+        matches_played=0,
+        matches_won=0
     )
     if avatar != None:
         new_robot.avatar = avatar.encode()
@@ -356,7 +361,7 @@ def get_robot_name_by_id(id):
 @db_session
 def create_user(user_name, email, password, avatar):
     new_user = User(
-        user_name=user_name, email=email, password=password, verified=False, photo=None
+        user_name=user_name, email=email, password=password, verified=False, photo=None, matches_played=0, matches_won=0
     )
     if avatar != None:
         new_user.photo = avatar.encode()
