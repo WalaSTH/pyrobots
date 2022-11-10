@@ -22,6 +22,7 @@ class User(db.Entity):
     matches_played = Required(int)
     matches_won = Required(int)
 
+
 class Robot(db.Entity):
     id = PrimaryKey(int, auto=True)
     robot_name = Required(str)
@@ -47,7 +48,14 @@ class Match(db.Entity):
     creator = Required(User, reverse="owned_matches")
     participants = Set(User, reverse="ongoing_matches")
     fighters = Set(Robot, reverse="fights")
+    match_results = Optional("Result")
 
+
+class Result(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    ranking = Required(IntArray)
+    won_games = Required(IntArray)
+    match = Required(Match)
 
 db.generate_mapping(create_tables=True)
 
