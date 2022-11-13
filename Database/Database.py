@@ -1,5 +1,6 @@
 from pony.orm import *
 import sys
+import datetime
 
 db = pony.orm.Database()
 
@@ -56,6 +57,7 @@ class Result(db.Entity):
     ranking = Required(IntArray)
     won_games = Required(IntArray)
     match = Required(Match)
+    date = Required(datetime)
 
 db.generate_mapping(create_tables=True)
 
