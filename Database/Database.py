@@ -1,6 +1,6 @@
 from pony.orm import *
 import sys
-import datetime
+from datetime import *
 
 db = pony.orm.Database()
 
@@ -245,6 +245,15 @@ def leave_match(m_id, u_id):
     Match[m_id].fighters.remove(rob)
     Match[m_id].current_players -= 1
     return True
+
+
+# --- Result fucntions ---
+
+
+@db_session
+def create_result(ranking, won_games, match):
+    new_result = Result(ranking = ranking, won_games = won_games, match = Match[match], date = datetime.now())
+
 
 # --- Robot functions ---
 
