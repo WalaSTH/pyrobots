@@ -10,6 +10,8 @@ def run_simulation(sim: SimData):
     robot_list = []
     robot_frame_list = []
     frame_list = []
+    explotion_list = []
+    losers_list = []
     missileList = []
     frame_list1 = []
     frame_list2 = []
@@ -33,8 +35,9 @@ def run_simulation(sim: SimData):
     frame = {"robots": robot_frame_list.copy(), "missiles": {}}
     robot_frame_list = []
     frame_list.append(frame)
-    for i in range(sim.n_rounds):
-        print("Starting round N: " + str(i + 1) + "!")
+    k = 0
+    while k < (sim.n_rounds) and len(robot_list) > 1:
+        print("Starting round N: " + str(k + 1) + "!")
         # respond for every robot
         for i in range(n_robots):
             robot_list[i].respond()
@@ -67,9 +70,53 @@ def run_simulation(sim: SimData):
         frame = {"robots": robot_frame_list.copy(), "missiles": {}}
         robot_frame_list = []
         frame_list.append(frame)
-        # check collisions
-        # apply damage
+        # activate cannon and shoot missile
+        for i in range(n_robots):
+            robot_list[i].shoot_cannon()
+        # advance missile
+        for i in range(n_robots):
+            robot_list[i].missile_advance(explotion_list)
+        # deal explotion damage
+        for i in range(len(explotion_list)):
+            for j in range(n_robots):
+                x_exp = explotion_list[i].x_position
+                y_exp = explotion_list[i].y_position
+                x_rob = robot_list[j].x_position
+                y_rob = robot_list[j].y_position
+                distance_to_explotion = calculate_distance(x_exp, y_exp, x_rob, y_rob)
+                if distance_to_explotion <= EXPLOTION_RANGE_CLOSE:
+                    robot_list[j].deal_damage(EXPLOTION_DAMAGE_CLOSE)
+                elif distance_to_explotion <= EXPLOTION_RANGE_MID:
+                    robot_list[j].deal_damage(EXPLOTION_DAMAGE_MID)
+                elif distance_to_explotion <= EXPLOTION_DAMAGE_FAR:
+                    robot_list[j].deal_damage(EXPLOTION_DAMAGE_MID)
+        explotion_list.clear()
+        # deal collide damage
+        for i in range(n_robots):
+            other_robots = robot_list.copy()
+            del other_robots[i]
+            for j in range(n_robots-1):
+                if (robot_list[i].x_position == other_robots[j].x_position \
+                and robot_list[i].y_position == other_robots[j].y_position)\
+                or (robot_list[i].x_position == TABLE_HORIZONTAL_LENGHT-1 \
+                or robot_list[i].x_position == 0 \
+                or robot_list[i].y_position == TABLE_VERTICAL_LENGHT -1 \
+                or robot_list[i].y_position == 0):
+                    robot_list[i].deal_damage(COLLITION_DAMAGE)
         # calculate deaths
+        for i in range(n_robots):
+            if robot_list[i].health == 0:
+                #kill robot
+                losers_list.append(robot_list[i])
+                robot_list.remove(robot_list[i])
+        k = k + 1
+    if len(robot_list) == 1:
+        winner = robot_list[0].robot_id
+        winner_name = get_robot_name_by_id(winner)
+    else:
+        winner = -1
+        winner_name = "none"
+    print("Winner is " + str(winner_name))
     return frame_list
 
 
