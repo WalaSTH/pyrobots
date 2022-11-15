@@ -1,5 +1,6 @@
 from pony.orm import *
 import sys
+from datetime import *
 
 db = pony.orm.Database()
 
@@ -21,6 +22,7 @@ class User(db.Entity):
     owned_robots = Set("Robot", reverse="owner")
     matches_played = Required(int)
     matches_won = Required(int)
+
 
 class Robot(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -47,7 +49,15 @@ class Match(db.Entity):
     creator = Required(User, reverse="owned_matches")
     participants = Set(User, reverse="ongoing_matches")
     fighters = Set(Robot, reverse="fights")
+    match_results = Optional("Result")
 
+
+class Result(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    ranking = Required(IntArray)
+    won_games = Required(IntArray)
+    match = Required(Match)
+    date = Required(datetime)
 
 db.generate_mapping(create_tables=True)
 
@@ -235,6 +245,15 @@ def leave_match(m_id, u_id):
     Match[m_id].fighters.remove(rob)
     Match[m_id].current_players -= 1
     return True
+
+
+# --- Result fucntions ---
+
+
+@db_session
+def create_result(ranking, won_games, match):
+    new_result = Result(ranking = ranking, won_games = won_games, match = Match[match], date = datetime.now())
+
 
 # --- Robot functions ---
 
