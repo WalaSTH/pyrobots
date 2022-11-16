@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
 import { useParams, useNavigate } from "react-router-dom";
-// import Missile from "../../components/Game/Missile";
+import Missile from "../../components/Game/Missile";
 
 export default function Board() {
   var [finished, setFinished] = useState(false);
@@ -93,22 +93,48 @@ export default function Board() {
                   );
                 })
               : setFinished(true)}
-            {/* {missiles.map((missile) => {
-              return (
-                <Missile
-                  key={missile.id}
-                  position={missile.missilePosition[position]}
-                  fill={colors[missile.sender]}
-                  scale={
-                    missile.missilePosition.length >= position
-                      ? { x: 0.3, y: 0.3 }
-                      : position === missile.missilePosition.length + 1
-                      ? { x: 20, y: 20 }
-                      : { x: 0, y: 0 }
-                  }
-                />
-              );
-            })} */}
+            {frames[position]
+              ? frames[position].missiles.map((missile) => {
+                  return (
+                    <Missile
+                      key={missile.id}
+                      radius={7}
+                      x={
+                        missile.missilePosition.x
+                          ? missile.missilePosition.x
+                          : 100
+                      }
+                      y={
+                        missile.missilePosition.y
+                          ? missile.missilePosition.y
+                          : 100
+                      }
+                      fill={colors[missile.id]}
+                    />
+                  );
+                })
+              : setFinished(true)}
+            {frames[position]
+              ? frames[position].explotions.map((explotion) => {
+                  return (
+                    <Missile
+                      key={explotion.id}
+                      radius={40}
+                      x={
+                        explotion.explotionPosition.x
+                          ? explotion.explotionPosition.x
+                          : 100
+                      }
+                      y={
+                        explotion.explotionPosition.y
+                          ? explotion.explotionPosition.y
+                          : 100
+                      }
+                      fill={colors[explotion.id]}
+                    />
+                  );
+                })
+              : setFinished(true)}
           </Layer>
         </Stage>
       </Grid>
