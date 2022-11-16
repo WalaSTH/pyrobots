@@ -85,6 +85,7 @@ export default function Board() {
                   return (
                     <Robot
                       key={robot.id}
+                      radius={12}
                       name={robot.name}
                       x={robot.robotPosition ? robot.robotPosition.x : 100}
                       y={robot.robotPosition ? robot.robotPosition.y : 200}
