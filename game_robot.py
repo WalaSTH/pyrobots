@@ -10,7 +10,9 @@ from game_auxilar_functions import *
 TABLE_HORIZONTAL_LENGHT = 1000
 TABLE_VERTICAL_LENGHT = 1000
 
-SCAN_LENGTH = 1000
+ROBOT_HITBOX_OFFSET = 12
+
+SCAN_LENGTH = 10000
 
 CANNON_COOLDOWN_DEFAULT = 10
 MISSILE_LIFE = 4
@@ -49,15 +51,18 @@ class Missile:
 
 class Explotion:
     id_robot: int
+    game_id_robot: int
     x_position: int
     y_position: int
-    def __init__(self, id, x, y):
+    def __init__(self, id, game_id, x, y):
         self.id_robot = id
+        self.game_id_robot = game_id
         self.x_position = x
         self.y_position = y
 
 class gameRobot:
     robot_id: int
+    game_id_robot: int
     robot_name: str
     x_position: int
     y_position: int
@@ -317,7 +322,7 @@ class gameRobot:
             self.missiles[i].remains = self.missiles[i].remains - 1 if self.missiles[i].remains - 1 > 0 else 0
             if self.missiles[i].remains == 0:
                 # explotar misil
-                new_explotion = Explotion(self.robot_id, self.missiles[i].x_target, self.missiles[i].y_target)
+                new_explotion = Explotion(self.robot_id, self.game_id_robot, self.missiles[i].x_target, self.missiles[i].y_target)
                 explotion_list.append(new_explotion)
                 self.missiles.remove(self.missiles[i])
                 print("Missile exploted")

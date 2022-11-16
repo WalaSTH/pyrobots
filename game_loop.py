@@ -11,28 +11,29 @@ def run_simulation(sim: SimData):
     robot_frame_list = []
     frame_list = []
     explotion_list = []
+    explotion_frame_list = []
+    missile_frame_list = []
+    dead_list = []
     losers_list = []
-    missileList = []
-    frame_list1 = []
-    frame_list2 = []
     # load robots to robot list
     for i in sim.robot_names:
         robot_list.append(load_robot(sim.username, i))
     # initialize every robot
     for i in range(n_robots):
         set_position_by_index(robot_list[i])
+        robot_list[i].game_id_robot = i
         robot_list[i].initialize()
         robot_for_frame = {
             "id": i,
             "robotName": robot_list[i].robot_name,
             "robotPosition": {
                 "x": robot_list[i].x_position,
-                "y": 1000 -robot_list[i].y_position,
+                "y": 999 -robot_list[i].y_position,
             },
             "health": robot_list[i].health,
         }
         robot_frame_list.append(robot_for_frame)
-    frame = {"robots": robot_frame_list.copy(), "missiles": {}}
+    frame = {"robots": robot_frame_list.copy(), "missiles": [], "explotions": []}
     robot_frame_list = []
     frame_list.append(frame)
     k = 0
@@ -58,24 +59,30 @@ def run_simulation(sim: SimData):
         for i in range(n_robots):
             robot_list[i].move()
             robot_for_frame = {
-                "id": i,
+                "id": robot_list[i].game_id_robot,
                 "robotName": robot_list[i].robot_name,
                 "robotPosition": {
                     "x":  robot_list[i].x_position,
-                    "y": 1000 - robot_list[i].y_position,
+                    "y": 999 - robot_list[i].y_position,
                 },
                 "health": robot_list[i].health,
             }
             robot_frame_list.append(robot_for_frame)
-        frame = {"robots": robot_frame_list.copy(), "missiles": {}}
-        robot_frame_list = []
-        frame_list.append(frame)
         # activate cannon and shoot missile
         for i in range(n_robots):
             robot_list[i].shoot_cannon()
         # advance missile
         for i in range(n_robots):
             robot_list[i].missile_advance(explotion_list)
+            for j in range(len(robot_list[i].missiles)):
+                missile_for_frame = {
+                    "id": robot_list[i].game_id_robot,
+                    "missilePosition": {
+                        "x": robot_list[i].missiles[j].x_position,
+                        "y": 999 - robot_list[i].missiles[j].y_position,
+                    }
+                }
+                missile_frame_list.append(missile_for_frame)
         # deal explotion damage
         for i in range(len(explotion_list)):
             for j in range(n_robots):
@@ -84,13 +91,21 @@ def run_simulation(sim: SimData):
                 x_rob = robot_list[j].x_position
                 y_rob = robot_list[j].y_position
                 distance_to_explotion = calculate_distance(x_exp, y_exp, x_rob, y_rob)
-                if distance_to_explotion <= EXPLOTION_RANGE_CLOSE:
+                if distance_to_explotion <= EXPLOTION_RANGE_CLOSE + ROBOT_HITBOX_OFFSET:
                     robot_list[j].deal_damage(EXPLOTION_DAMAGE_CLOSE)
-                elif distance_to_explotion <= EXPLOTION_RANGE_MID:
+                elif distance_to_explotion <= EXPLOTION_RANGE_MID + ROBOT_HITBOX_OFFSET:
                     robot_list[j].deal_damage(EXPLOTION_DAMAGE_MID)
-                elif distance_to_explotion <= EXPLOTION_DAMAGE_FAR:
+                elif distance_to_explotion <= EXPLOTION_DAMAGE_FAR + ROBOT_HITBOX_OFFSET:
                     robot_list[j].deal_damage(EXPLOTION_DAMAGE_MID)
-        explotion_list.clear()
+            explotion_to_frame = {
+                "id": explotion_list[i].game_id_robot,
+                "explotionPosition": {
+                    "x": explotion_list[i].x_position,
+                    "y": 999 - explotion_list[i].y_position,
+                }
+            }
+            explotion_frame_list.append(explotion_to_frame)
+
         # deal collide damage
         for i in range(n_robots):
             other_robots = robot_list.copy()
@@ -107,9 +122,21 @@ def run_simulation(sim: SimData):
         for i in range(n_robots):
             if robot_list[i].health == 0:
                 #kill robot
-                losers_list.append(robot_list[i])
-                robot_list.remove(robot_list[i])
+                dead_list.append(robot_list[i])
+                #robot_list.remove(robot_list[i])
+        for i in range(len(dead_list)):
+            robot_list.remove(dead_list[i])
+            n_robots = len(robot_list)
+            losers_list.append(dead_list[i])
+            dead_list.clear()
         k = k + 1
+
+        frame = {"robots": robot_frame_list.copy(), "missiles": missile_frame_list.copy(), "explotions": explotion_frame_list.copy()}
+        missile_frame_list = []
+        robot_frame_list = []
+        explotion_frame_list = []
+        frame_list.append(frame)
+        explotion_list.clear()
     if len(robot_list) == 1:
         winner = robot_list[0].robot_id
         winner_name = get_robot_name_by_id(winner)
