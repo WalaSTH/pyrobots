@@ -142,9 +142,10 @@ def run_simulation(sim: SimData):
         winner_name = get_robot_name_by_id(winner)
     else:
         winner = -1
-        winner_name = "none"
+        winner_name = None
     print("Winner is " + str(winner_name))
-    return frame_list
+    result = {"winner": winner_name, "frames": frame_list}
+    return result
 
 
 def load_robot(username, robot_name: str):
