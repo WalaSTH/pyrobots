@@ -176,15 +176,15 @@ class gameRobot:
                 print("HEY, we need to add to y: " + str(y_add))
             self.x_position = (
                 self.x_position + x_add
-                if self.x_position + x_add < TABLE_HORIZONTAL_LENGHT
-                else TABLE_HORIZONTAL_LENGHT
+                if self.x_position + x_add < TABLE_HORIZONTAL_LENGHT -1
+                else TABLE_HORIZONTAL_LENGHT -1
             )
             if self.x_position < 0:
                 self.x_position = 0
             self.y_position = (
                 self.y_position + y_add
-                if self.y_position + y_add < TABLE_VERTICAL_LENGHT
-                else TABLE_VERTICAL_LENGHT
+                if self.y_position + y_add < TABLE_VERTICAL_LENGHT -1
+                else TABLE_VERTICAL_LENGHT -1
             )
             if self.y_position < 0:
                 self.y_position = 0
