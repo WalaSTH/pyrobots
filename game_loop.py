@@ -113,10 +113,10 @@ def run_simulation(sim: SimData):
             for j in range(n_robots-1):
                 if (robot_list[i].x_position == other_robots[j].x_position \
                 and robot_list[i].y_position == other_robots[j].y_position)\
-                or (robot_list[i].x_position == TABLE_HORIZONTAL_LENGHT-1 \
-                or robot_list[i].x_position == 0 \
-                or robot_list[i].y_position == TABLE_VERTICAL_LENGHT -1 \
-                or robot_list[i].y_position == 0):
+                or (robot_list[i].x_position + ROBOT_HITBOX_OFFSET >= TABLE_HORIZONTAL_LENGHT-1 \
+                or robot_list[i].x_position - ROBOT_HITBOX_OFFSET <= 0 \
+                or robot_list[i].y_position + ROBOT_HITBOX_OFFSET >= TABLE_VERTICAL_LENGHT -1 \
+                or robot_list[i].y_position - ROBOT_HITBOX_OFFSET <= 0):
                     robot_list[i].deal_damage(COLLITION_DAMAGE)
         # calculate deaths
         for i in range(n_robots):

@@ -83,7 +83,7 @@ class SuperRobotCopy(gameRobot):
                 print("Cannon activated to angle "  + str(self.lastAngle)+ "and distance " + str(self.enemy_scanned))
                 #pass
         if self.robot_name == "Copy2":
-            self.counter += 3
+            self.counter += 10
             #print("Drive will be set to (" + str(self.counter) + "," + str(100) + ")")
 
 
