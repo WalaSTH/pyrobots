@@ -280,6 +280,15 @@ async def match_listing(list_params: MatchListParams = Depends()):
 
     return {"Matches": res_list}
 
+# --- Result Endpoints ---
+@app.get("/match/result", tags=["Results"], status_code=200)
+async def get_results(info: ChosenMatch):
+    if not check_match_existance(info.match_id):
+        raise HTTPException(status_code=404, detail=f"Match id {info.match_id} does not exist")
+
+    if not user_exists(info.username):
+        raise HTTPException(status_code=404, detail=f"User {info.username} is not a user")
+
 
 # --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)

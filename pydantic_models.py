@@ -68,3 +68,7 @@ class JoiningMatch(BaseModel):
 class LeavingMatch(BaseModel):
     username: str
     match: int
+
+class ChosenMatch(BaseModel):
+    match_id: int
+    username: str
