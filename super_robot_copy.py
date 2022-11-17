@@ -89,7 +89,7 @@ class SuperRobotCopy(gameRobot):
 
             self.drive(self.counter, 100)
 
-        if self.robot_name == "Ivan":
+        if self.robot_name == "Overpowered":
             try:
                 if self.state == None:
                     self.state = "searching"
