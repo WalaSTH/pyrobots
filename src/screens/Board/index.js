@@ -1,4 +1,17 @@
-import { Grid, List, LinearProgress, Container, Box } from "@mui/material";
+import {
+  Grid,
+  List,
+  LinearProgress,
+  Container,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Slider,
+} from "@mui/material";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
@@ -7,10 +20,13 @@ import Missile from "../../components/Game/Missile";
 
 export default function Board() {
   var [finished, setFinished] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
+  localStorage.setItem("simID", params.simID);
   const data = localStorage.getItem(params.simID);
   const frames = JSON.parse(data).data;
+  const winner = frames.winner;
   const [position, setPosition] = useState(0);
   const stageParentRef = useRef();
   const intervalRef = useRef();
@@ -39,13 +55,7 @@ export default function Board() {
     if (finished) {
       clearInterval(intervalRef.current);
       setPosition(frames.length - 1);
-      localStorage.removeItem(params.simID);
-      navigate("/");
-
-      // alert(
-      //   "Termino la simulacion. El ganador es: " +
-      //     frames[frames.length - 1].robots[0].robotName
-      // );
+      setDialogOpen(true);
     }
     return () => {
       clearInterval(intervalRef.current);
@@ -71,6 +81,32 @@ export default function Board() {
       style={{ display: "flex", alignItems: "center" }}
       data-testid="boardContainer"
     >
+      {dialogOpen && (
+        <Dialog open={dialogOpen}>
+          <DialogTitle>Simulation results</DialogTitle>
+          <DialogContent>
+            <Box display="flex">
+              <DialogContentText sx={{ marginLeft: "10px" }}>
+                {winner ? "The winner is " + winner : "Nobody won!"}
+              </DialogContentText>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Box display="flex" justifyContent="space-between" width="100%">
+              <Button
+                variant="filled"
+                sx={{ color: "primary.main" }}
+                onClick={() => {
+                  setDialogOpen(false);
+                  navigate("/");
+                }}
+              >
+                Back to home
+              </Button>
+            </Box>
+          </DialogActions>
+        </Dialog>
+      )}
       <Grid
         style={{
           border: ".1rem solid black",
@@ -78,10 +114,18 @@ export default function Board() {
         }}
         ref={stageParentRef}
       >
+        <Slider
+          aria-label="Frame"
+          max={frames.frames.length}
+          value={position}
+          onChange={(e, v) => {
+            setPosition(v);
+          }}
+        />
         <Stage ref={stageRef} data-testid="board">
           <Layer>
-            {frames[position]
-              ? frames[position].robots.map((robot) => {
+            {frames.frames[position]
+              ? frames.frames[position].robots.map((robot) => {
                   return (
                     <Robot
                       key={robot.id}
@@ -94,8 +138,8 @@ export default function Board() {
                   );
                 })
               : setFinished(true)}
-            {frames[position]
-              ? frames[position].missiles.map((missile) => {
+            {frames.frames[position]
+              ? frames.frames[position].missiles.map((missile) => {
                   return (
                     <Missile
                       key={missile.id}
@@ -115,8 +159,8 @@ export default function Board() {
                   );
                 })
               : setFinished(true)}
-            {frames[position]
-              ? frames[position].explotions.map((explotion) => {
+            {frames.frames[position]
+              ? frames.frames[position].explotions.map((explotion) => {
                   return (
                     <Missile
                       key={explotion.id}
@@ -147,8 +191,8 @@ export default function Board() {
             flexDirection: "column",
           }}
         >
-          {frames[position]
-            ? frames[position].robots.map((robot) => {
+          {frames.frames[position]
+            ? frames.frames[position].robots.map((robot) => {
                 return (
                   <Grid
                     key={robot.id}
@@ -190,7 +234,7 @@ export default function Board() {
                   </Grid>
                 );
               })
-            : setPosition(frames.length - 1)}
+            : setPosition(frames.frames.length - 1)}
         </List>
       </Box>
     </Container>
