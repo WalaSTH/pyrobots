@@ -1,5 +1,6 @@
-from pydantic import BaseModel, EmailStr
 from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import BaseModel, EmailStr
 from typing import List, Optional, Union
 
 MIN_PLAYERS_PER_MATCH = 2
@@ -65,6 +66,15 @@ class JoiningMatch(BaseModel):
     match: int
     password: Optional[str]
 
+
 class LeavingMatch(BaseModel):
     username: str
     match: int
+
+
+class UpdateParams(BaseModel):
+    username: str
+    param: str
+    new_pic: Union[str, None] = None
+    new_pwd: Union[str, None] = None
+    current_pwd: Union[str, None] = None
