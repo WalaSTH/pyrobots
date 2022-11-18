@@ -254,6 +254,11 @@ def leave_match(m_id, u_id):
 def create_result(ranking, won_games, match):
     new_result = Result(ranking = ranking, won_games = won_games, match = Match[match], date = datetime.now())
 
+@db_session
+def get_results(match_id):
+    match_result = Result.select(lambda r: r.match == Match[match_id])
+    result_json = {
+    }
 
 # --- Robot functions ---
 

@@ -289,6 +289,10 @@ async def get_results(info: ChosenMatch):
     if not user_exists(info.username):
         raise HTTPException(status_code=404, detail=f"User {info.username} is not a user")
 
+    if not check_user_connected(info.match_id, info.username) != []:
+        raise HTTPException(status_code=409, detail="You are not part of this match")
+
+    robots = []
 
 # --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)
