@@ -2,7 +2,7 @@ from Database.Database import *
 from pydantic_models import *
 from game_robot import *
 from game_auxilar_functions import *
-import random
+
 
 @db_session
 def run_simulation(sim: SimData):
@@ -23,6 +23,7 @@ def run_simulation(sim: SimData):
         set_position_by_index(robot_list[i])
         robot_list[i].game_id_robot = i
         robot_list[i].initialize()
+        set_position_by_index(robot_list[i])
         robot_for_frame = {
             "id": i,
             "robotName": robot_list[i].robot_name,
