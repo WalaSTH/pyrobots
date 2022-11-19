@@ -10,17 +10,15 @@ from fastapi import (
 )
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Union, Optional
-from fastapi.responses import FileResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from typing import Optional
+from fastapi.security import OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
 from connections import *
-import json
 from random import *
 from game_loop import *
-
+from utils.mails import RecoverType, send_recovery_email
 MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
@@ -59,6 +57,7 @@ tags_metadata = [
     {"name": "Token", "description": "Token login"},
     {"name": "matches", "description": "Operations with matches"},
     {"name": "Robots", "description": "Manage Robot"},
+    {"name": "Recovery", "description": "Email service to recover password and username"}
 ]
 
 app = FastAPI(
@@ -339,24 +338,6 @@ async def upload_photo(
         return {"detail": "Photo uploaded successfully"}
 
 
-@app.delete("/user/delete_user", tags=["Users"])
-async def user_delete(user_name: str):
-    """Deletes an user.
-    Args: \n
-        user_name (str): Name of the user to delete. \n
-    Raises: \n
-        HTTPException: The user does not exist. \n
-    Returns: \n
-        str: Verification text.
-    """
-    if not user_exists(user_name):
-        raise HTTPException(status_code=404, detail="user doesn't exist")
-
-    else:
-        delete_user(user_name)
-        return {"user successfully deleted"}
-
-
 # login
 @app.post("/token", tags=["Token"], response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -384,15 +365,29 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "avatar": avatar,
     }
 
+#3UVQ77jOg#Fw
 
-@app.get("/user/me/")
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
-    return {"username": current_user.user_name}
+@app.post("/user/recover", tags=["Recovery"], status_code=200)
+async def recovery_mail(recover: RecoverData):
+    user = get_user_by_email(recover.email);
 
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="There is no user with this email"
+        )
 
-@app.get("/user/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.user_name}]
+    try:
+        recover_type = RecoverType(recover.type)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=401,
+            detail=str(e)
+        )
+
+    await send_recovery_email(recover.email, user, recover_type)
+
+    return {"message": "Email has been sent"}
 
 
 # --- Simulation Endpoints ---
