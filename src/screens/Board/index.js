@@ -11,7 +11,12 @@ import {
   DialogActions,
   Button,
   Slider,
+  IconButton,
 } from "@mui/material";
+import {
+  PlayArrow as PlayArrowIcon,
+  Pause as PauseIcon,
+} from "@mui/icons-material";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
@@ -21,6 +26,7 @@ import Missile from "../../components/Game/Missile";
 export default function Board() {
   var [finished, setFinished] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [paused, setPaused] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   localStorage.setItem("simID", params.simID);
@@ -54,7 +60,7 @@ export default function Board() {
     fitStageIntoParentContainer();
     if (finished) {
       clearInterval(intervalRef.current);
-      setPosition(frames.length - 1);
+      setPosition(frames.frames.length - 1);
       setDialogOpen(true);
     }
     return () => {
@@ -62,11 +68,11 @@ export default function Board() {
       window.removeEventListener("resize", fitStageIntoParentContainer);
     };
     //eslint-disable-next-line
-  }, [finished]);
+  }, [finished, paused]);
 
   function getInterval() {
     const progressInterval = setInterval(() => {
-      setPosition((position) => position + 1);
+      if (!paused) setPosition((position) => position + 1);
     }, 100);
     return progressInterval;
   }
@@ -82,7 +88,7 @@ export default function Board() {
       data-testid="boardContainer"
     >
       {dialogOpen && (
-        <Dialog open={dialogOpen}>
+        <Dialog open={dialogOpen} fullWidth maxWidth="sm">
           <DialogTitle>Simulation results</DialogTitle>
           <DialogContent>
             <Box display="flex">
@@ -103,85 +109,116 @@ export default function Board() {
               >
                 Back to home
               </Button>
+              <Button
+                variant="filled"
+                sx={{ color: "primary.main" }}
+                onClick={() => {
+                  intervalRef.current = getInterval();
+                  setFinished(false);
+                  setPosition(frames.frames.length - 1);
+                  setPaused(true);
+                  setDialogOpen(false);
+                }}
+              >
+                Stay in simulation
+              </Button>
             </Box>
           </DialogActions>
         </Dialog>
       )}
       <Grid
         style={{
-          border: ".1rem solid black",
           width: "80%",
         }}
-        ref={stageParentRef}
       >
-        <Slider
-          aria-label="Frame"
-          max={frames.frames.length}
-          value={position}
-          onChange={(e, v) => {
-            setPosition(v);
+        <Box
+          style={{
+            border: ".1rem solid black",
+            width: "100%",
           }}
-        />
-        <Stage ref={stageRef} data-testid="board">
-          <Layer>
-            {frames.frames[position]
-              ? frames.frames[position].robots.map((robot) => {
-                  return (
-                    <Robot
-                      key={robot.id}
-                      radius={12}
-                      name={robot.name}
-                      x={robot.robotPosition ? robot.robotPosition.x : 100}
-                      y={robot.robotPosition ? robot.robotPosition.y : 200}
-                      fill={colors[robot.id % colors.length]}
-                    />
-                  );
-                })
-              : setFinished(true)}
-            {frames.frames[position]
-              ? frames.frames[position].missiles.map((missile) => {
-                  return (
-                    <Missile
-                      key={missile.id}
-                      radius={7}
-                      x={
-                        missile.missilePosition.x
-                          ? missile.missilePosition.x
-                          : 100
-                      }
-                      y={
-                        missile.missilePosition.y
-                          ? missile.missilePosition.y
-                          : 100
-                      }
-                      fill={colors[missile.id]}
-                    />
-                  );
-                })
-              : setFinished(true)}
-            {frames.frames[position]
-              ? frames.frames[position].explotions.map((explotion) => {
-                  return (
-                    <Missile
-                      key={explotion.id}
-                      radius={40}
-                      x={
-                        explotion.explotionPosition.x
-                          ? explotion.explotionPosition.x
-                          : 100
-                      }
-                      y={
-                        explotion.explotionPosition.y
-                          ? explotion.explotionPosition.y
-                          : 100
-                      }
-                      fill={colors[explotion.id]}
-                    />
-                  );
-                })
-              : setFinished(true)}
-          </Layer>
-        </Stage>
+          ref={stageParentRef}
+        >
+          <Stage ref={stageRef} data-testid="board">
+            <Layer>
+              {frames.frames[position]
+                ? frames.frames[position].robots.map((robot) => {
+                    return (
+                      <Robot
+                        key={robot.id}
+                        radius={12}
+                        name={robot.name}
+                        x={robot.robotPosition ? robot.robotPosition.x : 100}
+                        y={robot.robotPosition ? robot.robotPosition.y : 200}
+                        fill={colors[robot.id % colors.length]}
+                      />
+                    );
+                  })
+                : setFinished(true)}
+              {frames.frames[position]
+                ? frames.frames[position].missiles.map((missile) => {
+                    return (
+                      <Missile
+                        key={missile.id}
+                        radius={7}
+                        x={
+                          missile.missilePosition.x
+                            ? missile.missilePosition.x
+                            : 100
+                        }
+                        y={
+                          missile.missilePosition.y
+                            ? missile.missilePosition.y
+                            : 100
+                        }
+                        fill={colors[missile.id]}
+                      />
+                    );
+                  })
+                : setFinished(true)}
+              {frames.frames[position]
+                ? frames.frames[position].explotions.map((explotion) => {
+                    return (
+                      <Missile
+                        key={explotion.id}
+                        radius={40}
+                        x={
+                          explotion.explotionPosition.x
+                            ? explotion.explotionPosition.x
+                            : 100
+                        }
+                        y={
+                          explotion.explotionPosition.y
+                            ? explotion.explotionPosition.y
+                            : 100
+                        }
+                        fill={colors[explotion.id]}
+                      />
+                    );
+                  })
+                : setFinished(true)}
+            </Layer>
+          </Stage>
+        </Box>
+        <Box
+          display="flex"
+          marginLeft="15px"
+          alignItems="center"
+          marginRight="15px"
+        >
+          <IconButton
+            children={paused ? <PlayArrowIcon /> : <PauseIcon />}
+            onClick={() => setPaused(!paused)}
+          />
+          <Slider
+            aria-label="Frame"
+            max={frames.frames.length}
+            style={{ marginLeft: "10px" }}
+            value={position}
+            onChange={(_, v) => {
+              setPosition(v);
+            }}
+          />
+        </Box>
       </Grid>
       <Box style={{ marginLeft: "3rem" }}>
         <List

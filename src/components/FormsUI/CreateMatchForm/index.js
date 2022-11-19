@@ -52,7 +52,7 @@ const formValidation = Yup.object().shape({
   robot_id: Yup.number().integer().positive().required(),
 });
 
-export default function CreateMatchForm({ UserID }) {
+export default function CreateMatchForm({ userID }) {
   const navigate = useNavigate();
   const initialFormState = {
     name: "",
@@ -62,7 +62,7 @@ export default function CreateMatchForm({ UserID }) {
     games_per_match: "",
     rounds: "",
     robot_id: "",
-    creator: UserID,
+    creator: userID,
   };
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");

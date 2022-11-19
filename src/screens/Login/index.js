@@ -11,7 +11,7 @@ export default function Login({ navigate }) {
 
   function handleLogin(t) {
     localStorage.setItem("token", t.access_token);
-    localStorage.setItem("UserID", t.id);
+    localStorage.setItem("userID", t.id);
     localStorage.setItem("username", t.username);
     localStorage.setItem("avatar", t.avatar);
     navigate("/");

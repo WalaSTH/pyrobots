@@ -31,6 +31,7 @@ export default function NewRobot() {
 
   // Connection with endpoint
   async function handleSubmit(values, { resetForm }) {
+    console.log(userID);
     const formData = new FormData();
     formData.append("robot_name", values.name);
     formData.append("creator", userID);
