@@ -13,6 +13,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Skeleton,
 } from "@mui/material";
 
 // MUI icons
@@ -23,7 +24,56 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PercentIcon from "@mui/icons-material/Percent";
 import { useState } from "react";
 
-export default function UserProfile({ username, avatar, stats }) {
+function StatsCard({ stats }) {
+  return (
+    <Card
+      variant="filled"
+      sx={{
+        backgroundColor: "#f0f7ff",
+      }}
+    >
+      <List>
+        <ListItem>
+          <ListItemAvatar>
+            <SportsEsportsIcon />
+          </ListItemAvatar>
+          <ListItemText
+            primary="Games played"
+            secondary={stats.gamesPlayed || <Skeleton width="40%" />}
+          />
+        </ListItem>
+
+        <ListItem>
+          <ListItemAvatar>
+            <EmojiEventsIcon />
+          </ListItemAvatar>
+          <ListItemText
+            primary="Games won"
+            secondary={stats.gamesWon || <Skeleton width="40%" />}
+          />
+        </ListItem>
+
+        <ListItem>
+          <ListItemAvatar>
+            <PercentIcon />
+          </ListItemAvatar>
+          <ListItemText
+            primary="Victory rate"
+            secondary={
+              stats.victoryRate ? (
+                stats.victoryRate + "%"
+              ) : (
+                <Skeleton width="40%" />
+              )
+            }
+          />
+        </ListItem>
+      </List>
+    </Card>
+  );
+}
+
+export default function ProfileCard({ username, avatar, stats }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   function handleClick(event) {
@@ -162,44 +212,7 @@ export default function UserProfile({ username, avatar, stats }) {
             User stats
           </Typography>
 
-          <Card
-            variant="filled"
-            sx={{
-              backgroundColor: "#f0f7ff",
-            }}
-          >
-            <List>
-              <ListItem>
-                <ListItemAvatar>
-                  <SportsEsportsIcon />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Games played"
-                  secondary={stats.gamesPlayed || "-"}
-                />
-              </ListItem>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <EmojiEventsIcon />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Games won"
-                  secondary={stats.gamesWon || "-"}
-                />
-              </ListItem>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <PercentIcon />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Victory rate"
-                  secondary={stats.victoryRate ? stats.victoryRate + "%" : "-"}
-                />
-              </ListItem>
-            </List>
-          </Card>
+          <StatsCard stats={stats} />
         </Grid>
       </Grid>
     </Card>
