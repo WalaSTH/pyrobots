@@ -2,7 +2,7 @@
 from typing import Optional
 import random
 
-class Beyblade_Cheto(gameRobot):
+class BeybladeCheto(gameRobot):
     round: int
     state: Optional[str]
     searching_last_direction: Optional[float]

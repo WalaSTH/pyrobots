@@ -263,7 +263,7 @@ def create_result(ranking, won_games, match):
 def create_robot(robot_name, creator, code, avatar):
     if type(code) == str:
         robot_code = open(code, "rb").read()
-        class_name = str(Path(code).stem)
+        class_name = str(Path(code).stem) + ".py"
     else:
         robot_code = code.file.read()
         class_name = code.filename
@@ -276,6 +276,7 @@ def create_robot(robot_name, creator, code, avatar):
         matches_played=0,
         matches_won=0
     )
+    print(f"----- {new_robot.robot_class_name} -----")
     if avatar != None:
         new_robot.avatar = avatar.encode()
     else:
