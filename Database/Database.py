@@ -495,5 +495,10 @@ def update_user_password(name, new_pwd):
 @db_session
 def update_user_avatar(name, picture):
     user = get_user(name)
-    user.photo = picture.encode()
-    return user.photo.decode()
+    user.photo = picture.encode() if picture != None else None
+
+    avatar = None
+    if user.photo is not None:
+        avatar = user.photo.decode()
+
+    return avatar
