@@ -1,3 +1,4 @@
+// MUI components
 import {
   Avatar,
   Card,
@@ -10,14 +11,31 @@ import {
   Typography,
   Badge,
   IconButton,
+  Menu,
+  MenuItem,
 } from "@mui/material";
+
+// MUI icons
+import SettingsIcon from "@mui/icons-material/Settings";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import EditIcon from "@mui/icons-material/Edit";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PercentIcon from "@mui/icons-material/Percent";
+import { useState } from "react";
 
-export default function ProfileDisplay({ username, avatar, stats }) {
+export default function UserProfile({ username, avatar, stats }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  function handleClick(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleClose() {
+    setAnchorEl(null);
+  }
+
+  const menuOpen = Boolean(anchorEl);
+
   return (
     <Card
       variant="outlined"
@@ -34,6 +52,41 @@ export default function ProfileDisplay({ username, avatar, stats }) {
           justifyContent: "center",
         }}
       >
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "right",
+            marginBottom: -1.5,
+          }}
+        >
+          <IconButton
+            onClick={handleClick}
+            sx={{
+              marginBottom: -4,
+            }}
+          >
+            <SettingsIcon />
+          </IconButton>
+
+          <Menu
+            open={menuOpen}
+            onClose={handleClose}
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+          >
+            <MenuItem onClick={handleClose}>Change user avatar</MenuItem>
+            <MenuItem onClick={handleClose}>Change password</MenuItem>
+          </Menu>
+        </Grid>
         <Grid
           item
           xs={12}
@@ -70,7 +123,7 @@ export default function ProfileDisplay({ username, avatar, stats }) {
                   width: "6rem",
                   height: "6rem",
                   fontSize: "2.5rem",
-                  border: 2.5,
+                  border: 2.75,
                   borderColor: "primary.main",
                 }}
               />
@@ -122,7 +175,7 @@ export default function ProfileDisplay({ username, avatar, stats }) {
                 </ListItemAvatar>
                 <ListItemText
                   primary="Games played"
-                  secondary={stats.gamesPlayed || 0}
+                  secondary={stats.gamesPlayed || "-"}
                 />
               </ListItem>
 
@@ -132,7 +185,7 @@ export default function ProfileDisplay({ username, avatar, stats }) {
                 </ListItemAvatar>
                 <ListItemText
                   primary="Games won"
-                  secondary={stats.gamesWon || 0}
+                  secondary={stats.gamesWon || "-"}
                 />
               </ListItem>
 
@@ -142,7 +195,7 @@ export default function ProfileDisplay({ username, avatar, stats }) {
                 </ListItemAvatar>
                 <ListItemText
                   primary="Victory rate"
-                  secondary={stats.victoryRate || 0}
+                  secondary={stats.victoryRate ? stats.victoryRate + "%" : "-"}
                 />
               </ListItem>
             </List>

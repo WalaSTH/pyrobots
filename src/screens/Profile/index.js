@@ -2,12 +2,13 @@
 // import DisplayProfile from "../../components/DisplayProfile";
 
 import { Container } from "@mui/material";
-import ProfileDisplay from "../../components/ProfileDisplay";
+import UserProfile from "../../components/UserProfile";
 
-export default function Profile({}) {
+export default function Profile() {
   const username = localStorage.getItem("username");
   const avatar = localStorage.getItem("avatar");
   const stats = {};
+
   return (
     <Container
       component="main"
@@ -16,7 +17,7 @@ export default function Profile({}) {
         marginTop: 10,
       }}
     >
-      <ProfileDisplay username={username} avatar={avatar} stats={stats} />
+      <UserProfile username={username} avatar={avatar} stats={stats} />
     </Container>
   );
 }
