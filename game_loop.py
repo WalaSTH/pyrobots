@@ -2,7 +2,7 @@ from Database.Database import *
 from pydantic_models import *
 from game_robot import *
 from game_auxilar_functions import *
-
+import random
 
 @db_session
 def run_simulation(sim: SimData):
@@ -166,3 +166,5 @@ def set_position_by_index(gameRobot):
         x = random.randint(10, 990)
         y = random.randint(10, 990)
         gameRobot.set_position(x, y)
+
+
