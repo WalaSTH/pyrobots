@@ -365,8 +365,6 @@ class gameRobot:
         if self.engine_previous_direction != self.engine_direction:
             self.engine_turn_request = True
         self.engine_activated = True
-        if self.engine_previous_direction != self.engine_direction:
-            self.engine_turn_request = True
 
     # Status
     def get_directions():
