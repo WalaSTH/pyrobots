@@ -161,13 +161,7 @@ def load_robot(username, robot_name: str):
     return newRobot  # newRobot is defined in exec_str
 
 
-def set_position_by_index(gameRobot, index):
-    match index:
-        case 0:
-            gameRobot.set_position(750, 250)
-        case 1:
-            gameRobot.set_position(250, 250)
-        case 2:
-            gameRobot.set_position(250, 750)
-        case 3:
-            gameRobot.set_position(750, 750)
+def set_position_by_index(gameRobot):
+        x = random.randint(10, 990)
+        y = random.randint(10, 990)
+        gameRobot.set_position(x, y)
