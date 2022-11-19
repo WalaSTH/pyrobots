@@ -43,6 +43,7 @@ export default function DrawerWrapper({
     localStorage.removeItem("token");
     localStorage.removeItem("userID");
     localStorage.removeItem("username");
+    localStorage.removeItem("avatar");
     navigate("/");
   }
 
