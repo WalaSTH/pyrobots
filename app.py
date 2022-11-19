@@ -323,6 +323,10 @@ async def user_register(
         )
     else:
         create_user(username, email, get_password_hash(password), avatar)
+        new_id = get_last_user_id()
+        create_robot("Cheto_Beyblade", new_id, "Utils/Beyblade_Cheto.py", None)
+        create_robot("Cheto_Sniper", new_id, "Utils/Sniper_Cheto.py", None)
+
         return {"detail": "User created successfully"}
 
 
