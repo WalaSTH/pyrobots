@@ -349,8 +349,8 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.user_name}, expires_delta=access_token_expires
+    access_token = generate_token(
+        data={"username": user.user_name}, expires_delta=access_token_expires
     )
 
     avatar = None
@@ -366,17 +366,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     }
 
 #3UVQ77jOg#Fw
-
+# Recovery mail
 @app.post("/user/recover", tags=["Recovery"], status_code=200)
 async def recovery_mail(recover: RecoverData):
-    user = get_user_by_email(recover.email);
-
-    if user is None:
-        raise HTTPException(
-            status_code=401,
-            detail="There is no user with this email"
-        )
-
     try:
         recover_type = RecoverType(recover.type)
     except ValueError as e:
@@ -385,9 +377,20 @@ async def recovery_mail(recover: RecoverData):
             detail=str(e)
         )
 
-    await send_recovery_email(recover.email, user, recover_type)
+    user = get_user_by_email(recover.email);
 
-    return {"message": "Email has been sent"}
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="There is no user with this email"
+        )
+
+    token_expiration = timedelta(minutes=RESET_PASSWORD_TOKEN_EXPIRE_MINUTES)
+    token = generate_token(data={"username": user.user_name}, expires_delta=token_expiration)
+
+    await send_recovery_email(recover.email, user, recover_type, token)
+
+    return {"detail": "Email has been sent"}
 
 
 # --- Simulation Endpoints ---

@@ -4,6 +4,7 @@ from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from pydantic import EmailStr
 
 from Database.Database import User
+from security_functions import RESET_PASSWORD_TOKEN_EXPIRE_MINUTES
 
 conf = ConnectionConfig(
     MAIL_USERNAME = "noreplypyrobots@gmail.com",
@@ -27,9 +28,10 @@ class RecoverType(str, Enum):
 async def send_recovery_email(
     email: EmailStr,
     user: User,
-    recover_type: RecoverType
+    recover_type: RecoverType,
+    token: str
 ):
-    body = { "username": user.user_name, "email": email }
+    body = { "username": user.user_name, "email": email, "token": token, "expiration": RESET_PASSWORD_TOKEN_EXPIRE_MINUTES }
 
     if (recover_type is RecoverType.USERNAME):
         subject = "Recover Username"
