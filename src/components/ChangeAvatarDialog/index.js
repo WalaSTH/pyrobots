@@ -10,9 +10,11 @@ import {
   DialogTitle,
   ListItem,
 } from "@mui/material";
+
 import AvatarPreview from "../FormsUI/AvatarPreview";
+import FileUploadButton from "../FormsUI/FileUploadButton";
+
 import {
-  FileUpload as FileUploadButton,
   AddAPhoto as AddAPhotoIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
@@ -92,7 +94,7 @@ export default function ChangeAvatarDialog({
   }
 
   return (
-    <Dialog fullWidth maxWidth="lg" open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
       <Formik
         initialValues={{ ...initialFormState }}
         validationSchema={formValidation}
@@ -121,6 +123,7 @@ export default function ChangeAvatarDialog({
                     fontSize: "4rem",
                   }}
                 />
+
                 <Box
                   sx={{
                     display: "flex",
@@ -139,6 +142,7 @@ export default function ChangeAvatarDialog({
                       Select avatar
                     </FileUploadButton>
                   </ListItem>
+
                   <ListItem>
                     <Button
                       fullWidth
@@ -155,6 +159,7 @@ export default function ChangeAvatarDialog({
                 </Box>
               </Box>
             </DialogContent>
+
             <DialogActions>
               <Box display="flex" width="100%" justifyContent="space-between">
                 <Button
@@ -167,6 +172,7 @@ export default function ChangeAvatarDialog({
                 >
                   Cancel
                 </Button>
+
                 <Button type="submit">Update</Button>
               </Box>
             </DialogActions>

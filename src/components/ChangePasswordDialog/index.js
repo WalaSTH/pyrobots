@@ -20,7 +20,13 @@ const initialFormState = {
 };
 
 const formValidation = Yup.object().shape({
-  currentPassword: Yup.string().required("This field is required"),
+  currentPassword: Yup.string()
+    .required("This field is required")
+    .min(8, "Incorrect password")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+      "Incorrect password"
+    ),
   newPassword: Yup.string()
     .required("This field is required")
     .min(8, "Password must be at least 8 characters long")
@@ -30,7 +36,7 @@ const formValidation = Yup.object().shape({
     ),
   newPasswordConfirmation: Yup.string()
     .required("This field is required")
-    .oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
+    .oneOf([Yup.ref("newPassword"), null], "Passwords don't match"),
 });
 
 export default function ChangePasswordDialog({
@@ -42,8 +48,9 @@ export default function ChangePasswordDialog({
   function handleSubmit() {
     onClose();
   }
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
       <Formik
         initialValues={{ ...initialFormState }}
         validationSchema={formValidation}
@@ -60,6 +67,27 @@ export default function ChangePasswordDialog({
                 justifyContent: "center",
               }}
             >
+              <Grid item xs={12} mb={-1}>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "0.9rem", md: "1rem" },
+                  }}
+                >
+                  Enter your current password and a new password.
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} mt={2}>
+                <Typography
+                  color="primary"
+                  sx={{
+                    fontSize: { xs: "0.9rem", md: "1rem" },
+                  }}
+                >
+                  Current password
+                </Typography>
+              </Grid>
+
               <Grid
                 item
                 xs={12}
@@ -68,11 +96,37 @@ export default function ChangePasswordDialog({
                 }}
               >
                 <TextField
-                  dense
                   name="currentPassword"
                   label="Password"
                   type="password"
-                  variant="standard"
+                  autoComplete="off"
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography
+                  color="primary"
+                  sx={{
+                    fontSize: { xs: "0.9rem", md: "1rem" },
+                  }}
+                >
+                  New password
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  marginTop: 0.5,
+                  marginBottom: -0.5,
+                }}
+              >
+                <TextField
+                  name="newPassword"
+                  label="Password"
+                  type="password"
                   autoComplete="off"
                   required
                 />
@@ -87,29 +141,9 @@ export default function ChangePasswordDialog({
                 }}
               >
                 <TextField
-                  dense
-                  name="newPassword"
-                  label="New Password"
-                  type="password"
-                  variant="standard"
-                  autoComplete="off"
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  marginTop: 0.5,
-                  marginBottom: -0.5,
-                }}
-              >
-                <TextField
-                  dense
                   name="newPasswordConfirmation"
-                  label="Password Confirmation"
+                  label="Confirm password"
                   type="password"
-                  variant="standard"
                   autoComplete="off"
                   required
                 />
