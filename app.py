@@ -331,31 +331,29 @@ async def user_register(
 
         return {"detail": "User created successfully"}
 
-
-@app.get("/validate/{token}", tags=["Users"], status_code=200)
-async def validate_email(token: str):
+# Validate Account
+@app.get("/validate_account", tags=["Validation"], status_code=200)
+async def validate_account(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="BAD_TOKEN"
-            )
+        username = payload.get("username")
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="LINK_EXPIRES"
+            detail="Link expired"
         )
-    user = get_user_by_email(email)
+
+    user = get_user(username)
+
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="BAD_TOKEN"
+            detail="Invalid token"
         )
     else:
-        set_user_verified(email)
-    return {"Thanks for checking your email! email_user": email}
+        set_user_verified(username)
+
+    return {f"Account {username} validated"}
 
 
 # Upload image

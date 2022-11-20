@@ -29,7 +29,7 @@ async def send_verification_email(
     username: str,
     token: str
 ):
-    body = { "username": username, "email": email, "token": token, "expiration": VALIDATE_TOKEN_EXPIRE_MINUTES/60}
+    body = { "username": username, "email": email, "token": token, "expiration": VALIDATE_TOKEN_EXPIRE_MINUTES // 60}
 
     message = MessageSchema(
         subject = "Validate Account",

@@ -487,8 +487,8 @@ def get_user_name_by_id(user_id):
     return User[user_id].user_name
 
 @db_session
-def set_user_verified(user_email):
-    user = User.get(email=user_email)
+def set_user_verified(username):
+    user = User.get(user_name=username)
     user.verified = True
 
 @db_session
