@@ -18,7 +18,7 @@
       <div style="margin: 0 auto; width: 90%; text-align: center">
         <h1
           style="
-            background-color: rgba(0, 53, 102, 1);
+            background-color: #1976d2;
             padding: 5px 10px;
             border-radius: 5px;
             color: white;
@@ -30,16 +30,42 @@
           style="
             margin: 30px auto;
             background: white;
-            width: 40%;
             border-radius: 10px;
             padding: 50px;
             text-align: center;
           "
         >
-          <h3 style="margin-bottom: 50px; font-size: 24px">Hey {{ email }}!</h3>
-          <p style="font-size: 20px">Your username is: {{ username }}</p>
+          <p style="margin-bottom: 50px; font-size: 24px">Hey {{ email }}!</p>
+          <p style="font-size: 20px">Your username is: {{username}}</p>
+          <a
+            style="
+              display: block;
+              margin: 0 auto;
+              background-color: #1976d2;
+              color: white;
+              width: 50%;
+              padding: 10px;
+              font-size: 24px;
+              border-radius: 10px;
+              cursor: pointer;
+              text-decoration: none;
+            "
+            href="http://localhost:3000/login"
+            target="_blank"
+          >
+            Go to login
+          </a>
         </div>
       </div>
     </div>
+    <script>
+      function copyText() {
+        // Get the text field
+        var copyText = document.getElementById("username").innerHTML;
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText);
+      }
+    </script>
   </body>
 </html>
