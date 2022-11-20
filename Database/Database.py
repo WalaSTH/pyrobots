@@ -109,9 +109,9 @@ def get_match_info(room_id):
 
 
         participants_list.append(({
-            "robot_name": r.robot_name, 
-            "robot_avatar": r_avatar, 
-            "user_name": r.owner.user_name, 
+            "robot_name": r.robot_name,
+            "robot_avatar": r_avatar,
+            "user_name": r.owner.user_name,
             "user_avatar": u_avatar
         }))
     data = {
@@ -150,7 +150,7 @@ def get_match_list(name, filter):
 
         case "hosted":
             match_list = Match.select(
-                lambda m: (not m.started) 
+                lambda m: (not m.started)
                 and m.creator.user_name == name
                 )[:]
 
@@ -283,7 +283,7 @@ def get_robot_list(owner_name, detailed):
         r_avatar = None
         if r.avatar is not None:
             r_avatar = r.avatar.decode()
-        
+
         if detailed:
             res_list.append([r.id, r.robot_name, r.code, r_avatar])
         else:
@@ -497,3 +497,8 @@ def calculate_user_stats(username):
     }
 
     return stats
+
+@db_session
+def update_user_password(name, new_pwd):
+    user = get_user(name)
+    user.password = new_pwd

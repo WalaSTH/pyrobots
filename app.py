@@ -357,7 +357,7 @@ async def user_delete(user_name: str):
         return {"user successfully deleted"}
 
 
-# login
+# Login
 @app.post("/token", tags=["Token"], response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
@@ -385,14 +385,42 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     }
 
 
-@app.get("/user/me/")
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
-    return {"username": current_user.user_name}
+# Reset password
+@app.put("/user/reset_password", tags=["Recovery"], status_code=200)
+async def reset_password(reset: ResetData):
+    if (
+        any(char.isupper() for char in reset.password) == False
+        or any(char.islower() for char in reset.password) == False
+        or any(char.isdigit() for char in reset.password) == False
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="password must have at least one uppercase, one lowercase and one number"
+        )
 
+    try:
+        payload = jwt.decode(reset.token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired"
+        )
+    user = payload.get("username")
+    update_user_password(user, get_password_hash(reset.password))
 
-@app.get("/user/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.user_name}]
+    return {"detail": "Password updated"}
+
+# Check if token is expired
+@app.get("/token/status", tags=["Token"], status_code=200)
+async def get_token_status(token: str):
+    try:
+        jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired"
+        )
+    return {"detail": "Token is not expired"}
 
 
 @app.get("/users/stats", tags=["Users"], status_code=200)

@@ -25,6 +25,11 @@ class User(BaseModel):
     email: Optional[str] = None
 
 
+class ResetData(BaseModel):
+    token: str
+    password: str
+
+
 class TempMatch(BaseModel):
     name: str
     min_players: int
