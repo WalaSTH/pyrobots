@@ -38,7 +38,7 @@ def test_stats_zero():
 
     response = client.get("/users/stats",params=param)
     assert response.json() == {
-        "detail": "Stats succesfuly checked",
+        "detail": "Stats succesfully checked",
         "stats": {
             "played_matches": 0,
             "victories": 0
