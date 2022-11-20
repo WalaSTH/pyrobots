@@ -402,7 +402,7 @@ async def get_user_stats(checked_user: str):
 
     user_stats = calculate_user_stats(checked_user)
 
-    return{"detail": "Stats succesfuly checked", "stats": user_stats}
+    return{"detail": "Stats succesfully checked", "stats": user_stats}
 
 
 # --- Simulation Endpoints ---
