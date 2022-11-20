@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import DialogCode from "../../components/DialogCode/DialogCode";
+import RobotCodeDialog from "../RobotCodeDialog";
 
 export default function CardRobot({ robot }) {
   const [, name, code, played, won, avatar] = robot;
@@ -43,7 +43,7 @@ export default function CardRobot({ robot }) {
         </Button>
       </CardActions>
 
-      <DialogCode
+      <RobotCodeDialog
         open={showCodeDialog}
         onClose={handleCodeDialogClose}
         name={name}

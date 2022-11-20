@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 
-export default function DialogCode({ open, onClose, name, code }) {
+export default function RobotCodeDialog({ open, onClose, name, code }) {
   return (
     <Box>
       <Dialog
