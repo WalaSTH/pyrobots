@@ -400,7 +400,7 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 async def modify_logged_user(update_info: UpdateParams):
 
     if not user_exists(update_info.username):
-        raise HTTPException(status_code=404, detail=f"No user named {update_info.username}")
+        raise HTTPException(status_code=404, detail=f"No user named {update_info.username}.")
 
     if update_info.param != "avatar" and update_info.param != "password":
         raise HTTPException(status_code=400, detail=f"Param {update_info.param} does not exist.")
@@ -411,7 +411,7 @@ async def modify_logged_user(update_info: UpdateParams):
             if not user:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="That is not your current password"
+                    detail="That is not your current password."
                 )
 
             if (
@@ -421,15 +421,15 @@ async def modify_logged_user(update_info: UpdateParams):
             ):
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="password must have at least one uppercase, one lowercase and one number"
+                    detail="Password must have at least one uppercase, one lowercase and one number."
                 )
             update_user_password(update_info.username, get_password_hash(update_info.new_pwd))
 
-            return {"detail": "Password updated succesfuly."}
+            return {"detail": "Password updated succesfully."}
 
         case "avatar":
             avatar = update_user_avatar(update_info.username, update_info.new_pic)         
-            return {"detail": "User updated succesfuly.", "new_avatar": avatar}
+            return {"detail": "User updated succesfully.", "new_avatar": avatar}
 
 # --- Simulation Endpoints ---
 

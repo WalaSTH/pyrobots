@@ -502,3 +502,8 @@ def update_user_avatar(name, picture):
         avatar = user.photo.decode()
 
     return avatar
+
+@db_session
+def get_user_pwd(username):
+    user = get_user(username)
+    return user.password
