@@ -1,6 +1,6 @@
-// Form handling and validation
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
+
 import {
   Box,
   Button,
@@ -11,11 +11,12 @@ import {
   ListItem,
 } from "@mui/material";
 import AvatarPreview from "../FormsUI/AvatarPreview";
-import FileUploadButton from "../FormsUI/FileUploadButton";
 import {
+  FileUpload as FileUploadButton,
   AddAPhoto as AddAPhotoIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
+
 import axios from "axios";
 import { useState } from "react";
 
@@ -53,13 +54,13 @@ export default function ChangeAvatarDialog({
   snackbarProps,
 }) {
   const [initialAvatar, setInitialAvatar] = useState(avatar);
+  const { setOpen, setBody, setSeverity } = snackbarProps;
 
   function handleReset(resetForm) {
     resetForm();
     setInitialAvatar("none");
   }
 
-  const { setOpen, setBody, setSeverity } = snackbarProps;
   async function handleSubmit(values) {
     onClose();
     return await axios
@@ -91,7 +92,7 @@ export default function ChangeAvatarDialog({
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="lg" open={open} onClose={onClose}>
       <Formik
         initialValues={{ ...initialFormState }}
         validationSchema={formValidation}
@@ -102,7 +103,7 @@ export default function ChangeAvatarDialog({
       >
         {(formProps) => (
           <Form>
-            <DialogTitle> Edit user avatar</DialogTitle>
+            <DialogTitle color="primary">Change avatar</DialogTitle>
             <DialogContent>
               <Box
                 sx={{

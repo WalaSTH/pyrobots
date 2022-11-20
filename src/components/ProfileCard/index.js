@@ -24,6 +24,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PercentIcon from "@mui/icons-material/Percent";
 import { useState } from "react";
 import ChangeAvatarDialog from "../ChangeAvatarDialog";
+import ChangePasswordDialog from "../ChangePasswordDialog";
 
 function StatsCard({ stats }) {
   return (
@@ -86,6 +87,8 @@ export default function ProfileCard({
   snackbarProps,
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showAvatarDialog, setShowAvatarDialog] = useState(false);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const menuOpen = Boolean(anchorEl);
 
   function handleClick(event) {
@@ -96,14 +99,20 @@ export default function ProfileCard({
     setAnchorEl(null);
   }
 
-  const [showAvatarDialog, setShowAvatarDialog] = useState(false);
-
-  function handleAvatarOpen() {
+  function handleAvatarDialogOpen() {
     setShowAvatarDialog(true);
   }
 
-  function handleAvatarClose() {
+  function handleAvatarDialogClose() {
     setShowAvatarDialog(false);
+  }
+
+  function handlePasswordDialogOpen() {
+    setShowPasswordDialog(true);
+  }
+
+  function handlePasswordDialogClose() {
+    setShowPasswordDialog(false);
   }
 
   return (
@@ -156,22 +165,38 @@ export default function ProfileCard({
             <MenuItem
               onClick={() => {
                 handleClose();
-                handleAvatarOpen();
+                handleAvatarDialogOpen();
               }}
             >
               Change avatar
             </MenuItem>
-            <MenuItem onClick={handleClose}>Change password</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                handlePasswordDialogOpen();
+              }}
+            >
+              Change password
+            </MenuItem>
           </Menu>
         </Grid>
+
         <ChangeAvatarDialog
           open={showAvatarDialog}
-          onClose={handleAvatarClose}
+          onClose={handleAvatarDialogClose}
           username={username}
           avatar={avatar}
           setAvatar={setAvatar}
           snackbarProps={snackbarProps}
         />
+
+        <ChangePasswordDialog
+          open={showPasswordDialog}
+          onClose={handlePasswordDialogClose}
+          username={username}
+          snackbarProps={snackbarProps}
+        />
+
         <Grid
           item
           xs={12}
@@ -181,7 +206,7 @@ export default function ProfileCard({
             marginBottom: -1.5,
           }}
         >
-          <IconButton onClick={handleAvatarOpen}>
+          <IconButton onClick={handleAvatarDialogOpen}>
             <Badge
               overlap="circular"
               badgeContent={
