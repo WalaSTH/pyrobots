@@ -78,7 +78,12 @@ function StatsCard({ stats }) {
   );
 }
 
-export default function ProfileCard({ username, avatar, stats }) {
+export default function ProfileCard({
+  username,
+  avatar,
+  stats,
+  snackbarProps,
+}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -165,6 +170,7 @@ export default function ProfileCard({ username, avatar, stats }) {
           username={username}
           avatar={userAvatar}
           setAvatar={setUserAvatar}
+          snackbarProps={snackbarProps}
         />
         <Grid
           item

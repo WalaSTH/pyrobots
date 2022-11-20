@@ -60,7 +60,16 @@ export default function UserProfile() {
         marginTop: 10,
       }}
     >
-      <ProfileCard username={username} avatar={avatar} stats={stats} />
+      <ProfileCard
+        username={username}
+        avatar={avatar}
+        stats={stats}
+        snackbarProps={{
+          setOpen: setOpen,
+          setBody: setBody,
+          setSeverity: setSeverity,
+        }}
+      />
 
       {open && (
         <Snackbar

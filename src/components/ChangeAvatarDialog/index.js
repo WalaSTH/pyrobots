@@ -50,7 +50,9 @@ export default function ChangeAvatarDialog({
   username,
   avatar,
   setAvatar,
+  snackbarProps,
 }) {
+  const { setOpen, setBody, setSeverity } = snackbarProps;
   async function handleSubmit(values) {
     onClose();
     return await axios
@@ -60,11 +62,23 @@ export default function ChangeAvatarDialog({
         new_pic: await toBase64(values.avatar),
       })
       .then(function (response) {
+        setOpen(true);
+        setSeverity("success");
+        setBody(response.data.detail);
         localStorage.setItem("avatar", response.data.new_avatar);
         setAvatar(response.data.new_avatar);
       })
       .catch(function (error) {
-        console.log(error.response);
+        setSeverity("error");
+        if (
+          error.response &&
+          typeof error.response.data["detail"] != "object"
+        ) {
+          setBody(error.response.data["detail"]);
+        } else {
+          setBody("Unknown error");
+        }
+        setOpen(true);
       });
   }
 
