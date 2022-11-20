@@ -395,6 +395,16 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.user_name}]
 
 
+@app.get("/users/stats", tags=["Users"], status_code=200)
+async def get_user_stats(checked_user: str = Depends):
+    if not user_exists(checked_user):
+        raise HTTPException(status_code=404, detail=f"Username {checked_user} does not exist.")
+
+    user_stats = calculate_user_stats(checked_user)
+
+    return{"detail": "Stats succesfuly checked", "stats": user_stats}
+
+
 # --- Simulation Endpoints ---
 
 @app.post("/simulation/start", tags=["simulation"], status_code=200)

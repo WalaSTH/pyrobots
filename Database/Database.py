@@ -485,3 +485,15 @@ def check_user_quantity():
 @db_session
 def get_user_name_by_id(user_id):
     return User[user_id].user_name
+
+
+@db_session
+def calculate_user_stats(username):
+    user = get_user(username)
+
+    stats = {
+        "played_matches" : user.matches_played,
+        "victories" : user.won_matches
+    }
+
+    return stats
