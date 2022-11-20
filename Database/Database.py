@@ -285,7 +285,7 @@ def get_robot_list(owner_name, detailed):
             r_avatar = r.avatar.decode()
         
         if detailed:
-            res_list.append([r.id, r.robot_name, r.code, r_avatar])
+            res_list.append([r.id, r.robot_name, r.code, r.matches_played, r.matches_won, r_avatar])
         else:
             res_list.append([r.id, r.robot_name, r_avatar])
 
