@@ -30,10 +30,10 @@ export default function CardRobot({ robot }) {
   }
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card>
       <CardMedia
         component="img"
-        height="140"
+        height="140rem"
         image={
           avatar ||
           "https://media.istockphoto.com/vectors/cute-white-robot-character-vector-vector-id1187576166?k=20&m=1187576166&s=612x612&w=0&h=q-REVReHr8QRzKQ_TRWGU7KTP6OBIgGh-zlg91-S-j0="
@@ -49,13 +49,8 @@ export default function CardRobot({ robot }) {
 
       <CardActions>
         <Box display="flex" width="100%" justifyContent="space-between">
-          <Button variant="outlined" onClick={handleCodeDialogOpen}>
-            Code
-          </Button>
-
-          <Button variant="outlined" onClick={handleStatsDialogOpen}>
-            Stats
-          </Button>
+          <Button onClick={handleCodeDialogOpen}>Code</Button>
+          <Button onClick={handleStatsDialogOpen}>Stats</Button>
         </Box>
       </CardActions>
 
