@@ -396,7 +396,7 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 
 
 @app.get("/users/stats", tags=["Users"], status_code=200)
-async def get_user_stats(checked_user: str = Depends):
+async def get_user_stats(checked_user: str):
     if not user_exists(checked_user):
         raise HTTPException(status_code=404, detail=f"Username {checked_user} does not exist.")
 

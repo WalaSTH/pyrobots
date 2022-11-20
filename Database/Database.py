@@ -493,7 +493,7 @@ def calculate_user_stats(username):
 
     stats = {
         "played_matches" : user.matches_played,
-        "victories" : user.won_matches
+        "victories" : user.matches_won
     }
 
     return stats
