@@ -1,5 +1,6 @@
 import * as Yup from "yup";
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
+import axios from "axios";
 
 import {
   Dialog,
@@ -45,8 +46,40 @@ export default function ChangePasswordDialog({
   username,
   snackbarProps,
 }) {
-  function handleSubmit() {
-    onClose();
+  const { setOpen, setSeverity, setBody } = snackbarProps;
+
+  async function handleSubmit(values, { setErrors }) {
+    return await axios
+      .put("http://127.0.0.1:8000/user/update", {
+        username: username,
+        param: "password",
+        new_pwd: values.newPassword,
+        current_pwd: values.currentPassword,
+      })
+      .then(function (response) {
+        onClose();
+        setOpen(true);
+        setSeverity("success");
+        setBody(response.data.detail);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        if (error.response && error.response.status === 401) {
+          setErrors({ currentPassword: "Incorrect password" });
+        } else {
+          onClose();
+          setSeverity("error");
+          if (
+            error.response &&
+            typeof error.response.data["detail"] != "object"
+          ) {
+            setBody(error.response.data["detail"]);
+          } else {
+            setBody("Unknown error");
+          }
+          setOpen(true);
+        }
+      });
   }
 
   return (
@@ -54,6 +87,8 @@ export default function ChangePasswordDialog({
       <Formik
         initialValues={{ ...initialFormState }}
         validationSchema={formValidation}
+        validateOnChange={false}
+        validateOnBlur={false}
         onSubmit={handleSubmit}
       >
         <Form>
@@ -155,6 +190,7 @@ export default function ChangePasswordDialog({
               <Button autoFocus color="error" onClick={onClose}>
                 Cancel
               </Button>
+
               <Button type="submit">Update</Button>
             </Box>
           </DialogActions>
