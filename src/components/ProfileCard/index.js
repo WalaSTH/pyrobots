@@ -81,6 +81,7 @@ function StatsCard({ stats }) {
 export default function ProfileCard({
   username,
   avatar,
+  setAvatar,
   stats,
   snackbarProps,
 }) {
@@ -96,7 +97,6 @@ export default function ProfileCard({
   }
 
   const [showAvatarDialog, setShowAvatarDialog] = useState(false);
-  const [userAvatar, setUserAvatar] = useState(avatar);
 
   function handleAvatarOpen() {
     setShowAvatarDialog(true);
@@ -168,8 +168,8 @@ export default function ProfileCard({
           open={showAvatarDialog}
           onClose={handleAvatarClose}
           username={username}
-          avatar={userAvatar}
-          setAvatar={setUserAvatar}
+          avatar={avatar}
+          setAvatar={setAvatar}
           snackbarProps={snackbarProps}
         />
         <Grid
@@ -203,7 +203,7 @@ export default function ProfileCard({
             >
               <Avatar
                 alt={username}
-                src={userAvatar || "none"}
+                src={avatar || "none"}
                 sx={{
                   width: "6rem",
                   height: "6rem",

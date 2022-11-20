@@ -34,10 +34,10 @@ const theme = createTheme({
 export default function DrawerWrapper({
   setMobileOpen,
   navigate,
+  avatar,
   ...otherProps
 }) {
   const username = localStorage.getItem("username");
-  const avatar = localStorage.getItem("avatar");
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -83,7 +83,7 @@ export default function DrawerWrapper({
               }}
             >
               <Avatar
-                src={avatar}
+                src={avatar || "none"}
                 alt={username}
                 sx={{
                   color: "#fff",

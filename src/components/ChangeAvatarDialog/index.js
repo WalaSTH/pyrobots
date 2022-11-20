@@ -8,7 +8,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Input,
   ListItem,
 } from "@mui/material";
 import AvatarPreview from "../FormsUI/AvatarPreview";
@@ -18,9 +17,10 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import axios from "axios";
+import { useState } from "react";
 
 const initialFormState = {
-  avatar: null,
+  avatar: "",
 };
 
 const formValidation = Yup.object().shape({
@@ -52,6 +52,13 @@ export default function ChangeAvatarDialog({
   setAvatar,
   snackbarProps,
 }) {
+  const [initialAvatar, setInitialAvatar] = useState(avatar);
+
+  function handleReset(resetForm) {
+    resetForm();
+    setInitialAvatar("none");
+  }
+
   const { setOpen, setBody, setSeverity } = snackbarProps;
   async function handleSubmit(values) {
     onClose();
@@ -59,7 +66,7 @@ export default function ChangeAvatarDialog({
       .put("http://127.0.0.1:8000/user/update", {
         username: username,
         param: "avatar",
-        new_pic: await toBase64(values.avatar),
+        new_pic: values.avatar ? await toBase64(values.avatar) : "",
       })
       .then(function (response) {
         setOpen(true);
@@ -67,6 +74,7 @@ export default function ChangeAvatarDialog({
         setBody(response.data.detail);
         localStorage.setItem("avatar", response.data.new_avatar);
         setAvatar(response.data.new_avatar);
+        setInitialAvatar(response.data.new_avatar);
       })
       .catch(function (error) {
         setSeverity("error");
@@ -105,7 +113,7 @@ export default function ChangeAvatarDialog({
                 <AvatarPreview
                   name="avatar"
                   alt={username}
-                  src={avatar}
+                  src={initialAvatar}
                   sx={{
                     width: "10rem",
                     height: "10rem",
@@ -136,7 +144,7 @@ export default function ChangeAvatarDialog({
                       variant="outlined"
                       startIcon={<DeleteIcon />}
                       onClick={() => {
-                        formProps.resetForm();
+                        handleReset(formProps.resetForm);
                       }}
                       color="error"
                     >
@@ -153,6 +161,7 @@ export default function ChangeAvatarDialog({
                   color="error"
                   onClick={() => {
                     onClose();
+                    setInitialAvatar(avatar);
                   }}
                 >
                   Cancel

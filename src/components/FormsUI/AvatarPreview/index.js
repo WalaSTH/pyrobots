@@ -14,9 +14,9 @@ export default function AvatarPreview({
   const isError = !meta.touched || meta.error;
 
   const [avatarPreview, setAvatarPreview] = useState("");
-  const reader = new FileReader();
 
   useEffect(() => {
+    const reader = new FileReader();
     if (file && !isError) {
       reader.onloadend = () => {
         setAvatarPreview(reader.result);
