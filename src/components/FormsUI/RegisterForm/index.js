@@ -46,10 +46,6 @@ export default function RegisterUserForm({ handleSubmit }) {
       initialValues={{
         ...initialFormState,
       }}
-      initialTouched={{
-        code: true,
-        avatar: true,
-      }}
       validationSchema={formValidation}
       onSubmit={handleSubmit}
     >

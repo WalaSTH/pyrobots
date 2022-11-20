@@ -54,11 +54,9 @@ export default function NewRobotForm({ onSubmit }) {
   return (
     <Formik
       initialValues={{ ...initialFormState }}
-      initialTouched={{
-        code: true,
-        avatar: true,
-      }}
       validationSchema={formValidation}
+      validateOnChange={false}
+      validateOnBlur={false}
       onSubmit={onSubmit}
     >
       {(values) => (
@@ -156,7 +154,6 @@ export default function NewRobotForm({ onSubmit }) {
                 <FileUploadButton
                   id="robotCodeInput"
                   name="code"
-                  accept=".py"
                   data-testid="robotCodeInput"
                   inputProps={{ accept: ".py" }}
                   buttonProps={{ startIcon: <FileUploadIcon /> }}

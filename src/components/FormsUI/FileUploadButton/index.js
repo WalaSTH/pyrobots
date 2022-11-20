@@ -8,12 +8,13 @@ export default function FileUploadButton({
   children,
   ...otherProps
 }) {
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, setFieldTouched } = useFormikContext();
   const [, meta] = useField(name);
   const isError = meta.touched && meta.error;
 
   function handleChange(e) {
     setFieldValue(name, e.target.files[0]);
+    setFieldTouched(name, true);
     e.target.value = "";
   }
 

@@ -101,7 +101,6 @@ exports[`NewRobotForm rendering snapshot 1`] = `
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-hzys1r-MuiGrid-root"
       >
         <div
-          accept=".py"
           className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-1g6u8k6-MuiInputBase-root-MuiInput-root"
           data-testid="robotCodeInput"
           hidden={true}

@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import axios from "axios";
 
 import {
@@ -185,6 +185,7 @@ export default function ChangePasswordDialog({
               </Grid>
             </Grid>
           </DialogContent>
+
           <DialogActions>
             <Box display="flex" width="100%" justifyContent="space-between">
               <Button autoFocus color="error" onClick={onClose}>

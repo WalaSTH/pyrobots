@@ -13,11 +13,11 @@ export default function AvatarPreview({
   const file = field.value;
   const isError = !meta.touched || meta.error;
 
-  const [avatarPreview, setAvatarPreview] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState("none");
 
   useEffect(() => {
-    const reader = new FileReader();
     if (file && !isError) {
+      const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result);
       };
@@ -29,7 +29,7 @@ export default function AvatarPreview({
 
   const configAvatarPreview = {
     ...field,
-    src: avatarPreview || src || "none",
+    src: (!isError ? avatarPreview : src) || "none",
     alt: alt,
     color: "secondary",
     children: children,

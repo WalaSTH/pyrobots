@@ -20,7 +20,6 @@ import {
 } from "@mui/icons-material";
 
 import axios from "axios";
-import { useState } from "react";
 
 const initialFormState = {
   avatar: "",
@@ -55,13 +54,7 @@ export default function ChangeAvatarDialog({
   setAvatar,
   snackbarProps,
 }) {
-  const [initialAvatar, setInitialAvatar] = useState(avatar);
   const { setOpen, setBody, setSeverity } = snackbarProps;
-
-  function handleReset(resetForm) {
-    resetForm();
-    setInitialAvatar("none");
-  }
 
   async function handleSubmit(values) {
     onClose();
@@ -77,7 +70,6 @@ export default function ChangeAvatarDialog({
         setBody(response.data.detail);
         localStorage.setItem("avatar", response.data.new_avatar);
         setAvatar(response.data.new_avatar);
-        setInitialAvatar(response.data.new_avatar);
       })
       .catch(function (error) {
         setSeverity("error");
@@ -98,14 +90,12 @@ export default function ChangeAvatarDialog({
       <Formik
         initialValues={{ ...initialFormState }}
         validationSchema={formValidation}
-        initialTouched={{
-          avatar: true,
-        }}
         onSubmit={handleSubmit}
       >
         {(formProps) => (
           <Form>
             <DialogTitle color="primary">Change avatar</DialogTitle>
+
             <DialogContent>
               <Box
                 sx={{
@@ -116,7 +106,7 @@ export default function ChangeAvatarDialog({
                 <AvatarPreview
                   name="avatar"
                   alt={username}
-                  src={initialAvatar}
+                  src={avatar}
                   sx={{
                     width: "10rem",
                     height: "10rem",
@@ -139,7 +129,7 @@ export default function ChangeAvatarDialog({
                       inputProps={{ accept: "image/png,image/jpg,image/jpeg" }}
                       buttonProps={{ startIcon: <AddAPhotoIcon /> }}
                     >
-                      Select avatar
+                      Select an image
                     </FileUploadButton>
                   </ListItem>
 
@@ -149,7 +139,12 @@ export default function ChangeAvatarDialog({
                       variant="outlined"
                       startIcon={<DeleteIcon />}
                       onClick={() => {
-                        handleReset(formProps.resetForm);
+                        formProps.setFieldValue("avatar", "");
+                        if (avatar) {
+                          formProps.setFieldTouched("avatar", true);
+                        } else {
+                          formProps.setFieldTouched("avatar", false);
+                        }
                       }}
                       color="error"
                     >
@@ -167,13 +162,14 @@ export default function ChangeAvatarDialog({
                   color="error"
                   onClick={() => {
                     onClose();
-                    setInitialAvatar(avatar);
                   }}
                 >
                   Cancel
                 </Button>
 
-                <Button type="submit">Update</Button>
+                <Button type="submit" disabled={!formProps.touched.avatar}>
+                  Update
+                </Button>
               </Box>
             </DialogActions>
           </Form>
