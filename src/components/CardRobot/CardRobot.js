@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -6,10 +6,12 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import RobotCodeDialog from "../RobotCodeDialog";
+import RobotStatsDialog from "../RobotStatsDialog";
 
 export default function CardRobot({ robot }) {
   const [, name, code, played, won, avatar] = robot;
   const [showCodeDialog, setShowCodeDialog] = useState(false);
+  const [showStatsDialog, setShowStatsDialog] = useState(false);
 
   function handleCodeDialogOpen() {
     setShowCodeDialog(true);
@@ -17,6 +19,14 @@ export default function CardRobot({ robot }) {
 
   function handleCodeDialogClose() {
     setShowCodeDialog(false);
+  }
+
+  function handleStatsDialogOpen() {
+    setShowStatsDialog(true);
+  }
+
+  function handleStatsDialogClose() {
+    setShowStatsDialog(false);
   }
 
   return (
@@ -38,9 +48,15 @@ export default function CardRobot({ robot }) {
       </CardContent>
 
       <CardActions>
-        <Button variant="outlined" onClick={handleCodeDialogOpen}>
-          Code
-        </Button>
+        <Box display="flex" width="100%" justifyContent="space-between">
+          <Button variant="outlined" onClick={handleCodeDialogOpen}>
+            Code
+          </Button>
+
+          <Button variant="outlined" onClick={handleStatsDialogOpen}>
+            Stats
+          </Button>
+        </Box>
       </CardActions>
 
       <RobotCodeDialog
@@ -48,6 +64,13 @@ export default function CardRobot({ robot }) {
         onClose={handleCodeDialogClose}
         name={name}
         code={code}
+      />
+
+      <RobotStatsDialog
+        open={showStatsDialog}
+        onClose={handleStatsDialogClose}
+        name={name}
+        stats={{ played, won }}
       />
     </Card>
   );
