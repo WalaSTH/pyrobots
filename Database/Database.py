@@ -498,11 +498,7 @@ def update_user_avatar(name, picture):
     user = get_user(name)
     user.photo = picture.encode() if picture != None else None
 
-    avatar = None
-    if user.photo is not None:
-        avatar = user.photo.decode()
-
-    return avatar
+    return picture
 
 
 @db_session
