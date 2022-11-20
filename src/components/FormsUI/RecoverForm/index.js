@@ -3,6 +3,8 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import { Box } from "@mui/system";
+import { LinearProgress } from "@mui/material";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import TextField from "../TextField";
@@ -16,7 +18,7 @@ const formValidation = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
 
-export default function RecoverForm({ handleSubmit, type }) {
+export default function RecoverForm({ handleSubmit, type, loading }) {
   return (
     <Formik
       initialValues={{ ...initialFormState }}
@@ -56,9 +58,17 @@ export default function RecoverForm({ handleSubmit, type }) {
             </Grid>
 
             <Grid item xs={12}>
-              <SubmitFormButton data-testid="recover-button">
+              <SubmitFormButton
+                data-testid="recover-button"
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
                 {type === "password" ? "Reset Password" : "Recover Username"}
               </SubmitFormButton>
+              {loading && (
+                <Box sx={{ width: "100%" }}>
+                  <LinearProgress color="secondary" />
+                </Box>
+              )}
             </Grid>
             <Grid item xs={12}>
               <Link href="/login" variant="body2">

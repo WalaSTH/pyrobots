@@ -15,7 +15,7 @@ import Snackbar from "../../components/FormsUI/Snackbar";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
-// const endpoint = "http://127.0.0.1:8000/recover_email";
+const endpoint = "http://127.0.0.1:8000/user/recover";
 
 export default function Recover() {
   const navigate = useNavigate();
@@ -23,6 +23,9 @@ export default function Recover() {
   // Fetch query params
   const [searchParams] = useSearchParams();
   const recoverType = searchParams.get("type");
+
+  // Loading bar after submitting the form
+  const [loading, setLoading] = useState(false);
 
   // Email sent dialog
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -39,15 +42,18 @@ export default function Recover() {
 
   // Connection with endpoint
   async function handleSubmit(values) {
+    setLoading(true);
     return await axios
-      .post("https://634ab9a333bb42dca409da46.mockapi.io/api/recover_mail", {
+      .post(endpoint, {
         email: values.email,
         type: recoverType,
       })
       .then(function () {
         setDialogOpen(true);
+        setLoading(false);
       })
       .catch(function (error) {
+        setLoading(false);
         setSeverity("error");
         if (
           error.response &&
@@ -67,11 +73,18 @@ export default function Recover() {
       maxWidth="xs"
       sx={{
         display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
         alignItems: "center",
         marginBottom: 10,
       }}
     >
-      <RecoverForm handleSubmit={handleSubmit} type={recoverType} />
+      <RecoverForm
+        handleSubmit={handleSubmit}
+        type={recoverType}
+        loading={loading}
+        setLoading={setLoading}
+      />
       {dialogOpen && (
         <Dialog open={dialogOpen}>
           <DialogTitle>Email sent</DialogTitle>
