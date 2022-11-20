@@ -12,7 +12,6 @@ import {
   ListItem,
 } from "@mui/material";
 import AvatarPreview from "../FormsUI/AvatarPreview";
-import FileUploadInput from "../FormsUI/FileUploadInput";
 import FileUploadButton from "../FormsUI/FileUploadButton";
 import {
   AddAPhoto as AddAPhotoIcon,
@@ -57,80 +56,68 @@ export default function ChangeAvatarDialog({
         }}
         onSubmit={handleSubmit}
       >
-        <Form>
-          <DialogTitle> Edit user avatar</DialogTitle>
-          <DialogContent>
-            <Box
-              sx={{
-                display: "flex",
-                width: "100%",
-              }}
-            >
-              <AvatarPreview
-                name="avatar"
-                alt={username}
-                src={avatar}
-                sx={{
-                  width: "10rem",
-                  height: "10rem",
-                  fontSize: "3rem",
-                }}
-              />
+        {(formProps) => (
+          <Form>
+            <DialogTitle> Edit user avatar</DialogTitle>
+            <DialogContent>
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
                   width: "100%",
-                  justifyContent: "center",
                 }}
               >
-                <ListItem>
-                  <FileUploadInput
-                    name="avatar"
-                    accept="image/png,image/jpg,image/jpeg"
-                    data-testid="robotAvatar"
-                  />
-
-                  <FileUploadButton name="avatar" startIcon={<AddAPhotoIcon />}>
-                    Select avatar
-                  </FileUploadButton>
-
-                  {/* <Input
-                    type="file"
-                    id="avatarInput"
-                    inputProps={{ accept: "image/png,image/jpg,image/jpeg" }}
-                    sx={{ display: "none" }}
-                    onChange={handleChange}
-                  />
-                  <Button
-                    fullWidth
-                    component="label"
-                    htmlFor="avatarInput"
-                    variant="outlined"
-                  >
-                    Select avatar
-                  </Button> */}
-                </ListItem>
-                <ListItem>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    startIcon={<DeleteIcon />}
-                    color="error"
-                  >
-                    Delete
-                  </Button>
-                </ListItem>
+                <AvatarPreview
+                  name="avatar"
+                  alt={username}
+                  src={avatar}
+                  sx={{
+                    width: "10rem",
+                    height: "10rem",
+                    fontSize: "4rem",
+                  }}
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ListItem>
+                    <FileUploadButton
+                      name="avatar"
+                      id="userAvatarInput"
+                      inputProps={{ accept: "image/png,image/jpg,image/jpeg" }}
+                      buttonProps={{ startIcon: <AddAPhotoIcon /> }}
+                    >
+                      Select avatar
+                    </FileUploadButton>
+                  </ListItem>
+                  <ListItem>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      onClick={() => {
+                        formProps.resetForm();
+                      }}
+                      color="error"
+                    >
+                      Delete
+                    </Button>
+                  </ListItem>
+                </Box>
               </Box>
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button type="submit">Ok</Button>
-          </DialogActions>
-        </Form>
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button type="submit">Ok</Button>
+            </DialogActions>
+          </Form>
+        )}
       </Formik>
     </Dialog>
   );

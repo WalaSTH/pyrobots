@@ -100,17 +100,27 @@ exports[`NewRobotForm rendering snapshot 1`] = `
       <div
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-hzys1r-MuiGrid-root"
       >
-        <input
+        <div
           accept=".py"
+          className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-1g6u8k6-MuiInputBase-root-MuiInput-root"
           data-testid="robotCodeInput"
           hidden={true}
-          id="code"
-          onChange={[Function]}
-          type="file"
-        />
+          onClick={[Function]}
+        >
+          <input
+            accept=".py"
+            className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+            id="robotCodeInput"
+            onAnimationStart={[Function]}
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="file"
+          />
+        </div>
         <label
           className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
-          htmlFor="code"
+          htmlFor="robotCodeInput"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
@@ -141,25 +151,32 @@ exports[`NewRobotForm rendering snapshot 1`] = `
               />
             </svg>
           </span>
-           
           Select file
-           
         </label>
       </div>
       <div
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-hzys1r-MuiGrid-root"
       >
-        <input
-          accept="image/png,image/jpg,image/jpeg"
+        <div
+          className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-1g6u8k6-MuiInputBase-root-MuiInput-root"
           data-testid="robotAvatar"
           hidden={true}
-          id="avatar"
-          onChange={[Function]}
-          type="file"
-        />
+          onClick={[Function]}
+        >
+          <input
+            accept="image/png,image/jpg,image/jpeg"
+            className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+            id="robotAvatarInput"
+            onAnimationStart={[Function]}
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="file"
+          />
+        </div>
         <label
           className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
-          htmlFor="avatar"
+          htmlFor="robotAvatarInput"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
@@ -190,9 +207,7 @@ exports[`NewRobotForm rendering snapshot 1`] = `
               />
             </svg>
           </span>
-           
           Select avatar
-           
         </label>
       </div>
       <div
