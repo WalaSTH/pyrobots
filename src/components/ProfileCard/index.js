@@ -23,6 +23,7 @@ import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PercentIcon from "@mui/icons-material/Percent";
 import { useState } from "react";
+import ChangeAvatarDialog from "../ChangeAvatarDialog";
 
 function StatsCard({ stats }) {
   return (
@@ -75,6 +76,7 @@ function StatsCard({ stats }) {
 
 export default function ProfileCard({ username, avatar, stats }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const menuOpen = Boolean(anchorEl);
 
   function handleClick(event) {
     setAnchorEl(event.currentTarget);
@@ -84,7 +86,15 @@ export default function ProfileCard({ username, avatar, stats }) {
     setAnchorEl(null);
   }
 
-  const menuOpen = Boolean(anchorEl);
+  const [openAvatar, setOpenAvatar] = useState(false);
+
+  function handleAvatarOpen() {
+    setOpenAvatar(true);
+  }
+
+  function handleAvatarClose() {
+    setOpenAvatar(false);
+  }
 
   return (
     <Card
@@ -133,10 +143,23 @@ export default function ProfileCard({ username, avatar, stats }) {
               horizontal: "center",
             }}
           >
-            <MenuItem onClick={handleClose}>Change user avatar</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                handleAvatarOpen();
+              }}
+            >
+              Change avatar
+            </MenuItem>
             <MenuItem onClick={handleClose}>Change password</MenuItem>
           </Menu>
         </Grid>
+        <ChangeAvatarDialog
+          open={openAvatar}
+          onClose={handleAvatarClose}
+          username={username}
+          avatar={avatar}
+        />
         <Grid
           item
           xs={12}
@@ -146,7 +169,7 @@ export default function ProfileCard({ username, avatar, stats }) {
             marginBottom: -1.5,
           }}
         >
-          <IconButton>
+          <IconButton onClick={handleAvatarOpen}>
             <Badge
               overlap="circular"
               badgeContent={
