@@ -35,8 +35,12 @@
             text-align: center;
           "
         >
-          <p style="margin-bottom: 50px; font-size: 24px">Hey {{ email }}!</p>
-          <p style="font-size: 20px">Your username is: {{username}}</p>
+          <p style="color: #000; margin-bottom: 50px; font-size: 24px">
+            Hey {{ email }}!
+          </p>
+          <p style="color: #000; font-size: 20px">
+            Your username is: {{username}}
+          </p>
           <a
             style="
               display: block;
@@ -58,14 +62,5 @@
         </div>
       </div>
     </div>
-    <script>
-      function copyText() {
-        // Get the text field
-        var copyText = document.getElementById("username").innerHTML;
-
-        // Copy the text inside the text field
-        navigator.clipboard.writeText(copyText);
-      }
-    </script>
   </body>
 </html>
