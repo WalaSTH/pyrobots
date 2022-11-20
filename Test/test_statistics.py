@@ -19,7 +19,7 @@ u1_res = client.post("/user/signup", data=user_to_reg)
 assert u1_res.status_code == 200
 
 # New match creation.
-def test_stats_unexistant_user():
+def test_stats_unexistent_user():
 
     fake_user = get_random_string_goodps(10)
     while user_exists(fake_user):
