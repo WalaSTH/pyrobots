@@ -39,8 +39,8 @@ function StatsCard({ stats }) {
             <SportsEsportsIcon />
           </ListItemAvatar>
           <ListItemText
-            primary="Games played"
-            secondary={stats.gamesPlayed || <Skeleton width="40%" />}
+            primary="Matches played"
+            secondary={stats ? stats.played_matches : <Skeleton width="40%" />}
           />
         </ListItem>
 
@@ -49,8 +49,8 @@ function StatsCard({ stats }) {
             <EmojiEventsIcon />
           </ListItemAvatar>
           <ListItemText
-            primary="Games won"
-            secondary={stats.gamesWon || <Skeleton width="40%" />}
+            primary="Matches won"
+            secondary={stats ? stats.victories : <Skeleton width="40%" />}
           />
         </ListItem>
 
@@ -61,8 +61,12 @@ function StatsCard({ stats }) {
           <ListItemText
             primary="Victory rate"
             secondary={
-              stats.victoryRate ? (
-                stats.victoryRate + "%"
+              stats ? (
+                stats.played_matches === 0 ? (
+                  "0%"
+                ) : (
+                  stats.victories / stats.played_matches + "%"
+                )
               ) : (
                 <Skeleton width="40%" />
               )
