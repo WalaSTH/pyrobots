@@ -8,6 +8,7 @@ from field_validations import create_match_field_validation
 from security_functions import *
 from pydantic_models import *
 from random import *
+from utils.mails import send_verification_email
 
 MAX_LEN_ALIAS = 9
 MIN_LEN_ALIAS = 3
@@ -18,20 +19,20 @@ MIN_LEN_EMAIL = 10
 MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
 
-description = """ 
+description = """
     PyRobots 🤖
-    
+
     This is a game where you can create your own robot and fight against other robots.
-    
+
     ## The FUN is guaranteed! 🎉
-    
+
     ## Functionalities 🛠
-    
+
     * Create a match
     * Create a new user
     * Create a robot
     * Login
-    * Upload a photo    
+    * Upload a photo
     """
 origins = ["http://localhost:3000", "localhost:3000", "http://localhost:3000/", "localhost:3000/"]
 
@@ -180,37 +181,14 @@ async def user_register(user_to_reg: UserTemp = Depends(), photo: Optional[Uploa
             upload_photo_db(user_to_reg.username, photo.file.read())
         else:
             upload_photo_db(user_to_reg.username, None)
+
+
+        token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+        token = generate_token(data={"username": user_to_reg.user_name}, expires_delta=token_expiration)
+
+        await send_verification_email(user_to_reg.email, user_to_reg.username , token)
+
         return {"detail": "User created successfully"}
-
-
-@app.post("/send_email", tags=["Users"], status_code=200)
-async def send_email(user_email: str):
-    user = get_user_by_email(user_email)
-    if user is None:
-        raise HTTPException(
-            status_code=401,
-            detail="The email was not found in our system"
-        )
-    else:
-        if user.verified:
-            raise HTTPException(
-                status_code=404,
-                detail="This email is already verified"
-            )
-        else:
-            email = EmailSchema(email=[user_email])
-            validate_token_expires = \
-                timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
-            validate_token = create_access_token(
-                data={"sub": user_email},
-                expires_delta=validate_token_expires
-            )
-            alias = user.user_name
-            html = generate_html(alias, validate_token)
-            message = get_message(email, html)
-            fm = FastMail(conf)
-            await fm.send_message(message)
-            return {"token_val": validate_token}
 
 
 @app.get("/validate/{token}", tags=["Users"], status_code=200)
@@ -284,11 +262,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     elif not user.verified:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Email not verified",
+            detail="This account is not verified",
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
+    access_token = generate_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer", "username": user.user_name, "id": user.id}

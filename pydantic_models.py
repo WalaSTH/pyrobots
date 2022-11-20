@@ -12,17 +12,26 @@ class UserTemp(BaseModel):
     password: str
     email: EmailStr
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
     username: str
     id: int
+
+
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+
+class ValidationData(BaseModel):
+    id: int
+
 
 class User(BaseModel):
     username: str
     email: Optional[str] = None
+
 
 class TempMatch(BaseModel):
     name: str
@@ -34,16 +43,20 @@ class TempMatch(BaseModel):
     creator: int
     password: Union[str, None] = None
 
+
 class TempRobot(BaseModel):
     robot_name: str
     creator: int
     code: UploadFile = File(...)
     avatar: Union[UploadFile, None] = None
 
+
 class Robot(BaseModel):
     robot_name: str
     creator: str
     position_x: int = None
     position_y: int = None
+
+
 class EmailSchema(BaseModel):
     email: List[EmailStr]
