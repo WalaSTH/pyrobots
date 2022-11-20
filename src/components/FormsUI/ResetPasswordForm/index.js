@@ -1,11 +1,13 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import TextField from "../TextField";
 import SubmitFormButton from "../SubmitFormButton";
+import { useNavigate } from "react-router-dom";
 
 const initialFormState = {
   password: "",
@@ -25,7 +27,8 @@ const formValidation = Yup.object().shape({
   ),
 });
 
-export default function ResetPasswordForm({ handleSubmit }) {
+export default function ResetPasswordForm({ handleSubmit, isTokenValid }) {
+  const navigate = useNavigate();
   return (
     <Formik
       initialValues={{ ...initialFormState }}
@@ -41,45 +44,66 @@ export default function ResetPasswordForm({ handleSubmit }) {
           textAlign: "center",
         }}
       >
-        <Form>
+        {isTokenValid && (
+          <Form>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  children="Reset your password"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  name="password"
+                  label="Password"
+                  type="password"
+                  autoComplete="off"
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  name="passwordConfirmation"
+                  label="Confirm your password"
+                  type="password"
+                  autoComplete="off"
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <SubmitFormButton data-testid="resetPassword-button">
+                  Reset Password
+                </SubmitFormButton>
+              </Grid>
+            </Grid>
+          </Form>
+        )}
+        {!isTokenValid && (
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography
-                component="h1"
-                variant="h5"
-                children="Reset your password"
-              />
+              <Typography component="h1" variant="h5" children="Link Expired" />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
-                name="password"
-                data-testid="Password"
-                label="Password"
-                type="password"
-                autoComplete="off"
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                name="passwordConfirmation"
-                data-testid="passwordConfirmation"
-                label="Confirm your password"
-                type="password"
-                autoComplete="off"
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <SubmitFormButton data-testid="resetPassword-button">
-                Reset Password
-              </SubmitFormButton>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                fullWidth="true"
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                Back to login
+              </Button>
             </Grid>
           </Grid>
-        </Form>
+        )}
       </Card>
     </Formik>
   );

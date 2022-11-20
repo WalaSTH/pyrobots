@@ -1,18 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 import ResetPasswordForm from "../../components/FormsUI/ResetPasswordForm";
 import axios from "axios";
 import Snackbar from "../../components/FormsUI/Snackbar";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
-// const endpoint = "http://127.0.0.1:8000/user/reset_password";
+const resetPasswordEndpoint = "http://127.0.0.1:8000/user/reset_password";
+const tokenStatusEndpoint = "http://127.0.0.1:8000/token/status";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
 
-  // Fetch query params (TODO)
-  // const [searchParams] = useSearchParams();
-  // const user = searchParams.get("user");
+  // Fetch query params
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  // Check if token is expired
+  const [isTokenValid, setIsTokenValid] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(tokenStatusEndpoint, {
+        params: {
+          token: token,
+        },
+      })
+      .then(function () {
+        setIsTokenValid(true);
+      })
+      .catch(function () {
+        setIsTokenValid(false);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Snackbar utilities
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -27,8 +48,8 @@ export default function ResetPassword() {
   // Connection with endpoint
   async function handleSubmit(values) {
     return await axios
-      .put("https://634ab9a333bb42dca409da46.mockapi.io/api/reset-password/1", {
-        user: "token test",
+      .put(resetPasswordEndpoint, {
+        token: token,
         password: values.password,
       })
       .then(function () {
@@ -58,7 +79,10 @@ export default function ResetPassword() {
         marginBottom: 10,
       }}
     >
-      <ResetPasswordForm handleSubmit={handleSubmit} />
+      <ResetPasswordForm
+        handleSubmit={handleSubmit}
+        isTokenValid={isTokenValid}
+      />
       {snackbarOpen && (
         <Snackbar
           open={snackbarOpen}
