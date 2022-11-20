@@ -431,6 +431,17 @@ async def modify_logged_user(update_info: UpdateParams):
             avatar = update_user_avatar(update_info.username, update_info.new_pic)         
             return {"detail": "User updated succesfully.", "new_avatar": avatar}
 
+
+@app.get("/users/stats", tags=["Users"], status_code=200)
+async def get_user_stats(checked_user: str):
+    if not user_exists(checked_user):
+        raise HTTPException(status_code=404, detail=f"Username {checked_user} does not exist.")
+
+    user_stats = calculate_user_stats(checked_user)
+
+    return{"detail": "Stats succesfully checked", "stats": user_stats}
+
+
 # --- Simulation Endpoints ---
 
 @app.post("/simulation/start", tags=["simulation"], status_code=200)

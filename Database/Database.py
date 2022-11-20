@@ -285,7 +285,7 @@ def get_robot_list(owner_name, detailed):
             r_avatar = r.avatar.decode()
         
         if detailed:
-            res_list.append([r.id, r.robot_name, r.code, r_avatar])
+            res_list.append([r.id, r.robot_name, r.code, r.matches_played, r.matches_won, r_avatar])
         else:
             res_list.append([r.id, r.robot_name, r_avatar])
 
@@ -492,6 +492,7 @@ def update_user_password(name, new_pwd):
     user = get_user(name)
     user.password = new_pwd
 
+
 @db_session
 def update_user_avatar(name, picture):
     user = get_user(name)
@@ -503,7 +504,19 @@ def update_user_avatar(name, picture):
 
     return avatar
 
+
 @db_session
 def get_user_pwd(username):
     user = get_user(username)
     return user.password
+
+
+def calculate_user_stats(username):
+    user = get_user(username)
+
+    stats = {
+        "played_matches" : user.matches_played,
+        "victories" : user.matches_won
+    }
+
+    return stats
