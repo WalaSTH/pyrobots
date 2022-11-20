@@ -86,14 +86,15 @@ export default function ProfileCard({ username, avatar, stats }) {
     setAnchorEl(null);
   }
 
-  const [openAvatar, setOpenAvatar] = useState(false);
+  const [showAvatarDialog, setShowAvatarDialog] = useState(false);
+  const [userAvatar, setUserAvatar] = useState(avatar);
 
   function handleAvatarOpen() {
-    setOpenAvatar(true);
+    setShowAvatarDialog(true);
   }
 
   function handleAvatarClose() {
-    setOpenAvatar(false);
+    setShowAvatarDialog(false);
   }
 
   return (
@@ -155,10 +156,11 @@ export default function ProfileCard({ username, avatar, stats }) {
           </Menu>
         </Grid>
         <ChangeAvatarDialog
-          open={openAvatar}
+          open={showAvatarDialog}
           onClose={handleAvatarClose}
           username={username}
-          avatar={avatar}
+          avatar={userAvatar}
+          setAvatar={setUserAvatar}
         />
         <Grid
           item
@@ -191,7 +193,7 @@ export default function ProfileCard({ username, avatar, stats }) {
             >
               <Avatar
                 alt={username}
-                src={avatar || "none"}
+                src={userAvatar || "none"}
                 sx={{
                   width: "6rem",
                   height: "6rem",

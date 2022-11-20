@@ -17,6 +17,7 @@ import {
   AddAPhoto as AddAPhotoIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
+import axios from "axios";
 
 const initialFormState = {
   avatar: null,
@@ -34,16 +35,37 @@ const formValidation = Yup.object().shape({
     ),
 });
 
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
 export default function ChangeAvatarDialog({
   open,
   onClose,
   username,
   avatar,
+  setAvatar,
 }) {
-  function handleSubmit() {}
-
-  function handleCancel() {
+  async function handleSubmit(values) {
     onClose();
+    return await axios
+      .put("http://127.0.0.1:8000/user/update", {
+        username: username,
+        param: "avatar",
+        new_pic: await toBase64(values.avatar),
+      })
+      .then(function (response) {
+        localStorage.setItem("avatar", response.data.new_avatar);
+        setAvatar(response.data.new_avatar);
+      })
+      .catch(function (error) {
+        console.log(error.response);
+      });
   }
 
   return (
@@ -111,10 +133,18 @@ export default function ChangeAvatarDialog({
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button autoFocus onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button type="submit">Ok</Button>
+              <Box display="flex" width="100%" justifyContent="space-between">
+                <Button
+                  autoFocus
+                  color="error"
+                  onClick={() => {
+                    onClose();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Update</Button>
+              </Box>
             </DialogActions>
           </Form>
         )}
