@@ -7,33 +7,21 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 
-export default function DialogCode({ name, code }) {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+export default function DialogCode({ open, onClose, name, code }) {
   return (
     <Box>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        View code
-      </Button>
       <Dialog
         fullWidth
         maxWidth="md"
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" color="primary">
           {name}
         </DialogTitle>
+
         <DialogContent>
           <TextField
             value={code}
@@ -44,11 +32,11 @@ export default function DialogCode({ name, code }) {
             multiline={true}
             maxRows={10}
             fullWidth={true}
-            color="secondary"
           />
         </DialogContent>
+
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={onClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </Box>

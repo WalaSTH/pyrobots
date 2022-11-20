@@ -1,13 +1,23 @@
-import * as React from "react";
+import { Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 import DialogCode from "../../components/DialogCode/DialogCode";
 
 export default function CardRobot({ robot }) {
-  const [, name, code, avatar] = robot;
+  const [, name, code, played, won, avatar] = robot;
+  const [showCodeDialog, setShowCodeDialog] = useState(false);
+
+  function handleCodeDialogOpen() {
+    setShowCodeDialog(true);
+  }
+
+  function handleCodeDialogClose() {
+    setShowCodeDialog(false);
+  }
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -20,14 +30,25 @@ export default function CardRobot({ robot }) {
         }
         alt={name}
       />
+
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {name}
         </Typography>
       </CardContent>
+
       <CardActions>
-        <DialogCode name={name} code={code} />
+        <Button variant="outlined" onClick={handleCodeDialogOpen}>
+          Code
+        </Button>
       </CardActions>
+
+      <DialogCode
+        open={showCodeDialog}
+        onClose={handleCodeDialogClose}
+        name={name}
+        code={code}
+      />
     </Card>
   );
 }
