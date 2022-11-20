@@ -32,28 +32,16 @@ export default function Login({ navigate }) {
     return await axios
       .post("http://127.0.0.1:8000/token", params)
       .then((res) => {
-        const status = res.status;
-        const data = res.data;
-        if (status === 200) {
-          handleLogin(data);
-          return;
-        }
+        handleLogin(res.data);
       })
-      .catch((error) => {
-        if (!error || !error.response) setBody("No connection to server");
-        else if (error.response.status === 401) {
-          setBody("Username or password invalid");
-        } else if (error.response.status === 422) {
-          setBody("Bad request");
-        } else if (error.response.status === 406) {
-          setBody("Password do not match");
-        } else if (error.response.status === 402) {
-          setBody("Security failure");
+      .catch(function (error) {
+        setSeverity("error");
+        if (error.response) {
+          setBody(error.response.data["detail"]);
         } else {
           setBody("Unknown error");
         }
         setOpen(true);
-        setSeverity("error");
       });
   }
 
