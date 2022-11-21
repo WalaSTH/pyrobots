@@ -35,6 +35,7 @@ export default function Login({ navigate }) {
   const [openValidationDialog, setOpenValidationDialog] = useState(false);
 
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function resendValidationEmail(username) {
@@ -81,11 +82,15 @@ export default function Login({ navigate }) {
         handleLogin(res.data);
       })
       .catch(function (error) {
-        if (error.response.data["detail"] === "This account is not verified") {
+        if (
+          error.response.data["detail"].message ===
+          "This account is not verified"
+        ) {
           setUsername(credentials.e.username);
+          setEmail(error.response.data["detail"].email);
           setOpenValidationDialog(true);
         } else if (error.response) {
-          setBody(error.response.data["detail"]);
+          setBody(error.response.data["detail"].message);
           setSeverity("error");
           setOpen(true);
         } else {
@@ -116,9 +121,9 @@ export default function Login({ navigate }) {
           <DialogContent>
             <Box display="flex">
               <DialogContentText sx={{ marginLeft: "10px" }}>
-                Your account is not validated, check your email and validate
-                your account. If you didn't receive an email click the resend
-                button
+                Your account is not validated, check your email:{" "}
+                <strong>{email}</strong> and validate your account. If you
+                didn't receive an email click the resend button
               </DialogContentText>
             </Box>
           </DialogContent>
