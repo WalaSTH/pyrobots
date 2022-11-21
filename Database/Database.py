@@ -511,6 +511,7 @@ def get_user_pwd(username):
     return user.password
 
 
+@db_session
 def calculate_user_stats(username):
     user = get_user(username)
 
@@ -520,8 +521,3 @@ def calculate_user_stats(username):
     }
 
     return stats
-
-@db_session
-def update_user_password(name, new_pwd):
-    user = get_user(name)
-    user.password = new_pwd

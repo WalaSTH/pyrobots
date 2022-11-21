@@ -24,7 +24,7 @@ from utils.mails import RecoverType, send_recovery_email
 MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
-MIN_LEN_PASSWORD = 7
+MIN_LEN_PASSWORD = 8
 MAX_LEN_EMAIL = 30
 MIN_LEN_EMAIL = 10
 MAX_LEN_NAME_GAME = 10
@@ -299,7 +299,7 @@ async def user_register(
         len(username) > MAX_LEN_ALIAS
         or len(username) < MIN_LEN_ALIAS
         or len(password) > MAX_LEN_PASSWORD
-        or len(password) <= MIN_LEN_PASSWORD
+        or len(password) < MIN_LEN_PASSWORD
         or len(email) > MAX_LEN_EMAIL
         or len(email) < MIN_LEN_EMAIL
     ):
@@ -460,7 +460,8 @@ async def recovery_mail(recover: RecoverData):
 @app.put("/user/reset_password", tags=["Recovery"], status_code=200)
 async def reset_password(reset: ResetData):
     if (
-        any(char.isupper() for char in reset.password) == False
+        len(reset.password) < 8
+        or any(char.isupper() for char in reset.password) == False
         or any(char.islower() for char in reset.password) == False
         or any(char.isdigit() for char in reset.password) == False
     ):
@@ -474,10 +475,26 @@ async def reset_password(reset: ResetData):
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token expired"
+            detail="Link expired"
         )
-    user = payload.get("username")
-    update_user_password(user, get_password_hash(reset.password))
+
+    username = payload.get("username")
+
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail= "Username can't be empty"
+        )
+
+    user = get_user(username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not registered"
+        )
+    else:
+        update_user_password(user.user_name, get_password_hash(reset.password))
 
     return {"detail": "Password updated"}
 
