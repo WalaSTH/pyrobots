@@ -328,7 +328,7 @@ async def user_register(
         token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
         token = generate_token(data={"username": username}, expires_delta=token_expiration)
 
-        await send_verification_email(email, username , token)
+        await send_verification_email(email, username, token)
 
         return {"detail": "User created successfully"}
 
@@ -357,11 +357,17 @@ async def resend_email(resend: ResendValidationEmail):
 async def validate_account(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username = payload.get("username")
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Link expired"
+        )
+
+    username = payload.get("username")
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Username can't be empty"
         )
 
     user = get_user(username)
@@ -369,12 +375,12 @@ async def validate_account(token: str):
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Invalid token"
+            detail="User not registered"
         )
     else:
         set_user_verified(username)
 
-    return {f"Account {username} validated"}
+    return {"detail": f"Account {username} validated"}
 
 
 # Upload image
@@ -388,24 +394,6 @@ async def upload_photo(
     else:
         upload_photo_db(user.username, photo)
         return {"detail": "Photo uploaded successfully"}
-
-
-@app.delete("/user/delete_user", tags=["Users"])
-async def user_delete(user_name: str):
-    """Deletes an user.
-    Args: \n
-        user_name (str): Name of the user to delete. \n
-    Raises: \n
-        HTTPException: The user does not exist. \n
-    Returns: \n
-        str: Verification text.
-    """
-    if not user_exists(user_name):
-        raise HTTPException(status_code=404, detail="user doesn't exist")
-
-    else:
-        delete_user(user_name)
-        return {"user successfully deleted"}
 
 
 # login
@@ -440,16 +428,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "id": user.id,
         "avatar": avatar,
     }
-
-
-@app.get("/user/me/")
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
-    return {"username": current_user.user_name}
-
-
-@app.get("/user/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.user_name}]
 
 
 @app.get("/users/stats", tags=["Users"], status_code=200)
