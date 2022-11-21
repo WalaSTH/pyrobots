@@ -64,6 +64,7 @@ export default function UserProfile() {
 
       {open && (
         <Snackbar
+          data-testid="profileSnackbar"
           open={open}
           body={body}
           severity={severity}

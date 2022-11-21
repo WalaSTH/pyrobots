@@ -39,7 +39,14 @@ function StatsCard({ stats }) {
           </ListItemAvatar>
           <ListItemText
             primary="Matches played"
-            secondary={stats ? stats.played_matches : <Skeleton width="40%" />}
+            secondary={
+              stats ? (
+                stats.played_matches
+              ) : (
+                <Skeleton width="40%" data-testid="statsSkeleton" />
+              )
+            }
+            secondaryTypographyProps={{ "data-testid": "statsMatches" }}
           />
         </ListItem>
 
@@ -49,7 +56,14 @@ function StatsCard({ stats }) {
           </ListItemAvatar>
           <ListItemText
             primary="Matches won"
-            secondary={stats ? stats.victories : <Skeleton width="40%" />}
+            secondary={
+              stats ? (
+                stats.victories
+              ) : (
+                <Skeleton width="40%" data-testid="statsSkeleton" />
+              )
+            }
+            secondaryTypographyProps={{ "data-testid": "statsWins" }}
           />
         </ListItem>
 
@@ -67,9 +81,10 @@ function StatsCard({ stats }) {
                   stats.victories / stats.played_matches + "%"
                 )
               ) : (
-                <Skeleton width="40%" />
+                <Skeleton width="40%" data-testid="statsSkeleton" />
               )
             }
+            secondaryTypographyProps={{ "data-testid": "statsRate" }}
           />
         </ListItem>
       </List>
@@ -116,6 +131,7 @@ export default function ProfileCard({ username, avatar, stats }) {
           }}
         >
           <IconButton
+            data-testid="userSettingsButton"
             onClick={handleClick}
             sx={{
               marginBottom: -4,
@@ -125,6 +141,7 @@ export default function ProfileCard({ username, avatar, stats }) {
           </IconButton>
 
           <Menu
+            data-testid="userSettingsMenu"
             open={menuOpen}
             onClose={handleClose}
             anchorEl={anchorEl}
@@ -141,6 +158,7 @@ export default function ProfileCard({ username, avatar, stats }) {
             <MenuItem onClick={handleClose}>Change password</MenuItem>
           </Menu>
         </Grid>
+
         <Grid
           item
           xs={12}
@@ -171,6 +189,7 @@ export default function ProfileCard({ username, avatar, stats }) {
               }
             >
               <Avatar
+                data-testid="userAvatar"
                 alt={username}
                 src={avatar || "none"}
                 sx={{
@@ -195,7 +214,9 @@ export default function ProfileCard({ username, avatar, stats }) {
             marginBottom: -0.5,
           }}
         >
-          <Typography sx={{ fontSize: "1.5rem" }}> {username} </Typography>
+          <Typography data-testid="userName" sx={{ fontSize: "1.5rem" }}>
+            {username}
+          </Typography>
         </Grid>
 
         <Grid
