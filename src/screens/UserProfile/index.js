@@ -19,38 +19,34 @@ export default function UserProfile() {
 
   const username = localStorage.getItem("username");
   const avatar = localStorage.getItem("avatar");
-  const [stats, setStats] = useState({});
+  const [stats, setStats] = useState(null);
 
-  useEffect(
-    function () {
-      async function fetchStats() {
-        return await axios
-          .get("http://127.0.0.1:8000/users/stats", {
-            params: {
-              checked_user: username,
-            },
-          })
-          .then((response) => {
-            setStats(response.data.stats);
-          })
-          .catch((error) => {
-            setSeverity("error");
-            if (
-              error.response &&
-              typeof error.response.data["detail"] != "object"
-            ) {
-              setBody(error.response.data["detail"]);
-            } else {
-              setBody("Unknown error");
-            }
-            setOpen(true);
-            setStats({});
-          });
-      }
-      fetchStats();
-    },
-    [username]
-  );
+  async function fetchStats(username) {
+    return await axios.get("http://127.0.0.1:8000/users/stats", {
+      params: {
+        checked_user: username,
+      },
+    });
+  }
+
+  useEffect(() => {
+    fetchStats(username)
+      .then((res) => {
+        setStats(res.data.stats);
+      })
+      .catch((error) => {
+        setSeverity("error");
+        if (
+          error.response &&
+          typeof error.response.data["detail"] != "object"
+        ) {
+          setBody(error.response.data["detail"]);
+        } else {
+          setBody("Unknown error");
+        }
+        setOpen(true);
+      });
+  }, [username]);
 
   return (
     <Container

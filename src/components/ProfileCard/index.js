@@ -46,7 +46,7 @@ function StatsCard({ stats }) {
                 <Skeleton width="40%" data-testid="statsSkeleton" />
               )
             }
-            secondaryTypographyProps={{ "data-testid": "statsMatches" }}
+            secondaryTypographyProps={stats && { "data-testid": "statsItem" }}
           />
         </ListItem>
 
@@ -63,7 +63,7 @@ function StatsCard({ stats }) {
                 <Skeleton width="40%" data-testid="statsSkeleton" />
               )
             }
-            secondaryTypographyProps={{ "data-testid": "statsWins" }}
+            secondaryTypographyProps={stats && { "data-testid": "statsItem" }}
           />
         </ListItem>
 
@@ -84,7 +84,7 @@ function StatsCard({ stats }) {
                 <Skeleton width="40%" data-testid="statsSkeleton" />
               )
             }
-            secondaryTypographyProps={{ "data-testid": "statsRate" }}
+            secondaryTypographyProps={stats && { "data-testid": "statsItem" }}
           />
         </ListItem>
       </List>
