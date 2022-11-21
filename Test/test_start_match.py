@@ -1,8 +1,7 @@
 from base64 import b64encode
-from fastapi import File, UploadFile
+from fastapi import File
 from fastapi.testclient import TestClient
 from Database.Database import *
-from starlette.middleware.cors import CORSMiddleware
 from app import app
 from Test.auxiliar_functions import *
 import random
@@ -142,7 +141,6 @@ def test_match_start_unexisting():
     response = client.post("/match/start", params = match_start)
     assert response.json() == {"detail": "Match not found."}
     assert response.status_code == 404
-    print(response.status_code)
 
 # Trying to start match with unexisting user
 def test_match_start_unexisting():
@@ -154,7 +152,6 @@ def test_match_start_unexisting():
     response = client.post("/match/start", params = match_start)
     assert response.json() == {"detail": "User not found."}
     assert response.status_code == 404
-    print(response.status_code)
 
 # Trying to start match without being the creator
 def test_match_start_not_creator():
@@ -166,7 +163,6 @@ def test_match_start_not_creator():
     response = client.post("/match/start", params = match_start)
     assert response.json() == {"detail": "User did not create the match."}
     assert response.status_code == 400
-    print(response.status_code)
 
 # Trying to start a match with less player amount than minimum
 def test_match_start_less_min():
@@ -191,12 +187,9 @@ def test_match_start_ok():
         "username": "TestingMatch1",
         "syscalls": False
     }
-    print(match_start)
-    print(get_match_robots_ids(new_match_start))
     response = client.post("/match/start", params = match_start)
     assert response.json() == {"detail": "Match successfully executed."}
     assert response.status_code == 200
-    print(response.status_code)
 
 # Trying to start a match that has already started
 def test_match_start_already():
@@ -208,4 +201,3 @@ def test_match_start_already():
     response = client.post("/match/start", params = match_start)
     assert response.json() == {"detail": "Match already started."}
     assert response.status_code == 400
-    print(response.status_code)
