@@ -110,9 +110,9 @@ def get_match_info(room_id):
 
 
         participants_list.append(({
-            "robot_name": r.robot_name, 
-            "robot_avatar": r_avatar, 
-            "user_name": r.owner.user_name, 
+            "robot_name": r.robot_name,
+            "robot_avatar": r_avatar,
+            "user_name": r.owner.user_name,
             "user_avatar": u_avatar
         }))
     data = {
@@ -151,7 +151,7 @@ def get_match_list(name, filter):
 
         case "hosted":
             match_list = Match.select(
-                lambda m: (not m.started) 
+                lambda m: (not m.started)
                 and m.creator.user_name == name
                 )[:]
 
@@ -223,7 +223,7 @@ def check_match_password(match, pwd):
 
 @db_session
 def check_user_connected(match_id, username):
-    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:]
+    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:] != []
 
 
 @db_session
@@ -290,9 +290,9 @@ def get_robot_list(owner_name, detailed):
         r_avatar = None
         if r.avatar is not None:
             r_avatar = r.avatar.decode()
-        
+
         if detailed:
-            res_list.append([r.id, r.robot_name, r.code, r_avatar])
+            res_list.append([r.id, r.robot_name, r.code, r.matches_played, r.matches_won, r_avatar])
         else:
             res_list.append([r.id, r.robot_name, r_avatar])
 
@@ -492,3 +492,38 @@ def check_user_quantity():
 @db_session
 def get_user_name_by_id(user_id):
     return User[user_id].user_name
+
+@db_session
+def set_user_verified(username):
+    user = User.get(user_name=username)
+    user.verified = True
+
+@db_session
+def update_user_password(name, new_pwd):
+    user = get_user(name)
+    user.password = new_pwd
+
+
+@db_session
+def update_user_avatar(name, picture):
+    user = get_user(name)
+    user.photo = picture.encode() if picture != None else None
+
+    return picture
+
+
+@db_session
+def get_user_pwd(username):
+    user = get_user(username)
+    return user.password
+
+
+def calculate_user_stats(username):
+    user = get_user(username)
+
+    stats = {
+        "played_matches" : user.matches_played,
+        "victories" : user.matches_won
+    }
+
+    return stats

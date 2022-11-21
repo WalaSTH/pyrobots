@@ -1,11 +1,12 @@
-from pydantic import BaseModel, EmailStr
-from fastapi import FastAPI, HTTPException, UploadFile, File
 from typing import List, Optional, Union
+
+from pydantic import BaseModel, EmailStr
 
 MIN_PLAYERS_PER_MATCH = 2
 MAX_PLAYERS_PER_MATCH = 4
 MAX_ROUNDS_PER_GAME = 10000
 MAX_GAMES_PER_MATCH = 200
+
 
 
 class Token(BaseModel):
@@ -20,9 +21,22 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 
+class ValidationData(BaseModel):
+    token: str
+
+
+class ResendValidationEmail(BaseModel):
+    username: str
+
+
 class User(BaseModel):
     username: str
     email: Optional[str] = None
+
+
+class RecoverData(BaseModel):
+    email: EmailStr
+    type: Optional[str]
 
 
 class TempMatch(BaseModel):
@@ -46,6 +60,7 @@ class MatchListParams(BaseModel):
     filter: str
 
 
+
 class Robot(BaseModel):
     robot_name: str
     creator: str
@@ -65,6 +80,15 @@ class JoiningMatch(BaseModel):
     match: int
     password: Optional[str]
 
+
 class LeavingMatch(BaseModel):
     username: str
     match: int
+
+
+class UpdateParams(BaseModel):
+    username: str
+    param: str
+    new_pic: Union[str, None] = None
+    new_pwd: Union[str, None] = None
+    current_pwd: Union[str, None] = None
