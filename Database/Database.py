@@ -150,7 +150,7 @@ def get_match_list(name, filter):
 
         case "hosted":
             match_list = Match.select(
-                lambda m: (not m.started) 
+                lambda m: (not m.started)
                 and m.creator.user_name == name
                 )[:]
 
@@ -172,19 +172,35 @@ def get_match_list(name, filter):
         for u in m.participants:
             participants_list.append(u.user_name)
 
-        res_list.append(
-            (
-                m.id,
-                m.password != "",
-                m.name,
-                m.current_players,
-                m.game_quantity,
-                m.round_quantity,
-                m.min_players,
-                m.max_players,
-                participants_list,
+        if (filter == "finished"):
+            res_list.append(
+                (
+                    m.id,
+                    m.password != "",
+                    m.name,
+                    m.current_players,
+                    m.game_quantity,
+                    m.round_quantity,
+                    m.min_players,
+                    m.max_players,
+                    participants_list,
+                    m.match_results.date
+                )
             )
-        )
+        else:
+            res_list.append(
+                (
+                    m.id,
+                    m.password != "",
+                    m.name,
+                    m.current_players,
+                    m.game_quantity,
+                    m.round_quantity,
+                    m.min_players,
+                    m.max_players,
+                    participants_list
+                )
+            )
 
     return res_list
 
