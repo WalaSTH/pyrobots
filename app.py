@@ -282,7 +282,7 @@ async def match_listing(list_params: MatchListParams = Depends()):
 
 # --- Result Endpoints ---
 @app.get("/match/result", tags=["Results"], status_code=200)
-async def get_results(info: ChosenMatch):
+async def get_results(info: ChosenMatch = Depends()):
     if not check_match_existance(info.match_id):
         raise HTTPException(status_code=404, detail=f"Match id {info.match_id} does not exist")
 
@@ -292,7 +292,7 @@ async def get_results(info: ChosenMatch):
     if not check_user_connected(info.match_id, info.username) != []:
         raise HTTPException(status_code=409, detail="You are not part of this match")
 
-    robots = []
+    return{"detail": "Results succesfully retrieved.", "data": get_match_results(info.match_id)}
 
 # --- User Endpoints ---
 @app.post("/user/signup", tags=["Users"], status_code=200)

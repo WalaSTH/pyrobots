@@ -255,10 +255,31 @@ def create_result(ranking, won_games, match):
     new_result = Result(ranking = ranking, won_games = won_games, match = Match[match], date = datetime.now())
 
 @db_session
-def get_results(match_id):
-    match_result = Result.select(lambda r: r.match == Match[match_id])
-    result_json = {
+def get_match_results(match_id):
+    match_result = Match[match_id].match_results
+    res = []
+
+    for r_id in range(len(match_result.ranking)):
+        robot_i = Robot[match_result.ranking[r_id]]
+
+        r_avatar = None
+        if robot_i.avatar is not None:
+            r_avatar = robot_i.avatar.decode()
+
+        robot_dict = {
+            "name": robot_i.robot_name,
+            "avatar": r_avatar,
+            "username": robot_i.owner.user_name,
+            "victories": match_result.won_games[r_id]
+        }
+
+        res.append(robot_dict)
+
+    result = {
+        "robot_list": res,
+        "date": match_result.date
     }
+    return result
 
 # --- Robot functions ---
 
