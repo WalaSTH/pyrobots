@@ -1,5 +1,6 @@
 import {
   Grid,
+  Card,
   List,
   LinearProgress,
   Container,
@@ -52,7 +53,7 @@ export default function Board() {
     stageRef.current.scale({ x: scale, y: scale });
   }
 
-  const colors = ["red", "green", "black", "purple"];
+  const colors = ["pink", "green", "black", "purple"];
 
   useEffect(() => {
     intervalRef.current = getInterval();
@@ -84,7 +85,10 @@ export default function Board() {
   return (
     <Container
       maxwidth="xl"
-      style={{ display: "flex", alignItems: "center" }}
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
       data-testid="boardContainer"
     >
       {dialogOpen && (
@@ -126,153 +130,176 @@ export default function Board() {
           </DialogActions>
         </Dialog>
       )}
-      <Grid
-        style={{
-          width: "80%",
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
         }}
       >
-        <Box
+        <Grid
           style={{
-            border: ".1rem solid black",
-            width: "100%",
+            width: "60%",
           }}
-          ref={stageParentRef}
         >
-          <Stage ref={stageRef} data-testid="board">
-            <Layer>
-              {frames.frames[position]
-                ? frames.frames[position].robots.map((robot) => {
-                    return (
-                      <Robot
-                        key={robot.id}
-                        radius={12}
-                        name={robot.name}
-                        x={robot.robotPosition ? robot.robotPosition.x : 100}
-                        y={robot.robotPosition ? robot.robotPosition.y : 200}
-                        fill={colors[robot.id % colors.length]}
-                      />
-                    );
-                  })
-                : setFinished(true)}
-              {frames.frames[position]
-                ? frames.frames[position].missiles.map((missile) => {
-                    return (
-                      <Missile
-                        key={missile.id}
-                        radius={7}
-                        x={
-                          missile.missilePosition.x
-                            ? missile.missilePosition.x
-                            : 100
-                        }
-                        y={
-                          missile.missilePosition.y
-                            ? missile.missilePosition.y
-                            : 100
-                        }
-                        fill={colors[missile.id]}
-                      />
-                    );
-                  })
-                : setFinished(true)}
-              {frames.frames[position]
-                ? frames.frames[position].explotions.map((explotion) => {
-                    return (
-                      <Missile
-                        key={explotion.id}
-                        radius={40}
-                        x={
-                          explotion.explotionPosition.x
-                            ? explotion.explotionPosition.x
-                            : 100
-                        }
-                        y={
-                          explotion.explotionPosition.y
-                            ? explotion.explotionPosition.y
-                            : 100
-                        }
-                        fill={colors[explotion.id]}
-                      />
-                    );
-                  })
-                : setFinished(true)}
-            </Layer>
-          </Stage>
-        </Box>
-        <Box
-          display="flex"
-          marginLeft="15px"
-          alignItems="center"
-          marginRight="15px"
-        >
-          <IconButton
-            children={paused ? <PlayArrowIcon /> : <PauseIcon />}
-            onClick={() => setPaused(!paused)}
-          />
-          <Slider
-            aria-label="Frame"
-            max={frames.frames.length}
-            style={{ marginLeft: "10px" }}
-            value={position}
-            onChange={(_, v) => {
-              setPosition(v);
+          <Box
+            style={{
+              border: ".05rem solid black",
+              borderRadius: ".5rem",
+              backgroundColor: "#f5f7ff",
+              width: "100%",
             }}
-          />
-        </Box>
-      </Grid>
-      <Box style={{ marginLeft: "3rem" }}>
-        <List
-          ref={lifeRef}
+            ref={stageParentRef}
+          >
+            <Stage ref={stageRef} data-testid="board">
+              <Layer>
+                {frames.frames[position]
+                  ? frames.frames[position].robots.map((robot) => {
+                      return (
+                        <Robot
+                          key={robot.id}
+                          radius={12}
+                          name={robot.name}
+                          x={robot.robotPosition ? robot.robotPosition.x : 100}
+                          y={robot.robotPosition ? robot.robotPosition.y : 200}
+                          fill={colors[robot.id % colors.length]}
+                        />
+                      );
+                    })
+                  : setFinished(true)}
+                {frames.frames[position]
+                  ? frames.frames[position].missiles.map((missile) => {
+                      return (
+                        <Missile
+                          key={missile.id}
+                          radius={7}
+                          x={
+                            missile.missilePosition.x
+                              ? missile.missilePosition.x
+                              : 100
+                          }
+                          y={
+                            missile.missilePosition.y
+                              ? missile.missilePosition.y
+                              : 100
+                          }
+                          fill={colors[missile.id]}
+                        />
+                      );
+                    })
+                  : setFinished(true)}
+                {frames.frames[position]
+                  ? frames.frames[position].explotions.map((explotion) => {
+                      return (
+                        <Missile
+                          key={explotion.id}
+                          radius={40}
+                          x={
+                            explotion.explotionPosition.x
+                              ? explotion.explotionPosition.x
+                              : 100
+                          }
+                          y={
+                            explotion.explotionPosition.y
+                              ? explotion.explotionPosition.y
+                              : 100
+                          }
+                          fill={colors[explotion.id]}
+                        />
+                      );
+                    })
+                  : setFinished(true)}
+              </Layer>
+            </Stage>
+          </Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            marginTop=".2rem"
+            sx={{
+              width: "100%",
+              border: 1,
+              borderColor: "solid black",
+              borderRadius: ".5rem",
+              paddingRight: "1rem",
+              backgroundColor: "white",
+            }}
+          >
+            <IconButton
+              children={paused ? <PlayArrowIcon /> : <PauseIcon />}
+              onClick={() => setPaused(!paused)}
+            />
+            <Slider
+              aria-label="Frame"
+              max={frames.frames.length}
+              style={{ marginLeft: "10px" }}
+              value={position}
+              onChange={(_, v) => {
+                setPosition(v);
+              }}
+            />
+          </Box>
+        </Grid>
+        <Box
           style={{
-            display: "flex",
-            flexDirection: "column",
+            marginLeft: "3rem",
           }}
         >
-          {frames.frames[position]
-            ? frames.frames[position].robots.map((robot) => {
-                return (
-                  <Grid
-                    key={robot.id}
-                    style={{
-                      marginBottom: "1rem",
-                      border: ".1rem solid black",
-                      padding: "1rem",
-                      width: "10rem",
-                      backgroundColor: colors[robot.id % colors.length],
-                    }}
-                  >
-                    <div
+          <List
+            ref={lifeRef}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {frames.frames[position]
+              ? frames.frames[position].robots.map((robot) => {
+                  return (
+                    <Card
+                      key={robot.id}
                       style={{
-                        color: "white",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        marginBottom: "5px",
+                        marginBottom: "1rem",
+                        border: ".1rem solid black",
+                        padding: "1rem",
+                        width: "10rem",
+                        backgroundColor: colors[robot.id % colors.length],
                       }}
                     >
-                      {robot.robotName}
-                    </div>
-                    <LinearProgress
-                      value={robot.health}
-                      variant="determinate"
-                      color="primary"
-                    />
-                    <div
-                      style={{
-                        color: "white",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        marginTop: "5px",
-                      }}
-                    >
-                      {robot.health + "%"}
-                    </div>
-                  </Grid>
-                );
-              })
-            : setPosition(frames.frames.length - 1)}
-        </List>
+                      <div
+                        style={{
+                          color: "white",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          marginBottom: "5px",
+                        }}
+                      >
+                        {robot.robotName}
+                      </div>
+                      <LinearProgress
+                        value={robot.health}
+                        variant="determinate"
+                        color="primary"
+                      />
+                      <div
+                        style={{
+                          color: "white",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          marginTop: "5px",
+                        }}
+                      >
+                        {robot.health + "%"}
+                      </div>
+                    </Card>
+                  );
+                })
+              : setPosition(frames.frames.length - 1)}
+          </List>
+        </Box>
       </Box>
     </Container>
   );
