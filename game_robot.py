@@ -118,7 +118,6 @@ class gameRobot:
     def set_speed_level(self):
         turn_kind = get_turn_kind(self.engine_previous_direction, self.engine_direction)
         if self.engine_turn_request and turn_kind != "Despicable":
-            turn_kind = self.get_turn_kind()
             match turn_kind:
                 case "Mild":
                     self.current_speed_level = self.current_speed_level - 1 if self.current_speed_level > 1 else 1
@@ -240,22 +239,24 @@ class gameRobot:
             # Get x and y to add
             y_add = get_y_add(MISSILE_SPEED, missile_direction)
             x_add = get_x_add(MISSILE_SPEED, missile_direction)
-            # Add them
-            self.missiles[i].x_position = (
-                self.missiles[i].x_position + x_add
-                if self.missiles[i].x_position + x_add < TABLE_HORIZONTAL_LENGHT
-                else TABLE_HORIZONTAL_LENGHT
-            )
-            if self.missiles[i].x_position < 0:
-                self.missiles[i].x_position = 0
 
-            self.missiles[i].y_position = (
-                self.missiles[i].y_position + y_add
-                if self.missiles[i].y_position + y_add < TABLE_VERTICAL_LENGHT
-                else TABLE_VERTICAL_LENGHT
-            )
-            if self.missiles[i].y_position < 0:
-                self.missiles[i].y_position = 0
+            # Add them
+            #self.missiles[i].x_position = self.missiles[i].x_position + x_add
+            if self.missiles[i].x_position + x_add < 1:
+                self.missiles[i].x_position = 1
+            else:
+                self.missiles[i].x_position = self.missiles[i].x_position + x_add
+            if self.missiles[i].x_position > TABLE_HORIZONTAL_LENGHT -1:
+                self.missiles[i].x_position = TABLE_HORIZONTAL_LENGHT -1
+
+
+            if self.missiles[i].y_position + y_add < 1:
+                self.missiles[i].y_position = 1
+            else:
+                self.missiles[i].y_position = self.missiles[i].y_position + y_add
+            if self.missiles[i].y_position > TABLE_VERTICAL_LENGHT -2:
+                self.missiles[i].y_position = TABLE_VERTICAL_LENGHT -2
+
             # Check if it has to explote
             self.missiles[i].remains = self.missiles[i].remains - 1 if self.missiles[i].remains - 1 > 0 else 0
             if self.missiles[i].remains == 0:
