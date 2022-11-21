@@ -11,9 +11,9 @@ import Lobby from "../screens/Lobby";
 import BrowseMatches from "../screens/BrowseMatches";
 import Board from "../screens/Board";
 import ResetPassword from "../screens/ResetPassword";
+import UserProfile from "../screens/UserProfile";
 import Recover from "../screens/Recover";
 import ValidateAccount from "../screens/ValidateAccount";
-import UserProfile from "../screens/UserProfile";
 
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
