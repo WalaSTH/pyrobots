@@ -8,6 +8,7 @@ MAX_ROUNDS_PER_GAME = 10000
 MAX_GAMES_PER_MATCH = 200
 
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -18,6 +19,14 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+
+class ValidationData(BaseModel):
+    token: str
+
+
+class ResendValidationEmail(BaseModel):
+    username: str
 
 
 class User(BaseModel):
@@ -49,6 +58,7 @@ class RobotOwner(BaseModel):
 class MatchListParams(BaseModel):
     name: str
     filter: str
+
 
 
 class Robot(BaseModel):

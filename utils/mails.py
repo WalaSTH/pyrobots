@@ -1,10 +1,11 @@
 from enum import Enum
+import sys
 
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from pydantic import EmailStr
 
 from Database.Database import User
-from security_functions import RESET_PASSWORD_TOKEN_EXPIRE_MINUTES
+from utils.auth import RESET_PASSWORD_TOKEN_EXPIRE_MINUTES, VALIDATE_TOKEN_EXPIRE_MINUTES
 
 conf = ConnectionConfig(
     MAIL_USERNAME = "noreplypyrobots@gmail.com",
@@ -49,3 +50,30 @@ async def send_recovery_email(
 
     fm = FastMail(conf)
     await fm.send_message(message, template_name=template)
+
+async def send_verification_email(
+    email: EmailStr,
+    username: str,
+    token: str
+):
+    if "pytest" in sys.modules:
+        print("Sending email...")
+        return
+
+    body = {
+        "username": username,
+        "email": email,
+        "token": token,
+        "expiration": VALIDATE_TOKEN_EXPIRE_MINUTES // 60
+    }
+
+    message = MessageSchema(
+        subject = "Validate Account",
+        recipients = [email],
+        template_body = body,
+        subtype = MessageType.html
+    )
+
+    fm = FastMail(conf)
+
+    await fm.send_message(message, template_name="validate_account.html")

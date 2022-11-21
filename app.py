@@ -13,10 +13,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from fastapi.security import OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
-from security_functions import *
+from utils.auth import *
+from jose import JWTError
 from pydantic_models import *
-from connections import *
-from random import *
+from connections import WebSocket, ConnectionManager
+from random import randint
+from utils.mails import send_verification_email
 from game_loop import *
 from utils.mails import RecoverType, send_recovery_email
 MAX_LEN_ALIAS = 16
@@ -27,7 +29,6 @@ MAX_LEN_EMAIL = 30
 MIN_LEN_EMAIL = 10
 MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
-
 
 description = """
     PyRobots 🤖
@@ -281,6 +282,7 @@ async def match_listing(list_params: MatchListParams = Depends()):
 
 
 # --- User Endpoints ---
+# Register
 @app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(
     username: str = Form(),
@@ -322,7 +324,63 @@ async def user_register(
         )
     else:
         create_user(username, email, get_password_hash(password), avatar)
+
+        token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+        token = generate_token(data={"username": username}, expires_delta=token_expiration)
+
+        await send_verification_email(email, username, token)
+
         return {"detail": "User created successfully"}
+
+
+# Resend validation email
+@app.post("/resend_validation", tags=["Validation"], status_code=200)
+async def resend_email(resend: ResendValidationEmail):
+    user = get_user(resend.username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invalid username"
+        )
+
+    token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+    token = generate_token(data={"username": resend.username}, expires_delta=token_expiration)
+
+    await send_verification_email(user.email, resend.username , token)
+
+    return {"detail": "Verification email sent"}
+
+
+# Validate Account
+@app.post("/validate_account", tags=["Validation"], status_code=200)
+async def validate_account(validation: ValidationData):
+    try:
+        payload = jwt.decode(validation.token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Link expired"
+        )
+
+    username = payload.get("username")
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Username can't be empty"
+        )
+
+    user = get_user(username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not registered"
+        )
+    else:
+        set_user_verified(username)
+
+    return {"detail": f"Account {username} validated"}
 
 
 # Upload image
@@ -345,7 +403,13 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail={"message": "Incorrect username or password"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    elif not user.verified:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"message": "This account is not verified", "email": user.email},
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -425,7 +489,7 @@ async def modify_logged_user(update_info: UpdateParams):
             return {"detail": "Password updated succesfully."}
 
         case "avatar":
-            avatar = update_user_avatar(update_info.username, update_info.new_pic)         
+            avatar = update_user_avatar(update_info.username, update_info.new_pic)
             return {"detail": "User updated succesfully.", "new_avatar": avatar}
 
 
