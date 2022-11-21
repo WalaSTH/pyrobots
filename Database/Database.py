@@ -222,7 +222,7 @@ def check_match_password(match, pwd):
 
 @db_session
 def check_user_connected(match_id, username):
-    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:]
+    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:] != []
 
 
 @db_session
@@ -492,6 +492,25 @@ def set_user_verified(username):
     user.verified = True
 
 @db_session
+def update_user_password(name, new_pwd):
+    user = get_user(name)
+    user.password = new_pwd
+
+
+@db_session
+def update_user_avatar(name, picture):
+    user = get_user(name)
+    user.photo = picture.encode() if picture != None else None
+
+    return picture
+
+
+@db_session
+def get_user_pwd(username):
+    user = get_user(username)
+    return user.password
+
+
 def calculate_user_stats(username):
     user = get_user(username)
 

@@ -211,7 +211,7 @@ async def match_join(
     if robot_id == None:
         raise HTTPException(status_code=404, detail=f"Robot {match_to_join.robot} does not exist or does not belong to you")
 
-    if check_user_connected(match_to_join.match, match_to_join.username) != []:
+    if check_user_connected(match_to_join.match, match_to_join.username):
         raise HTTPException(status_code=409, detail="You have already joined this match")
 
     if check_full_match(match_to_join.match):
@@ -245,7 +245,7 @@ async def match_leave(
     if not check_match_existance(match_to_leave.match):
         raise HTTPException(status_code=404, detail=f"Match id {match_to_leave.match} does not exist")
 
-    if not check_user_connected(match_to_leave.match, match_to_leave.username) != []:
+    if not check_user_connected(match_to_leave.match, match_to_leave.username):
         raise HTTPException(status_code=409, detail="You are not part of this match")
 
     user_id = get_user_id(match_to_leave.username)
@@ -427,6 +427,43 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "id": user.id,
         "avatar": avatar,
     }
+
+
+# Modify user
+@app.put("/user/update", tags=["Users"], status_code=200)
+async def modify_logged_user(update_info: UpdateParams):
+
+    if not user_exists(update_info.username):
+        raise HTTPException(status_code=404, detail=f"No user named {update_info.username}.")
+
+    if update_info.param != "avatar" and update_info.param != "password":
+        raise HTTPException(status_code=400, detail=f"Param {update_info.param} does not exist.")
+
+    match update_info.param:
+        case "password":
+            user = authenticate_user(update_info.username, update_info.current_pwd)
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="That is not your current password."
+                )
+
+            if (
+                any(char.isupper() for char in update_info.new_pwd) == False
+                or any(char.islower() for char in update_info.new_pwd) == False
+                or any(char.isdigit() for char in update_info.new_pwd) == False
+            ):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Password must have at least one uppercase, one lowercase and one number."
+                )
+            update_user_password(update_info.username, get_password_hash(update_info.new_pwd))
+
+            return {"detail": "Password updated succesfully."}
+
+        case "avatar":
+            avatar = update_user_avatar(update_info.username, update_info.new_pic)
+            return {"detail": "User updated succesfully.", "new_avatar": avatar}
 
 
 @app.get("/users/stats", tags=["Users"], status_code=200)
