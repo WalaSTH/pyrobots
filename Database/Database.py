@@ -222,7 +222,7 @@ def check_match_password(match, pwd):
 
 @db_session
 def check_user_connected(match_id, username):
-    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:]
+    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:] != []
 
 
 @db_session
@@ -285,7 +285,7 @@ def get_robot_list(owner_name, detailed):
             r_avatar = r.avatar.decode()
         
         if detailed:
-            res_list.append([r.id, r.robot_name, r.code, r_avatar])
+            res_list.append([r.id, r.robot_name, r.code, r.matches_played, r.matches_won, r_avatar])
         else:
             res_list.append([r.id, r.robot_name, r_avatar])
 
@@ -485,3 +485,34 @@ def check_user_quantity():
 @db_session
 def get_user_name_by_id(user_id):
     return User[user_id].user_name
+
+
+@db_session
+def update_user_password(name, new_pwd):
+    user = get_user(name)
+    user.password = new_pwd
+
+
+@db_session
+def update_user_avatar(name, picture):
+    user = get_user(name)
+    user.photo = picture.encode() if picture != None else None
+
+    return picture
+
+
+@db_session
+def get_user_pwd(username):
+    user = get_user(username)
+    return user.password
+
+
+def calculate_user_stats(username):
+    user = get_user(username)
+
+    stats = {
+        "played_matches" : user.matches_played,
+        "victories" : user.matches_won
+    }
+
+    return stats
