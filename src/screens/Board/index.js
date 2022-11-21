@@ -17,7 +17,9 @@ import {
 import {
   PlayArrow as PlayArrowIcon,
   Pause as PauseIcon,
+  Refresh as RefreshIcon,
 } from "@mui/icons-material";
+import { purple, pink, deepOrange, teal } from "@mui/material/colors";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Stage, Layer } from "react-konva";
 import Robot from "../../components/Game/Robot";
@@ -53,7 +55,7 @@ export default function Board() {
     stageRef.current.scale({ x: scale, y: scale });
   }
 
-  const colors = ["pink", "green", "black", "purple"];
+  const colors = [purple[500], pink[500], deepOrange[500], teal[300]];
 
   useEffect(() => {
     intervalRef.current = getInterval();
@@ -107,16 +109,6 @@ export default function Board() {
                 variant="filled"
                 sx={{ color: "primary.main" }}
                 onClick={() => {
-                  setDialogOpen(false);
-                  navigate("/");
-                }}
-              >
-                Back to home
-              </Button>
-              <Button
-                variant="filled"
-                sx={{ color: "primary.main" }}
-                onClick={() => {
                   intervalRef.current = getInterval();
                   setFinished(false);
                   setPosition(frames.frames.length - 1);
@@ -125,6 +117,16 @@ export default function Board() {
                 }}
               >
                 Stay in simulation
+              </Button>
+              <Button
+                variant="filled"
+                sx={{ color: "red" }}
+                onClick={() => {
+                  setDialogOpen(false);
+                  navigate("/");
+                }}
+              >
+                Back to home
               </Button>
             </Box>
           </DialogActions>
@@ -195,7 +197,7 @@ export default function Board() {
                       return (
                         <Missile
                           key={explotion.id}
-                          radius={40}
+                          radius={30}
                           x={
                             explotion.explotionPosition.x
                               ? explotion.explotionPosition.x
@@ -230,6 +232,16 @@ export default function Board() {
             <IconButton
               children={paused ? <PlayArrowIcon /> : <PauseIcon />}
               onClick={() => setPaused(!paused)}
+            />
+            <IconButton
+              sx={{ marginLeft: "-.5rem" }}
+              children={<RefreshIcon />}
+              onClick={() => {
+                setFinished(false);
+                setPosition(0);
+                setPaused(false);
+                setDialogOpen(false);
+              }}
             />
             <Slider
               aria-label="Frame"
