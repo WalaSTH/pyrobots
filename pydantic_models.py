@@ -1,5 +1,6 @@
-from pydantic import BaseModel, EmailStr
 from typing import List, Optional, Union
+
+from pydantic import BaseModel, EmailStr
 
 MIN_PLAYERS_PER_MATCH = 2
 MAX_PLAYERS_PER_MATCH = 4
@@ -36,6 +37,11 @@ class User(BaseModel):
 class ResetData(BaseModel):
     token: str
     password: str
+
+
+class RecoverData(BaseModel):
+    email: EmailStr
+    type: Optional[str]
 
 
 class TempMatch(BaseModel):

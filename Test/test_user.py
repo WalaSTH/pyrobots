@@ -1,12 +1,11 @@
 from datetime import timedelta
 from unittest.mock import ANY
-
 from fastapi.testclient import TestClient
 from Database.Database import *
 from Test.auxiliar_functions import *
-from starlette.middleware.cors import CORSMiddleware
 from base64 import b64encode
 from app import app
+from utils.mails import RecoverType
 from utils.auth import generate_token
 import random
 import string
@@ -99,6 +98,7 @@ def test_user_register_invalid_username():
     assert response.status_code == 401
     assert response.json() == {"detail": "field size is invalid"}
 
+
 #Creation new user with invalid password
 def test_user_register_invalid_password_all_lower():
     user_to_reg = {
@@ -111,6 +111,7 @@ def test_user_register_invalid_password_all_lower():
     assert response.status_code == 401
     assert response.json() == {"detail": "password must have at least one uppercase, one lowercase and one number"}
 
+
 def test_user_register_invalid_password_all_upper():
     user_to_reg = {
         "username": "test_ur_5",
@@ -121,6 +122,7 @@ def test_user_register_invalid_password_all_upper():
     response = client.post("/user/signup", data=user_to_reg)
     assert response.status_code == 401
     assert response.json() == {"detail": "password must have at least one uppercase, one lowercase and one number"}
+
 
 def test_user_register_invalid_password_all_number():
     user_to_reg = {
@@ -133,6 +135,7 @@ def test_user_register_invalid_password_all_number():
     assert response.status_code == 401
     assert response.json() == {"detail": "password must have at least one uppercase, one lowercase and one number"}
 
+
 def test_password_short_size():
     user_to_reg = {
         "username": "test_pw_1",
@@ -143,6 +146,7 @@ def test_password_short_size():
     response = client.post("/user/signup", data=user_to_reg)
     assert response.status_code == 401
     assert response.json() == {"detail": "field size is invalid"}
+
 
 def test_upload_photo():
     username = "test_up_1"
@@ -161,6 +165,7 @@ def test_upload_photo():
     assert response.status_code == 200
     assert response.json() == {"detail": "Photo uploaded successfully"}
 
+
 def test_upload_photo_invalid_username():
     username = "test_up_2"
     photo = b64encode(open("Test/test.jpg", "rb").read())
@@ -168,6 +173,53 @@ def test_upload_photo_invalid_username():
     response = client.post("/user/upload_photo", data={"photo": photo}, params={"username": username})
     assert response.status_code == 401
     assert response.json() == {"detail": "user does not exist"}
+
+
+def test_recovery_mail_with_invalid_type():
+    email = get_email()
+    invalid_type = "invalid_type"
+    response = client.post("/user/recover", json={"email": email, "type": invalid_type})
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": f"'{invalid_type}' is not a valid RecoverType"}
+
+
+def test_recovery_mail_with_none_type():
+    email = get_email()
+    none_type = None
+    response = client.post("/user/recover", json={"email": email, "type": none_type})
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": f"{none_type} is not a valid RecoverType"}
+
+
+def test_recovery_mail_with_non_existant_user():
+    email = get_email()
+    valid_type = "password"
+    response = client.post("/user/recover", json={"email": email, "type": valid_type})
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": "There is no user with this email"}
+
+
+def test_recovery_mail_is_sent_with_existant_user(mocker):
+    user_to_reg = {
+        "username": (get_random_string_lower(5)),
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+        "avatar": None,
+    }
+
+    client.post("/user/signup", data=user_to_reg)
+    user = get_user(user_to_reg["username"])
+    valid_type = RecoverType.PASSWORD
+
+    mock_send_email = mocker.patch("app.send_recovery_email")
+    response = client.post("/user/recover", json={"email": user.email, "type": valid_type.value})
+
+    mock_send_email.assert_called_once()
+    assert response.json() == {"detail": "Email has been sent"}
+
 
 def test_user_not_verified():
     username = "test_uv_1"
@@ -198,7 +250,7 @@ def test_resend_validation_with_non_existant_user():
     assert response.status_code == 404
     assert response.json() == {"detail": "Invalid username"}
 
-def test_resend_validation_with_existant_user_resends_email(mocker):
+def test_resend_validation_with_existant_user(mocker):
     user_to_reg = {
         "username": "test_rv_2",
         "password": (get_random_string_goodps(8)),

@@ -20,7 +20,7 @@ from connections import WebSocket, ConnectionManager
 from random import randint
 from utils.mails import send_verification_email
 from game_loop import *
-
+from utils.mails import RecoverType, send_recovery_email
 MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
 MAX_LEN_PASSWORD = 16
@@ -58,6 +58,7 @@ tags_metadata = [
     {"name": "Token", "description": "Token login"},
     {"name": "matches", "description": "Operations with matches"},
     {"name": "Robots", "description": "Manage Robot"},
+    {"name": "Recovery", "description": "Email service to recover password and username"}
 ]
 
 app = FastAPI(
@@ -413,7 +414,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = generate_token(
-        data={"sub": user.user_name}, expires_delta=access_token_expires
+        data={"username": user.user_name}, expires_delta=access_token_expires
     )
 
     avatar = None
@@ -427,6 +428,32 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "id": user.id,
         "avatar": avatar,
     }
+
+# Recovery mail
+@app.post("/user/recover", tags=["Recovery"], status_code=200)
+async def recovery_mail(recover: RecoverData):
+    try:
+        recover_type = RecoverType(recover.type)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=401,
+            detail=str(e)
+        )
+
+    user = get_user_by_email(recover.email)
+
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="There is no user with this email"
+        )
+
+    token_expiration = timedelta(minutes=RESET_PASSWORD_TOKEN_EXPIRE_MINUTES)
+    token = generate_token(data={"username": user.user_name}, expires_delta=token_expiration)
+
+    await send_recovery_email(recover.email, user, recover_type, token)
+
+    return {"detail": "Email has been sent"}
 
 
 # Reset password
