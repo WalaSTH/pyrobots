@@ -16,6 +16,11 @@ export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
   const userID = localStorage.getItem("userID");
   const username = localStorage.getItem("username");
+  const simID = localStorage.getItem("simID");
+  if (simID && window.location.pathname !== "/board/" + simID) {
+    localStorage.removeItem(simID);
+    localStorage.removeItem("simID");
+  }
 
   return (
     <Routes>
