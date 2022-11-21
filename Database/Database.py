@@ -1,6 +1,7 @@
 from pony.orm import *
 import sys
 from datetime import *
+from pathlib import Path
 
 db = pony.orm.Database()
 
@@ -260,10 +261,16 @@ def create_result(ranking, won_games, match):
 
 @db_session
 def create_robot(robot_name, creator, code, avatar):
+    if type(code) == str:
+        robot_code = open(code, "rb").read()
+        class_name = str(Path(code).stem) + ".py"
+    else:
+        robot_code = code.file.read()
+        class_name = code.filename
     new_robot = Robot(
         robot_name=robot_name,
-        code=code.file.read(),
-        robot_class_name=code.filename,
+        code=robot_code,
+        robot_class_name=class_name,
         owner=creator,
         matches_played=0,
         matches_won=0

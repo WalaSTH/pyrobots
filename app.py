@@ -324,6 +324,9 @@ async def user_register(
         )
     else:
         create_user(username, email, get_password_hash(password), avatar)
+        new_id = get_last_user_id()
+        create_robot("Spinner Cheto", new_id, "default_bots/spinner_Cheto.py", None)
+        create_robot("Sniper Cheto", new_id, "default_bots/sniper_Cheto.py", None)
 
         token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
         token = generate_token(data={"username": username}, expires_delta=token_expiration)
