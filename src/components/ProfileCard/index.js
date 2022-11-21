@@ -41,7 +41,14 @@ function StatsCard({ stats }) {
           </ListItemAvatar>
           <ListItemText
             primary="Matches played"
-            secondary={stats ? stats.played_matches : <Skeleton width="40%" />}
+            secondary={
+              stats ? (
+                stats.played_matches
+              ) : (
+                <Skeleton width="40%" data-testid="statsSkeleton" />
+              )
+            }
+            secondaryTypographyProps={stats && { "data-testid": "statsItem" }}
           />
         </ListItem>
 
@@ -51,7 +58,14 @@ function StatsCard({ stats }) {
           </ListItemAvatar>
           <ListItemText
             primary="Matches won"
-            secondary={stats ? stats.victories : <Skeleton width="40%" />}
+            secondary={
+              stats ? (
+                stats.victories
+              ) : (
+                <Skeleton width="40%" data-testid="statsSkeleton" />
+              )
+            }
+            secondaryTypographyProps={stats && { "data-testid": "statsItem" }}
           />
         </ListItem>
 
@@ -69,9 +83,10 @@ function StatsCard({ stats }) {
                   stats.victories / stats.played_matches + "%"
                 )
               ) : (
-                <Skeleton width="40%" />
+                <Skeleton width="40%" data-testid="statsSkeleton" />
               )
             }
+            secondaryTypographyProps={stats && { "data-testid": "statsItem" }}
           />
         </ListItem>
       </List>
@@ -141,6 +156,7 @@ export default function ProfileCard({
           }}
         >
           <IconButton
+            data-testid="userSettingsButton"
             onClick={handleClick}
             sx={{
               marginBottom: -4,
@@ -150,6 +166,7 @@ export default function ProfileCard({
           </IconButton>
 
           <Menu
+            data-testid="userSettingsMenu"
             open={menuOpen}
             onClose={handleClose}
             anchorEl={anchorEl}
@@ -163,6 +180,7 @@ export default function ProfileCard({
             }}
           >
             <MenuItem
+              data-testid="menuItem"
               onClick={() => {
                 handleClose();
                 handleAvatarDialogOpen();
@@ -171,6 +189,7 @@ export default function ProfileCard({
               Change avatar
             </MenuItem>
             <MenuItem
+              data-testid="menuItem"
               onClick={() => {
                 handleClose();
                 handlePasswordDialogOpen();
@@ -227,6 +246,7 @@ export default function ProfileCard({
               }
             >
               <Avatar
+                data-testid="userAvatar"
                 alt={username}
                 src={avatar || "none"}
                 sx={{
@@ -251,7 +271,9 @@ export default function ProfileCard({
             marginBottom: -0.5,
           }}
         >
-          <Typography sx={{ fontSize: "1.5rem" }}> {username} </Typography>
+          <Typography data-testid="userName" sx={{ fontSize: "1.5rem" }}>
+            {username}
+          </Typography>
         </Grid>
 
         <Grid

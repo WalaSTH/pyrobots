@@ -40,10 +40,7 @@ export default function DrawerWrapper({
   const username = localStorage.getItem("username");
 
   function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userID");
-    localStorage.removeItem("username");
-    localStorage.removeItem("avatar");
+    localStorage.clear();
     navigate("/");
   }
 

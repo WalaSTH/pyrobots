@@ -64,6 +64,9 @@
     "react-test-renderer": "^18.2.0"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "^konva": "konva/konva"
+    }
   }
 }

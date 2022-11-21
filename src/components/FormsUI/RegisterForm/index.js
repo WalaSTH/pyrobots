@@ -9,7 +9,7 @@ import SubmitFormButton from "../../FormsUI/SubmitFormButton";
 import TextField from "../../FormsUI/TextField";
 
 // MUI components
-import { Card, Grid, Typography } from "@mui/material";
+import { Card, Grid, Typography, Box, LinearProgress } from "@mui/material";
 
 // MUI icons
 import PersonIcon from "@mui/icons-material/Person";
@@ -40,7 +40,7 @@ const formValidation = Yup.object().shape({
   ),
 });
 
-export default function RegisterUserForm({ handleSubmit }) {
+export default function RegisterUserForm({ handleSubmit, loading }) {
   return (
     <Formik
       initialValues={{
@@ -151,6 +151,11 @@ export default function RegisterUserForm({ handleSubmit }) {
 
             <Grid item xs={12}>
               <SubmitFormButton>Register</SubmitFormButton>
+              {loading && (
+                <Box sx={{ width: "100%" }}>
+                  <LinearProgress color="secondary" />
+                </Box>
+              )}
             </Grid>
           </Grid>
         </Form>
