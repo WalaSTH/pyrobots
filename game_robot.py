@@ -173,7 +173,7 @@ class gameRobot:
                     self.x_position, self.y_position, x_enemy, y_enemy
                 )
                 # check if robot is on angle range
-                if enemy_distance < self.scan_len and enemy_distance < self.scan_result:
+                if enemy_distance <= self.scan_len and enemy_distance < self.scan_result:
                     enemy_angle = calculate_angle(
                         self.x_position,
                         self.y_position,
@@ -182,12 +182,9 @@ class gameRobot:
                         enemy_distance,
                     )
                     if upper_angle > lower_angle:
-                        #regular case
                         if enemy_angle >= lower_angle and enemy_angle <= upper_angle:
-                            # enemy is on range and closer than previous
                             self.scan_result = enemy_distance
                     elif y_enemy >= self.y_position:
-                        #weird case and enemy is 1st quadrant
                         if enemy_angle <= lower_angle and enemy_angle <= upper_angle:
                             self.scan_result = enemy_distance
                     else:
@@ -240,11 +237,10 @@ class gameRobot:
         n_missiles = len(self.missiles)
         for i in range(n_missiles):
             missile_direction = self.missiles[i].direction
-            missile_distance = self.missiles[i].distance
-            # calcular nuevo punto x,y para el misil
+            # Get x and y to add
             y_add = get_y_add(MISSILE_SPEED, missile_direction)
             x_add = get_x_add(MISSILE_SPEED, missile_direction)
-            # sumar y mover
+            # Add them
             self.missiles[i].x_position = (
                 self.missiles[i].x_position + x_add
                 if self.missiles[i].x_position + x_add < TABLE_HORIZONTAL_LENGHT
@@ -260,10 +256,10 @@ class gameRobot:
             )
             if self.missiles[i].y_position < 0:
                 self.missiles[i].y_position = 0
-            # ver si explota
+            # Check if it has to explote
             self.missiles[i].remains = self.missiles[i].remains - 1 if self.missiles[i].remains - 1 > 0 else 0
             if self.missiles[i].remains == 0:
-                # explotar misil
+                # Explote missile
                 new_explotion = Explotion(self.robot_id, self.game_id_robot, self.missiles[i].x_target, self.missiles[i].y_target)
                 explotion_list.append(new_explotion)
                 self.missiles.remove(self.missiles[i])
