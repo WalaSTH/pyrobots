@@ -23,11 +23,11 @@ from game_loop import *
 from utils.mails import RecoverType, send_recovery_email
 MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
-MAX_LEN_PASSWORD = 16
-MIN_LEN_PASSWORD = 7
-MAX_LEN_EMAIL = 30
+MAX_LEN_PASSWORD = 69
+MIN_LEN_PASSWORD = 8
+MAX_LEN_EMAIL = 69
 MIN_LEN_EMAIL = 10
-MAX_LEN_NAME_GAME = 10
+MAX_LEN_NAME_GAME = 20
 MIN_LEN_NAME_GAME = 3
 
 description = """
@@ -293,13 +293,13 @@ async def user_register(
     """USER REGISTER FUNCTION"""
 
     invalid_fields = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED, detail="field size is invalid"
+        status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid field size"
     )
     if (
         len(username) > MAX_LEN_ALIAS
         or len(username) < MIN_LEN_ALIAS
         or len(password) > MAX_LEN_PASSWORD
-        or len(password) <= MIN_LEN_PASSWORD
+        or len(password) < MIN_LEN_PASSWORD
         or len(email) > MAX_LEN_EMAIL
         or len(email) < MIN_LEN_EMAIL
     ):
@@ -454,6 +454,61 @@ async def recovery_mail(recover: RecoverData):
     await send_recovery_email(recover.email, user, recover_type, token)
 
     return {"detail": "Email has been sent"}
+
+
+# Reset password
+@app.put("/user/reset_password", tags=["Recovery"], status_code=200)
+async def reset_password(reset: ResetData):
+    if (
+        len(reset.password) < 8
+        or any(char.isupper() for char in reset.password) == False
+        or any(char.islower() for char in reset.password) == False
+        or any(char.isdigit() for char in reset.password) == False
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="password must have at least one uppercase, one lowercase and one number"
+        )
+
+    try:
+        payload = jwt.decode(reset.token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Link expired"
+        )
+
+    username = payload.get("username")
+
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail= "Username can't be empty"
+        )
+
+    user = get_user(username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not registered"
+        )
+    else:
+        update_user_password(user.user_name, get_password_hash(reset.password))
+
+    return {"detail": "Password updated"}
+
+# Check if token is expired
+@app.get("/token/status", tags=["Token"], status_code=200)
+async def get_token_status(token: str):
+    try:
+        jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired"
+        )
+    return {"detail": "Token is not expired"}
 
 
 # Modify user

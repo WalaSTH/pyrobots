@@ -34,6 +34,11 @@ class User(BaseModel):
     email: Optional[str] = None
 
 
+class ResetData(BaseModel):
+    token: str
+    password: str
+
+
 class RecoverData(BaseModel):
     email: EmailStr
     type: Optional[str]
