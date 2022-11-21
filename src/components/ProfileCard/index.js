@@ -154,8 +154,12 @@ export default function ProfileCard({ username, avatar, stats }) {
               horizontal: "center",
             }}
           >
-            <MenuItem onClick={handleClose}>Change user avatar</MenuItem>
-            <MenuItem onClick={handleClose}>Change password</MenuItem>
+            <MenuItem data-testid="menuItem" onClick={handleClose}>
+              Change user avatar
+            </MenuItem>
+            <MenuItem data-testid="menuItem" onClick={handleClose}>
+              Change password
+            </MenuItem>
           </Menu>
         </Grid>
 
