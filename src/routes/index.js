@@ -11,11 +11,18 @@ import Lobby from "../screens/Lobby";
 import BrowseMatches from "../screens/BrowseMatches";
 import Board from "../screens/Board";
 import UserProfile from "../screens/UserProfile";
+import Recover from "../screens/Recover";
+import ValidateAccount from "../screens/ValidateAccount";
 
 export default function RoutesWrapper({ navigate }) {
   const token = localStorage.getItem("token");
   const userID = localStorage.getItem("userID");
   const username = localStorage.getItem("username");
+  const simID = localStorage.getItem("simID");
+  if (simID && window.location.pathname !== "/board/" + simID) {
+    localStorage.removeItem(simID);
+    localStorage.removeItem("simID");
+  }
 
   return (
     <Routes>
@@ -31,7 +38,8 @@ export default function RoutesWrapper({ navigate }) {
         path="/login"
         element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
       />
-      <Route path="/recover" element={<></>} />
+      <Route path="/recover" element={<Recover />} />
+      <Route path="/validate-account" element={<ValidateAccount />} />
       <Route element={<PrivateRoute />}>
         <Route path="/list-robot" element={<ListRobot />} />
         <Route path="/browse-matches" element={<BrowseMatches />} />

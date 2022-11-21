@@ -168,18 +168,6 @@ exports[`<LoginForm component rendering 1`] = `
       <div
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
       >
-        <a
-          className="MuiTypography-root MuiTypography-body2 MuiLink-root MuiLink-underlineAlways css-101ca9i-MuiTypography-root-MuiLink-root"
-          href="/register"
-          onBlur={[Function]}
-          onFocus={[Function]}
-        >
-          Don't have an account? Sign Up
-        </a>
-      </div>
-      <div
-        className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
-      >
         <div
           className="MuiBox-root css-1l4w6pd"
         >
@@ -209,6 +197,18 @@ exports[`<LoginForm component rendering 1`] = `
             </a>
           </div>
         </div>
+      </div>
+      <div
+        className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+      >
+        <a
+          className="MuiTypography-root MuiTypography-body2 MuiLink-root MuiLink-underlineAlways css-101ca9i-MuiTypography-root-MuiLink-root"
+          href="/register"
+          onBlur={[Function]}
+          onFocus={[Function]}
+        >
+          Don't have an account? Sign Up
+        </a>
       </div>
     </div>
   </form>
