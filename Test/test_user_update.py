@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from Database.Database import *
 from Test.auxiliar_functions import *
-from security_functions import verify_password
+from utils.auth import verify_password
 from app import app
 
 client = TestClient(app)
