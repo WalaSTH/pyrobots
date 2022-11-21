@@ -365,7 +365,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "avatar": avatar,
     }
 
-#3UVQ77jOg#Fw
 # Recovery mail
 @app.post("/user/recover", tags=["Recovery"], status_code=200)
 async def recovery_mail(recover: RecoverData):
@@ -377,7 +376,7 @@ async def recovery_mail(recover: RecoverData):
             detail=str(e)
         )
 
-    user = get_user_by_email(recover.email);
+    user = get_user_by_email(recover.email)
 
     if user is None:
         raise HTTPException(
