@@ -1,6 +1,4 @@
-from cmath import pi
 import math
-from enum import Enum
 from Database.Database import *
 from pydantic_models import *
 from game_auxilar_functions import *
@@ -61,6 +59,7 @@ class Explotion:
         self.y_position = y
 
 class gameRobot:
+    # default attributes
     robot_id: int
     game_id_robot: int
     robot_name: str
@@ -116,28 +115,8 @@ class gameRobot:
         self.x_position = x
         self.y_position = y
 
-    def get_actual_velocity(self):
-        return (
-            SPEED_100_PERCENT * (self.engine_velocity   / 100)  * self.current_speed_level * 20 / 100
-        )
-
-    def get_turn_kind(self):
-        kind: Enum("Despicable", "Mild", "Moderate", "Severe")
-        difference = abs(self.engine_previous_direction - self.engine_direction)
-        if difference > 180:
-            difference = 360 - difference
-        if difference <=10:
-            kind = "Despicable"
-        elif difference <= 20:
-            kind = "Mild"
-        elif difference <= 45 :
-            kind = "Moderate"
-        else:
-            kind = "Severe"
-        return kind
-
     def set_speed_level(self):
-        turn_kind = self.get_turn_kind()
+        turn_kind = get_turn_kind(self.engine_previous_direction, self.engine_direction)
         if self.engine_turn_request and turn_kind != "Despicable":
             turn_kind = self.get_turn_kind()
             match turn_kind:
@@ -157,7 +136,7 @@ class gameRobot:
     def move(self):
         if self.engine_activated:
             self.set_speed_level()
-            current_velocity = self.get_actual_velocity()
+            current_velocity = get_actual_velocity(SPEED_100_PERCENT, self.engine_velocity, self.current_speed_level)
             y_add = get_y_add(current_velocity, self.engine_direction)
             x_add = get_x_add(current_velocity, self.engine_direction)
             self.x_position = (
@@ -281,7 +260,6 @@ class gameRobot:
             )
             if self.missiles[i].y_position < 0:
                 self.missiles[i].y_position = 0
-            #print("Missile is in (" + str(self.missiles[i].x_position) + ", "+str(self.missiles[i].y_position) + ").")
             # ver si explota
             self.missiles[i].remains = self.missiles[i].remains - 1 if self.missiles[i].remains - 1 > 0 else 0
             if self.missiles[i].remains == 0:
@@ -289,11 +267,11 @@ class gameRobot:
                 new_explotion = Explotion(self.robot_id, self.game_id_robot, self.missiles[i].x_target, self.missiles[i].y_target)
                 explotion_list.append(new_explotion)
                 self.missiles.remove(self.missiles[i])
-                #print("Missile exploted")
 
     def deal_damage(self, damage):
         self.health = self.health - damage if self.health - damage > 0 else 0
-    ###### User accesible methods
+
+    ###### Player methods
 
     # Cannon
     def is_cannon_ready(self):
@@ -328,8 +306,8 @@ class gameRobot:
         self.engine_activated = True
 
     # Status
-    def get_directions():
-        return "here you go"
+    def get_directions(self):
+        return self.engine_direction
 
     def get_velocity(self):
         return self.engine_velocity
