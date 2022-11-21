@@ -1,4 +1,5 @@
 from enum import Enum
+import sys
 
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from pydantic import EmailStr
@@ -20,16 +21,27 @@ conf = ConnectionConfig(
     TEMPLATE_FOLDER='./templates/email'
 )
 
+
 class RecoverType(str, Enum):
     USERNAME = "username"
     PASSWORD = "password"
+
 
 async def send_verification_email(
     email: EmailStr,
     username: str,
     token: str
 ):
-    body = { "username": username, "email": email, "token": token, "expiration": VALIDATE_TOKEN_EXPIRE_MINUTES // 60}
+    if "pytest" in sys.modules:
+        print("Sending email...")
+        return
+
+    body = {
+        "username": username,
+        "email": email,
+        "token": token,
+        "expiration": VALIDATE_TOKEN_EXPIRE_MINUTES // 60
+    }
 
     message = MessageSchema(
         subject = "Validate Account",

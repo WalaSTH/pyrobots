@@ -1,9 +1,13 @@
+from datetime import timedelta
+from unittest.mock import ANY
+
 from fastapi.testclient import TestClient
 from Database.Database import *
 from Test.auxiliar_functions import *
 from starlette.middleware.cors import CORSMiddleware
 from base64 import b64encode
 from app import app
+from security_functions import generate_token
 import random
 import string
 
@@ -24,6 +28,66 @@ def test_user_register():
     assert response.status_code == 200
     delete_user(user_to_reg["username"])
 
+
+def test_user_register_sends_email(mocker):
+    user_to_reg = {
+        "username": (get_random_string_lower(5)),
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+        "avatar": None,
+    }
+
+    mock_send_email = mocker.patch("app.send_verification_email")
+
+    client.post("/user/signup", data=user_to_reg)
+
+    mock_send_email.assert_called_once_with(
+        user_to_reg["email"], user_to_reg["username"], ANY
+    )
+
+    delete_user(user_to_reg["username"])
+
+def test_user_register_with_existant_username_responds_401():
+    user_to_reg1 = {
+        "username": "testUser",
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+        "avatar": None,
+    }
+
+    user_to_reg2 = {
+        "username": "testUser",
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+        "avatar": None,
+    }
+
+    client.post("/user/signup", data=user_to_reg1)
+    response = client.post("/user/signup", data=user_to_reg2)
+
+    assert response.json() == {"detail": "existing username"}
+    assert response.status_code == 401
+
+def test_user_register_with_existant_email_responds_401():
+    user_to_reg1 = {
+        "username": get_random_string_lower(5),
+        "password": (get_random_string_goodps(8)),
+        "email": "testEmail@gmail.com",
+        "avatar": None,
+    }
+
+    user_to_reg2 = {
+        "username": get_random_string_lower(5),
+        "password": (get_random_string_goodps(8)),
+        "email": "testEmail@gmail.com",
+        "avatar": None,
+    }
+
+    client.post("/user/signup", data=user_to_reg1)
+    response = client.post("/user/signup", data=user_to_reg2)
+
+    assert response.json() == {"detail": "A user with this email already exists"}
+    assert response.status_code == 401
 
 #Creation new user with invalid username
 def test_user_register_invalid_username():
@@ -122,3 +186,122 @@ def test_user_not_verified():
     assert response.status_code == 401
     assert response.json() == {"detail": "This account is not verified"}
     delete_user(username)
+
+def test_resend_validation_with_none_username():
+    username = None
+    response = client.post("/resend_validation", json={"username": username})
+
+    assert response.status_code == 422
+
+
+def test_resend_validation_with_non_existant_user():
+    username = get_random_string_lower(5)
+    response = client.post("/resend_validation", json={"username": username})
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Invalid username"}
+
+def test_resend_validation_with_existant_user_resends_email(mocker):
+    user_to_reg = {
+        "username": (get_random_string_lower(5)),
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+        "avatar": None,
+    }
+
+    client.post("/user/signup", data=user_to_reg)
+
+    mock_send_email = mocker.patch("app.send_verification_email")
+
+    response = client.post("/resend_validation", json={"username": user_to_reg["username"]})
+
+    mock_send_email.assert_called_once_with(
+        user_to_reg["email"], user_to_reg["username"], ANY
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {"detail": "Verification email sent"}
+
+
+def test_validate_account_with_invalid_token_responds_404():
+    invalid_token = "invalid-token"
+    response = client.get("/validate_account", params={"token": invalid_token})
+
+    assert response.status_code == 404
+
+
+def test_validate_account_with_invalid_jwt_token_responds_404():
+    invalid_token = "invalid-token"
+
+    response = client.get("/validate_account", params={"token": invalid_token})
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Link expired"}
+
+
+def test_validate_account_with_expired_token_responds_404():
+    expired_token = generate_token({"username": "testUser"}, timedelta(minutes=-1))
+    response = client.get("/validate_account", params={"token": expired_token})
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Link expired"}
+
+
+def test_validate_account_with_token_without_username_responds_404():
+    invalid_token = generate_token({"foo": "bar"}, timedelta(minutes=5))
+    response = client.get("/validate_account", params={"token": invalid_token})
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Username can't be empty"}
+
+
+def test_validate_account_with_token_with_username_not_registered_responds_404():
+    valid_token = generate_token(
+        {"username": "non-existant-user"},
+        timedelta(minutes=5)
+    )
+
+    response = client.get("/validate_account", params={"token": valid_token})
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "User not registered"}
+
+
+def test_validate_account_with_token_with_user_registered_successful_response():
+    user = {
+        "username": (get_random_string_lower(5)),
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+        "avatar": None,
+    }
+    client.post("/user/signup", data=user)
+
+    valid_token = generate_token(
+        {"username": user["username"]},
+        timedelta(minutes=5)
+    )
+
+    response = client.get("/validate_account", params={"token": valid_token})
+
+    assert response.status_code == 200
+    assert response.json() == {"detail": f"Account {user['username']} validated"}
+
+
+def test_validate_account_with_token_with_user_registered_verifies_user():
+    user = {
+        "username": (get_random_string_lower(5)),
+        "password": (get_random_string_goodps(8)),
+        "email": (get_email()),
+        "avatar": None,
+    }
+    client.post("/user/signup", data=user)
+
+    valid_token = generate_token(
+        {"username": user["username"]},
+        timedelta(minutes=5)
+    )
+
+    client.get("/validate_account", params={"token": valid_token})
+
+    db_user = get_user(user["username"])
+
+    assert db_user.verified
