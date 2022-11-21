@@ -10,6 +10,7 @@ import CreateMatch from "../screens/CreateMatch/";
 import Lobby from "../screens/Lobby";
 import BrowseMatches from "../screens/BrowseMatches";
 import Board from "../screens/Board";
+import ResetPassword from "../screens/ResetPassword";
 import UserProfile from "../screens/UserProfile";
 import Recover from "../screens/Recover";
 import ValidateAccount from "../screens/ValidateAccount";
@@ -39,6 +40,7 @@ export default function RoutesWrapper({ navigate }) {
         element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
       />
       <Route path="/recover" element={<Recover />} />
+      <Route path="/reset-password/" element={<ResetPassword />} />
       <Route path="/validate-account" element={<ValidateAccount />} />
       <Route element={<PrivateRoute />}>
         <Route path="/list-robot" element={<ListRobot />} />
