@@ -151,13 +151,27 @@ exports[`UserProfile matches Snapshot 1`] = `
                 </svg>
               </div>
               <div
-                className="MuiListItemText-root css-tlelie-MuiListItemText-root"
+                className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
               >
                 <span
                   className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
                 >
                   Matches played
                 </span>
+                <p
+                  className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    data-testid="statsSkeleton"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "40%",
+                      }
+                    }
+                  />
+                </p>
               </div>
             </li>
             <li
@@ -180,13 +194,27 @@ exports[`UserProfile matches Snapshot 1`] = `
                 </svg>
               </div>
               <div
-                className="MuiListItemText-root css-tlelie-MuiListItemText-root"
+                className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
               >
                 <span
                   className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
                 >
                   Matches won
                 </span>
+                <p
+                  className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    data-testid="statsSkeleton"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "40%",
+                      }
+                    }
+                  />
+                </p>
               </div>
             </li>
             <li
@@ -218,9 +246,17 @@ exports[`UserProfile matches Snapshot 1`] = `
                 </span>
                 <p
                   className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
-                  data-testid="statsRate"
                 >
-                  NaN%
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    data-testid="statsSkeleton"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "40%",
+                      }
+                    }
+                  />
                 </p>
               </div>
             </li>
