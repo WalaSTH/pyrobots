@@ -114,10 +114,11 @@ def test_user_not_verified():
         "password": (get_random_string_goodps(8)),
         "email": (get_email()),
     }
-    response = client.post("/user/signup", params=user_to_reg)
+    response = client.post("/user/signup", data=user_to_reg)
     assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
-    response = client.post("/user/token", params={"username": username, "password": user_to_reg["password"]})
+    response = client.post("/token", data={"username": username, "password": user_to_reg["password"]})
+    print(response.reason)
     assert response.status_code == 401
-    assert response.json() == {"detail": "user not verified"}
+    assert response.json() == {"detail": "This account is not verified"}
     delete_user(username)
