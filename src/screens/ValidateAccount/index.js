@@ -26,10 +26,8 @@ export default function ValidateAccount() {
 
   useEffect(() => {
     axios
-      .get(endpoint, {
-        params: {
-          token: token,
-        },
+      .post(endpoint, {
+        token: token,
       })
       .then(function () {
         setIsValidating(false);
