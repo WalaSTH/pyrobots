@@ -2,7 +2,7 @@
 
 exports[`<Recover component rendering 1`] = `
 <main
-  className="MuiContainer-root MuiContainer-maxWidthXs css-1fqfyna-MuiContainer-root"
+  className="MuiContainer-root MuiContainer-maxWidthXs css-1yiz356-MuiContainer-root"
 >
   <div
     className="MuiPaper-root MuiPaper-outlined MuiPaper-rounded MuiCard-root css-he3bwl-MuiPaper-root-MuiCard-root"
@@ -20,7 +20,6 @@ exports[`<Recover component rendering 1`] = `
         >
           <h1
             className="MuiTypography-root MuiTypography-h5 css-ag7rrr-MuiTypography-root"
-            data-testid="typography-signin"
           >
             Recover your username
           </h1>
@@ -87,7 +86,7 @@ exports[`<Recover component rendering 1`] = `
           className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
         >
           <button
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth css-189e9pj-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth css-1i1t3do-MuiButtonBase-root-MuiButton-root"
             data-testid="recover-button"
             disabled={false}
             onBlur={[Function]}
