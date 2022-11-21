@@ -267,7 +267,6 @@ def create_robot(robot_name, creator, code, avatar):
     else:
         robot_code = code.file.read()
         class_name = code.filename
-    print(f"----- {type(code)} -----")
     new_robot = Robot(
         robot_name=robot_name,
         code=robot_code,
@@ -276,7 +275,6 @@ def create_robot(robot_name, creator, code, avatar):
         matches_played=0,
         matches_won=0
     )
-    print(f"----- {new_robot.robot_class_name} -----")
     if avatar != None:
         new_robot.avatar = avatar.encode()
     else:

@@ -76,15 +76,10 @@ def load_robot(username, robot_name: str):
     user = get_user(username)
     robot_id = get_id_robot(robot_name, user)
     size = len(classname)
-    print("\n\n\n", classname, "\n\n\n")
     classname = classname[: size - 3]
-    print("\n\n\n", classname, "\n\n\n")
     classname = classname.replace("_", " ").title().replace(" ", "")
-    print("\n\n\n", classname, "\n\n\n")
     exec_str = "newRobot = " + classname + "(" + str(robot_id) + ")"
-    print("\n\n\n", exec_str, "\n\n\n")
     exec_str = code + exec_str.encode()
-    print("\n\n\n", exec_str, "\n\n\n")
     exec(exec_str, globals())
     return newRobot  # newRobot is defined in exec_str
 

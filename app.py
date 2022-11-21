@@ -324,8 +324,8 @@ async def user_register(
     else:
         create_user(username, email, get_password_hash(password), avatar)
         new_id = get_last_user_id()
-        create_robot("spinner", new_id, "default_bots/spinner.py", None)
-        create_robot("sniper", new_id, "default_bots/sniper.py", None)
+        create_robot("Spinner Cheto", new_id, "default_bots/spinner_Cheto.py", None)
+        create_robot("Sniper Cheto", new_id, "default_bots/sniper_Cheto.py", None)
 
         return {"detail": "User created successfully"}
 
