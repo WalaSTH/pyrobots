@@ -561,7 +561,7 @@ async def get_user_stats(checked_user: str):
     return{"detail": "Stats succesfully checked", "stats": user_stats}
 
 
-# --- Simulation Endpoints ---
+# --- Start Simulation and Match ---
 
 @app.post("/simulation/start", tags=["simulation"], status_code=200)
 async def create_sim(sim: SimData):
@@ -587,4 +587,40 @@ async def create_sim(sim: SimData):
                 detail="User does not have any robot named "
                 + str(sim.robot_names[i] + "."),
             )
-    return run_simulation(sim)
+    robots = []
+    for i in sim.robot_names:
+        robots.append(get_robot_id_by_name(sim.username, i))
+    return run_game(robots, sim.n_rounds, True)
+
+@app.post("/match/start",tags=["Matches"], status_code=200)
+async def start_match(match_id: int, username: str, syscalls:Optional[bool] = True):
+    if not check_match_existance(match_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Match not found.")
+    if not user_exists(username):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.")
+    if not (get_match_creator(match_id) == get_user_id(username)):
+        print(str(get_user_id(username)))
+        print(str(get_match_creator(match_id)))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User did not create the match.")
+    robots = get_match_robots_ids(match_id)
+    if len(robots) > get_match_max_players(match_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Number of players is higher than maximum allowed.")
+    if len(robots) < get_match_min_players(match_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Number of players is lower than minimum allowed.")
+    if get_match_started(match_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Match already started.")
+    #Run
+    run_match(match_id, syscalls)
+    return {"detail" : "Match successfully executed."}

@@ -1,7 +1,10 @@
 import math
+from enum import Enum
 from cmath import pi
 
-## Auxilar functions
+"""  Auxilar functions """
+
+####---- Trigonometry related functions  ----####
 
 ### Gets an angle as a value between 0 and 359
 def get_angle(angle):
@@ -9,8 +12,6 @@ def get_angle(angle):
     if angle < 0:
         angle = angle_old + ( abs(int(angle_old / 360)) + 1 ) * 360
     return angle - (int(angle / 360) * 360)
-
-""" abs(int(-400 / 360)"""
 
 ### Gets distance between two points in a plane
 def calculate_distance(x, y, x_enemy, y_enemy):
@@ -43,7 +44,7 @@ def calculate_angle(x, y, x_enemy, y_enemy, hypotenuse):
             a = 360 - a
     return a
 
-
+### Gets cathetus from angle and hypotenuse
 def get_cathetus(angle, hypotenuse):
     return math.sin(math.radians(angle)) * hypotenuse
 
@@ -100,13 +101,34 @@ def get_x_add(hypotenuse, angle_threesixty):
             pass
     return x_add
 
+### Determinates how pronunciated is a turn based on previous direction
+def get_turn_kind(previous_direction, direction):
+    kind: Enum("Despicable", "Mild", "Moderate", "Severe")
+    difference = abs(previous_direction - direction)
+    if difference > 180:
+        difference = 360 - difference
+    if difference <=10:
+        kind = "Despicable"
+    elif difference <= 20:
+        kind = "Mild"
+    elif difference <= 45 :
+        kind = "Moderate"
+    else:
+        kind = "Severe"
+    return kind
 
-####### Scanner
+
+def get_actual_velocity(speed, engine_velocity, current_speed_level):
+        return (
+            speed * (engine_velocity   / 100)  * current_speed_level * 20 / 100
+        )
+
+####---- Scanner related functions  ----####
 def limit_res(res):
     if abs(res) > 10:
         res = 10
     return int(res)
 
-######## Cannon and missile
+####---- Cannon and missile related functions  ----####
 def rounds_to_explote(distance, speed):
     return int(math.ceil(distance / speed))

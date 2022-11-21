@@ -1,6 +1,4 @@
-from cmath import pi
 import math
-from enum import Enum
 from Database.Database import *
 from pydantic_models import *
 from game_auxilar_functions import *
@@ -61,6 +59,7 @@ class Explotion:
         self.y_position = y
 
 class gameRobot:
+    # default attributes
     robot_id: int
     game_id_robot: int
     robot_name: str
@@ -116,33 +115,9 @@ class gameRobot:
         self.x_position = x
         self.y_position = y
 
-    def get_actual_velocity(self):
-        return (
-            SPEED_100_PERCENT * (self.engine_velocity   / 100)  * self.current_speed_level * 20 / 100
-        )
-
-    def get_turn_kind(self):
-        kind: Enum("Despicable", "Mild", "Moderate", "Severe")
-        difference = abs(self.engine_previous_direction - self.engine_direction)
-        if difference > 180:
-            difference = 360 - difference
-        print("Difference is " + str(difference))
-        if difference <=10:
-            kind = "Despicable"
-        elif difference <= 20:
-            kind = "Mild"
-        elif difference <= 45 :
-            kind = "Moderate"
-        else:
-            kind = "Severe"
-        return kind
-
     def set_speed_level(self):
-        turn_kind = self.get_turn_kind()
-        print("Turn is " + str(turn_kind))
+        turn_kind = get_turn_kind(self.engine_previous_direction, self.engine_direction)
         if self.engine_turn_request and turn_kind != "Despicable":
-            print("Turn occured for" + str(self.robot_name) + "!")
-            turn_kind = self.get_turn_kind()
             match turn_kind:
                 case "Mild":
                     self.current_speed_level = self.current_speed_level - 1 if self.current_speed_level > 1 else 1
@@ -156,24 +131,13 @@ class gameRobot:
             self.frames_on_vel = 0
         else:
             self.frames_on_vel += 1
-        print(
-            "Current speed level for "
-            + str(self.robot_name)
-            + " is "
-            + str(self.current_speed_level)
-        )
 
     def move(self):
         if self.engine_activated:
             self.set_speed_level()
-            current_velocity = self.get_actual_velocity()
+            current_velocity = get_actual_velocity(SPEED_100_PERCENT, self.engine_velocity, self.current_speed_level)
             y_add = get_y_add(current_velocity, self.engine_direction)
             x_add = get_x_add(current_velocity, self.engine_direction)
-            print("Current velocity for "+ str(self.robot_name) + "is " + str(current_velocity))
-            if (self.robot_name == "Copy1"):
-                print("SO, direction is: " + str(self.engine_direction) + " right?")
-                print("HEY, we need to add to x: " + str(x_add))
-                print("HEY, we need to add to y: " + str(y_add))
             self.x_position = (
                 self.x_position + x_add
                 if self.x_position + x_add < TABLE_HORIZONTAL_LENGHT -1
@@ -207,9 +171,8 @@ class gameRobot:
                 enemy_distance = calculate_distance(
                     self.x_position, self.y_position, x_enemy, y_enemy
                 )
-                print("Distance calculated, is " + str(enemy_distance))
                 # check if robot is on angle range
-                if enemy_distance < self.scan_len and enemy_distance < self.scan_result:
+                if enemy_distance <= self.scan_len and enemy_distance < self.scan_result:
                     enemy_angle = calculate_angle(
                         self.x_position,
                         self.y_position,
@@ -217,32 +180,16 @@ class gameRobot:
                         y_enemy,
                         enemy_distance,
                     )
-                    print("Enemy angle is "+ str(enemy_angle))
-                    print("Upper angle is "+ str(upper_angle))
-                    print("Lower angle is "+ str(lower_angle))
                     if upper_angle > lower_angle:
-                        #regular case
-                        print("Regular case")
-
                         if enemy_angle >= lower_angle and enemy_angle <= upper_angle:
-                            print("enemy is on range and closer than previouse")
-                            # enemy is on range and closer than previous
                             self.scan_result = enemy_distance
-                            print("Enemy found on angle: " + str(enemy_angle))
                     elif y_enemy >= self.y_position:
-                        #weird case and enemy is 1st quadrant
-                        print("weird case and enemy is 1st quadrant")
                         if enemy_angle <= lower_angle and enemy_angle <= upper_angle:
                             self.scan_result = enemy_distance
-                            print("Enemy found on angle: " + str(enemy_angle))
                     else:
-                        print("other case")
                         if enemy_angle >= lower_angle and enemy_angle >= upper_angle:
                             self.scan_result = enemy_distance
-                            print("Enemy found on angle: " + str(enemy_angle))
             self.scan_setted = False
-            if self.scan_result == math.inf:
-                print("Scan found 0 robots")
         else:
             self.scan_result = math.inf
 
@@ -278,15 +225,7 @@ class gameRobot:
                 self.cannon_distance,
                 rounds_to_explote(self.cannon_distance, MISSILE_SPEED)
             )
-
             self.missiles.append(new_missile)
-            print(
-                str(self.robot_name)
-                + " has fired a missle to direction "
-                + str(self.cannon_direction)
-                + " with distance "
-                + str(self.cannon_distance)
-            )
         else:
             self.cannon_cooldown = (
                 self.cannon_cooldown - 1 if self.cannon_cooldown - 1 > 0 else 0
@@ -297,43 +236,41 @@ class gameRobot:
         n_missiles = len(self.missiles)
         for i in range(n_missiles):
             missile_direction = self.missiles[i].direction
-            missile_distance = self.missiles[i].distance
-            # calcular nuevo punto x,y para el misil
+            # Get x and y to add
             y_add = get_y_add(MISSILE_SPEED, missile_direction)
             x_add = get_x_add(MISSILE_SPEED, missile_direction)
-            # sumar y mover
-            self.missiles[i].x_position = (
-                self.missiles[i].x_position + x_add
-                if self.missiles[i].x_position + x_add < TABLE_HORIZONTAL_LENGHT
-                else TABLE_HORIZONTAL_LENGHT
-            )
-            if self.missiles[i].x_position < 0:
-                self.missiles[i].x_position = 0
 
-            self.missiles[i].y_position = (
-                self.missiles[i].y_position + y_add
-                if self.missiles[i].y_position + y_add < TABLE_VERTICAL_LENGHT
-                else TABLE_VERTICAL_LENGHT
-            )
-            if self.missiles[i].y_position < 0:
-                self.missiles[i].y_position = 0
-            print("Missile is in (" + str(self.missiles[i].x_position) + ", "+str(self.missiles[i].y_position) + ").")
-            # ver si explota
+            # Add them
+            #self.missiles[i].x_position = self.missiles[i].x_position + x_add
+            if self.missiles[i].x_position + x_add < 1:
+                self.missiles[i].x_position = 1
+            else:
+                self.missiles[i].x_position = self.missiles[i].x_position + x_add
+            if self.missiles[i].x_position > TABLE_HORIZONTAL_LENGHT -1:
+                self.missiles[i].x_position = TABLE_HORIZONTAL_LENGHT -1
+
+
+            if self.missiles[i].y_position + y_add < 1:
+                self.missiles[i].y_position = 1
+            else:
+                self.missiles[i].y_position = self.missiles[i].y_position + y_add
+            if self.missiles[i].y_position > TABLE_VERTICAL_LENGHT -2:
+                self.missiles[i].y_position = TABLE_VERTICAL_LENGHT -2
+
+            # Check if it has to explote
             self.missiles[i].remains = self.missiles[i].remains - 1 if self.missiles[i].remains - 1 > 0 else 0
             if self.missiles[i].remains == 0:
-                # explotar misil
+                # Explote missile
                 new_explotion = Explotion(self.robot_id, self.game_id_robot, self.missiles[i].x_target, self.missiles[i].y_target)
                 explotion_list.append(new_explotion)
                 self.missiles.remove(self.missiles[i])
-                print("Missile exploted")
 
     def deal_damage(self, damage):
         self.health = self.health - damage if self.health - damage > 0 else 0
-        print("dealed "+str(damage)+ "to robot")
-    ###### User accesible methods
+
+    ###### Player methods
 
     # Cannon
-
     def is_cannon_ready(self):
         return self.cannon_cooldown == 0
 
@@ -345,7 +282,6 @@ class gameRobot:
             distance = MISSILE_MAX_DISTANCE
         self.cannon_distance = distance
         self.cannon_setted = True
-
 
     # Scan
     def point_scanner(self, direction, resolution_in_degrees):
@@ -367,8 +303,8 @@ class gameRobot:
         self.engine_activated = True
 
     # Status
-    def get_directions():
-        return "here you go"
+    def get_directions(self):
+        return self.engine_direction
 
     def get_velocity(self):
         return self.engine_velocity
