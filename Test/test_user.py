@@ -6,9 +6,7 @@ from Test.auxiliar_functions import *
 from base64 import b64encode
 from app import app
 from utils.mails import RecoverType
-from utils.auth import generate_token, get_password_hash
-import random
-import string
+from utils.auth import generate_token
 
 client = TestClient(app)
 
