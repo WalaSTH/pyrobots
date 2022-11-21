@@ -10,6 +10,7 @@ import CreateMatch from "../screens/CreateMatch/";
 import Lobby from "../screens/Lobby";
 import BrowseMatches from "../screens/BrowseMatches";
 import Board from "../screens/Board";
+import UserProfile from "../screens/UserProfile";
 import Recover from "../screens/Recover";
 import ValidateAccount from "../screens/ValidateAccount";
 
@@ -51,6 +52,7 @@ export default function RoutesWrapper({ navigate }) {
         <Route path="/board/:simID" element={<Board />} />
         <Route path="/match-history" element={<></>} />
         <Route path="/lobby/:matchID" element={<Lobby />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import { useField } from "formik";
 import { useState } from "react";
 
-export default function AvatarPreview({ name, children, ...otherProps }) {
+export default function AvatarPreview({ name, alt, children, ...otherProps }) {
   const [field, meta] = useField(name);
   const file = field.value;
   const isError = !file || !meta.touched || meta.error;
@@ -20,7 +20,7 @@ export default function AvatarPreview({ name, children, ...otherProps }) {
   const configAvatarPreview = {
     ...field,
     src: src,
-    alt: "Avatar preview",
+    alt: alt,
     color: "secondary",
     ...otherProps,
   };
