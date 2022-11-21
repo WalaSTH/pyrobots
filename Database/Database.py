@@ -1,6 +1,7 @@
 from pony.orm import *
 import sys
 from datetime import *
+from pathlib import Path
 
 db = pony.orm.Database()
 
@@ -109,9 +110,9 @@ def get_match_info(room_id):
 
 
         participants_list.append(({
-            "robot_name": r.robot_name, 
-            "robot_avatar": r_avatar, 
-            "user_name": r.owner.user_name, 
+            "robot_name": r.robot_name,
+            "robot_avatar": r_avatar,
+            "user_name": r.owner.user_name,
             "user_avatar": u_avatar
         }))
     data = {
@@ -250,7 +251,7 @@ def check_match_password(match, pwd):
 
 @db_session
 def check_user_connected(match_id, username):
-    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:]
+    return (Match[match_id].participants).select(lambda u: u.user_name == username)[:] != []
 
 
 @db_session
@@ -301,10 +302,16 @@ def create_result(ranking, won_games, match):
 
 @db_session
 def create_robot(robot_name, creator, code, avatar):
+    if type(code) == str:
+        robot_code = open(code, "rb").read()
+        class_name = str(Path(code).stem) + ".py"
+    else:
+        robot_code = code.file.read()
+        class_name = code.filename
     new_robot = Robot(
         robot_name=robot_name,
-        code=code.file.read(),
-        robot_class_name=code.filename,
+        code=robot_code,
+        robot_class_name=class_name,
         owner=creator,
         matches_played=0,
         matches_won=0
@@ -536,6 +543,30 @@ def check_user_quantity():
 @db_session
 def get_user_name_by_id(user_id):
     return User[user_id].user_name
+
+@db_session
+def set_user_verified(username):
+    user = User.get(user_name=username)
+    user.verified = True
+
+@db_session
+def update_user_password(name, new_pwd):
+    user = get_user(name)
+    user.password = new_pwd
+
+
+@db_session
+def update_user_avatar(name, picture):
+    user = get_user(name)
+    user.photo = picture.encode() if picture != None else None
+
+    return picture
+
+
+@db_session
+def get_user_pwd(username):
+    user = get_user(username)
+    return user.password
 
 
 @db_session

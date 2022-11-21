@@ -10,26 +10,25 @@ from fastapi import (
 )
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Union, Optional
-from fastapi.responses import FileResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from typing import Optional
+from fastapi.security import OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
-from security_functions import *
+from utils.auth import *
+from jose import JWTError
 from pydantic_models import *
-from connections import *
-import json
-from random import *
+from connections import WebSocket, ConnectionManager
+from random import randint
+from utils.mails import send_verification_email
 from game_loop import *
-
+from utils.mails import RecoverType, send_recovery_email
 MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
-MAX_LEN_PASSWORD = 16
-MIN_LEN_PASSWORD = 7
-MAX_LEN_EMAIL = 30
+MAX_LEN_PASSWORD = 69
+MIN_LEN_PASSWORD = 8
+MAX_LEN_EMAIL = 69
 MIN_LEN_EMAIL = 10
-MAX_LEN_NAME_GAME = 10
+MAX_LEN_NAME_GAME = 20
 MIN_LEN_NAME_GAME = 3
-
 
 description = """
     PyRobots 🤖
@@ -59,6 +58,7 @@ tags_metadata = [
     {"name": "Token", "description": "Token login"},
     {"name": "matches", "description": "Operations with matches"},
     {"name": "Robots", "description": "Manage Robot"},
+    {"name": "Recovery", "description": "Email service to recover password and username"}
 ]
 
 app = FastAPI(
@@ -212,7 +212,7 @@ async def match_join(
     if robot_id == None:
         raise HTTPException(status_code=404, detail=f"Robot {match_to_join.robot} does not exist or does not belong to you")
 
-    if check_user_connected(match_to_join.match, match_to_join.username) != []:
+    if check_user_connected(match_to_join.match, match_to_join.username):
         raise HTTPException(status_code=409, detail="You have already joined this match")
 
     if check_full_match(match_to_join.match):
@@ -246,7 +246,7 @@ async def match_leave(
     if not check_match_existance(match_to_leave.match):
         raise HTTPException(status_code=404, detail=f"Match id {match_to_leave.match} does not exist")
 
-    if not check_user_connected(match_to_leave.match, match_to_leave.username) != []:
+    if not check_user_connected(match_to_leave.match, match_to_leave.username):
         raise HTTPException(status_code=409, detail="You are not part of this match")
 
     user_id = get_user_id(match_to_leave.username)
@@ -282,6 +282,7 @@ async def match_listing(list_params: MatchListParams = Depends()):
 
 
 # --- User Endpoints ---
+# Register
 @app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(
     username: str = Form(),
@@ -292,13 +293,13 @@ async def user_register(
     """USER REGISTER FUNCTION"""
 
     invalid_fields = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED, detail="field size is invalid"
+        status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid field size"
     )
     if (
         len(username) > MAX_LEN_ALIAS
         or len(username) < MIN_LEN_ALIAS
         or len(password) > MAX_LEN_PASSWORD
-        or len(password) <= MIN_LEN_PASSWORD
+        or len(password) < MIN_LEN_PASSWORD
         or len(email) > MAX_LEN_EMAIL
         or len(email) < MIN_LEN_EMAIL
     ):
@@ -323,7 +324,66 @@ async def user_register(
         )
     else:
         create_user(username, email, get_password_hash(password), avatar)
+        new_id = get_last_user_id()
+        create_robot("Spinner Cheto", new_id, "default_bots/spinner_Cheto.py", None)
+        create_robot("Sniper Cheto", new_id, "default_bots/sniper_Cheto.py", None)
+
+        token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+        token = generate_token(data={"username": username}, expires_delta=token_expiration)
+
+        await send_verification_email(email, username, token)
+
         return {"detail": "User created successfully"}
+
+
+# Resend validation email
+@app.post("/resend_validation", tags=["Validation"], status_code=200)
+async def resend_email(resend: ResendValidationEmail):
+    user = get_user(resend.username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invalid username"
+        )
+
+    token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+    token = generate_token(data={"username": resend.username}, expires_delta=token_expiration)
+
+    await send_verification_email(user.email, resend.username , token)
+
+    return {"detail": "Verification email sent"}
+
+
+# Validate Account
+@app.post("/validate_account", tags=["Validation"], status_code=200)
+async def validate_account(validation: ValidationData):
+    try:
+        payload = jwt.decode(validation.token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Link expired"
+        )
+
+    username = payload.get("username")
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Username can't be empty"
+        )
+
+    user = get_user(username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not registered"
+        )
+    else:
+        set_user_verified(username)
+
+    return {"detail": f"Account {username} validated"}
 
 
 # Upload image
@@ -339,24 +399,6 @@ async def upload_photo(
         return {"detail": "Photo uploaded successfully"}
 
 
-@app.delete("/user/delete_user", tags=["Users"])
-async def user_delete(user_name: str):
-    """Deletes an user.
-    Args: \n
-        user_name (str): Name of the user to delete. \n
-    Raises: \n
-        HTTPException: The user does not exist. \n
-    Returns: \n
-        str: Verification text.
-    """
-    if not user_exists(user_name):
-        raise HTTPException(status_code=404, detail="user doesn't exist")
-
-    else:
-        delete_user(user_name)
-        return {"user successfully deleted"}
-
-
 # login
 @app.post("/token", tags=["Token"], response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -364,12 +406,18 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail={"message": "Incorrect username or password"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    elif not user.verified:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"message": "This account is not verified", "email": user.email},
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.user_name}, expires_delta=access_token_expires
+    access_token = generate_token(
+        data={"username": user.user_name}, expires_delta=access_token_expires
     )
 
     avatar = None
@@ -384,15 +432,123 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "avatar": avatar,
     }
 
+# Recovery mail
+@app.post("/user/recover", tags=["Recovery"], status_code=200)
+async def recovery_mail(recover: RecoverData):
+    try:
+        recover_type = RecoverType(recover.type)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=401,
+            detail=str(e)
+        )
 
-@app.get("/user/me/")
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
-    return {"username": current_user.user_name}
+    user = get_user_by_email(recover.email)
+
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="There is no user with this email"
+        )
+
+    token_expiration = timedelta(minutes=RESET_PASSWORD_TOKEN_EXPIRE_MINUTES)
+    token = generate_token(data={"username": user.user_name}, expires_delta=token_expiration)
+
+    await send_recovery_email(recover.email, user, recover_type, token)
+
+    return {"detail": "Email has been sent"}
 
 
-@app.get("/user/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.user_name}]
+# Reset password
+@app.put("/user/reset_password", tags=["Recovery"], status_code=200)
+async def reset_password(reset: ResetData):
+    if (
+        len(reset.password) < 8
+        or any(char.isupper() for char in reset.password) == False
+        or any(char.islower() for char in reset.password) == False
+        or any(char.isdigit() for char in reset.password) == False
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="password must have at least one uppercase, one lowercase and one number"
+        )
+
+    try:
+        payload = jwt.decode(reset.token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Link expired"
+        )
+
+    username = payload.get("username")
+
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail= "Username can't be empty"
+        )
+
+    user = get_user(username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not registered"
+        )
+    else:
+        update_user_password(user.user_name, get_password_hash(reset.password))
+
+    return {"detail": "Password updated"}
+
+# Check if token is expired
+@app.get("/token/status", tags=["Token"], status_code=200)
+async def get_token_status(token: str):
+    try:
+        jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired"
+        )
+    return {"detail": "Token is not expired"}
+
+
+# Modify user
+@app.put("/user/update", tags=["Users"], status_code=200)
+async def modify_logged_user(update_info: UpdateParams):
+
+    if not user_exists(update_info.username):
+        raise HTTPException(status_code=404, detail=f"No user named {update_info.username}.")
+
+    if update_info.param != "avatar" and update_info.param != "password":
+        raise HTTPException(status_code=400, detail=f"Param {update_info.param} does not exist.")
+
+    match update_info.param:
+        case "password":
+            user = authenticate_user(update_info.username, update_info.current_pwd)
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="That is not your current password."
+                )
+
+            if (
+                any(char.isupper() for char in update_info.new_pwd) == False
+                or any(char.islower() for char in update_info.new_pwd) == False
+                or any(char.isdigit() for char in update_info.new_pwd) == False
+            ):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Password must have at least one uppercase, one lowercase and one number."
+                )
+            update_user_password(update_info.username, get_password_hash(update_info.new_pwd))
+
+            return {"detail": "Password updated succesfully."}
+
+        case "avatar":
+            avatar = update_user_avatar(update_info.username, update_info.new_pic)
+            return {"detail": "User updated succesfully.", "new_avatar": avatar}
 
 
 @app.get("/users/stats", tags=["Users"], status_code=200)
