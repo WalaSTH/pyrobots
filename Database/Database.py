@@ -279,7 +279,7 @@ def get_match_creator(match_id):
     return Match[match_id].creator.id
 
 @db_session
-def get_match_state(match_id):
+def get_match_started(match_id):
     return Match[match_id].started
 
 # --- Result fucntions ---

@@ -7,7 +7,7 @@ import signal
 import time
 
 @db_session
-def run_game(robots, n_rounds, is_sim: bool):
+def run_game(robots, n_rounds, is_sim: bool, syscalls = True):
     #robots contains robot ids
     n_robots = len(robots)
     robot_list = []
@@ -24,15 +24,17 @@ def run_game(robots, n_rounds, is_sim: bool):
     for i in range(n_robots):
         set_position_by_index(robot_list[i])
         robot_list[i].game_id_robot = i
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(3)
+        if syscalls:
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(3)
         try:
             robot_list[i].initialize()
         except:
             dead_list.append(robot_list[i])
             print("Robot " +str(robot_list[i].robot_name)+ " killed due to bad code.")
         finally:
-            signal.alarm(0)
+            if syscalls:
+                signal.alarm(0)
         set_position_by_index(robot_list[i])
         robot_for_frame = {
             "id": i,
@@ -51,15 +53,17 @@ def run_game(robots, n_rounds, is_sim: bool):
     while k < (n_rounds) and len(robot_list) > 1:
         # respond for every robot
         for i in range(n_robots):
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(3)
+            if syscalls:
+                signal.signal(signal.SIGALRM, timeout_handler)
+                signal.alarm(3)
             try:
                 robot_list[i].respond()
             except:
                 print("Robot " +str(robot_list[i].robot_name)+ " killed due to bad code.")
                 dead_list.append(robot_list[i])
             finally:
-                signal.alarm(0)
+                if syscalls:
+                    signal.alarm(0)
         # scan for every robot
         for i in range(n_robots):
             other_robots = robot_list.copy()
@@ -173,7 +177,7 @@ def run_game(robots, n_rounds, is_sim: bool):
         result = winner
     return result
 
-def run_match(match_id):
+def run_match(match_id, syscalls = True):
     n_rounds = get_match_rounds(match_id)
     m_games = get_match_games(match_id)
     robots = get_match_robots_ids(match_id)
@@ -181,7 +185,7 @@ def run_match(match_id):
     n_robots = len(robots)
     won_games = [0]*n_robots
     for i in range(m_games):
-        winner_id = run_game(robots, n_rounds, False)
+        winner_id = run_game(robots, n_rounds, False, syscalls)
         if winner_id != -1:
             for j in range(n_robots):
                 if ranking[j] == winner_id:
