@@ -452,21 +452,19 @@ async def start_match(match_id: int, username: str):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User did not create match.")
-    n_rounds = get_match_rounds(match_id)
-    m_games = get_match_games(match_id)
     robots = get_match_robots_ids(match_id)
     if len(robots) > get_match_max_players(match_id):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Number of players is higher than maximum allowed")
+            detail="Number of players is higher than maximum allowed.")
     if len(robots) < get_match_min_players(match_id):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Number of players is lower than minimum allowed")
+            detail="Number of players is lower than minimum allowed.")
     if get_match_state(match_id):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Match already started")
+            detail="Match already started.")
     #Run
     run_match(match_id)
     return {"detail" : "Match successfully executed."}
