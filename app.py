@@ -23,11 +23,11 @@ from game_loop import *
 from utils.mails import RecoverType, send_recovery_email
 MAX_LEN_ALIAS = 16
 MIN_LEN_ALIAS = 3
-MAX_LEN_PASSWORD = 16
+MAX_LEN_PASSWORD = 69
 MIN_LEN_PASSWORD = 8
-MAX_LEN_EMAIL = 30
+MAX_LEN_EMAIL = 69
 MIN_LEN_EMAIL = 10
-MAX_LEN_NAME_GAME = 10
+MAX_LEN_NAME_GAME = 20
 MIN_LEN_NAME_GAME = 3
 
 description = """
@@ -293,7 +293,7 @@ async def user_register(
     """USER REGISTER FUNCTION"""
 
     invalid_fields = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED, detail="field size is invalid"
+        status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid field size"
     )
     if (
         len(username) > MAX_LEN_ALIAS
