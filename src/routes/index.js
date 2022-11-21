@@ -13,7 +13,6 @@ import Board from "../screens/Board";
 import ResetPassword from "../screens/ResetPassword";
 import Recover from "../screens/Recover";
 import ValidateAccount from "../screens/ValidateAccount";
-import Profile from "../screens/Profile";
 import UserProfile from "../screens/UserProfile";
 
 export default function RoutesWrapper({ navigate }) {

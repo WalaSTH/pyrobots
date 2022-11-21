@@ -60,6 +60,7 @@ export default function ResetPasswordForm({ handleSubmit, isTokenValid }) {
                   name="password"
                   label="Password"
                   type="password"
+                  data-testid="passwordField"
                   autoComplete="off"
                   required
                 />
@@ -70,6 +71,7 @@ export default function ResetPasswordForm({ handleSubmit, isTokenValid }) {
                   name="passwordConfirmation"
                   label="Confirm your password"
                   type="password"
+                  data-testid="passwordConfirmationField"
                   autoComplete="off"
                   required
                 />
@@ -94,7 +96,7 @@ export default function ResetPasswordForm({ handleSubmit, isTokenValid }) {
                 variant="contained"
                 color="primary"
                 size="large"
-                fullWidth="true"
+                fullWidth
                 onClick={() => {
                   navigate("/login");
                 }}

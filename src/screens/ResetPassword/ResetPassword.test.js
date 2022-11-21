@@ -1,14 +1,14 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import renderer from "react-test-renderer";
-import Recover from "./";
+import ResetPassword from "./";
 import { BrowserRouter } from "react-router-dom";
 
-describe("<Recover", () => {
+describe("<ResetPassword", () => {
   it("component rendering", async () => {
     const component = renderer.create(
       <BrowserRouter>
-        <Recover />
+        <ResetPassword />
       </BrowserRouter>
     );
     let tree = component.toJSON();
@@ -16,14 +16,14 @@ describe("<Recover", () => {
   });
 
   it("mock fetch", async () => {
-    Recover.handleSubmit = jest.fn();
+    ResetPassword.handleSubmit = jest.fn();
     const fakeReset = {
       user: "fake token",
       password: "Password1",
     };
 
-    await Recover.handleSubmit(fakeReset);
-    expect(Recover.handleSubmit).toHaveBeenCalledTimes(1);
-    expect(Recover.handleSubmit).toHaveBeenCalledWith(fakeReset);
+    await ResetPassword.handleSubmit(fakeReset);
+    expect(ResetPassword.handleSubmit).toHaveBeenCalledTimes(1);
+    expect(ResetPassword.handleSubmit).toHaveBeenCalledWith(fakeReset);
   });
 });

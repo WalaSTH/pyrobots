@@ -2,31 +2,44 @@ import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
+import { BrowserRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import ResetPasswordForm from "./";
 
-describe("<ResetPassword", () => {
+describe("<ResetPasswordForm", () => {
   const user = userEvent.setup();
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
   it("component rendering", () => {
-    const component = renderer.create(<ResetPasswordForm />);
+    const component = renderer.create(
+      <BrowserRouter>
+        <ResetPasswordForm />
+      </BrowserRouter>
+    );
     expect(component.toJSON()).toMatchSnapshot();
   });
 
   it("component renders with all the components", () => {
-    render(<ResetPasswordForm />);
+    render(
+      <BrowserRouter>
+        <ResetPasswordForm isTokenValid={true} />
+      </BrowserRouter>
+    );
     screen.getByText("Reset your password");
-    screen.getByTestId("Password");
-    screen.getByTestId("passwordConfirmation");
+    screen.getByTestId("passwordField");
+    screen.getByTestId("passwordConfirmationField");
     screen.getByTestId("resetPassword-button");
   });
 
   it("validates password field to be not empty after write", async () => {
     const mockHandler = jest.fn();
-    render(<ResetPasswordForm handleSubmit={mockHandler} />);
+    render(
+      <BrowserRouter>
+        <ResetPasswordForm handleSubmit={mockHandler} isTokenValid={true} />{" "}
+      </BrowserRouter>
+    );
 
     const passwordInput = screen.getByLabelText(/Password/);
     const confirmPasswordInput = screen.getByLabelText(/Confirm your password/);
@@ -44,7 +57,11 @@ describe("<ResetPassword", () => {
 
   it("checks recover without email does not send email", async () => {
     const mockHandler = jest.fn();
-    render(<ResetPasswordForm handleSubmit={mockHandler} />);
+    render(
+      <BrowserRouter>
+        <ResetPasswordForm handleSubmit={mockHandler} />{" "}
+      </BrowserRouter>
+    );
 
     const button = screen.queryByTestId("recover-button");
     await user.click(button);
