@@ -3,6 +3,8 @@ from pydantic_models import *
 from game_robot import *
 from game_auxilar_functions import *
 import random
+import signal
+import time
 
 @db_session
 def run_game(robots, n_rounds, is_sim: bool):
@@ -22,7 +24,15 @@ def run_game(robots, n_rounds, is_sim: bool):
     for i in range(n_robots):
         set_position_by_index(robot_list[i])
         robot_list[i].game_id_robot = i
-        robot_list[i].initialize()
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(3)
+        try:
+            robot_list[i].initialize()
+        except:
+            dead_list.append(robot_list[i])
+            print("Robot " +str(robot_list[i].robot_name)+ " killed due to bad code.")
+        finally:
+            signal.alarm(0)
         set_position_by_index(robot_list[i])
         robot_for_frame = {
             "id": i,
@@ -41,7 +51,15 @@ def run_game(robots, n_rounds, is_sim: bool):
     while k < (n_rounds) and len(robot_list) > 1:
         # respond for every robot
         for i in range(n_robots):
-            robot_list[i].respond()
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(3)
+            try:
+                robot_list[i].respond()
+            except:
+                print("Robot " +str(robot_list[i].robot_name)+ " killed due to bad code.")
+                dead_list.append(robot_list[i])
+            finally:
+                signal.alarm(0)
         # scan for every robot
         for i in range(n_robots):
             other_robots = robot_list.copy()
@@ -127,8 +145,11 @@ def run_game(robots, n_rounds, is_sim: bool):
                 dead_list.append(robot_list[i])
                 #robot_list.remove(robot_list[i])
         for i in range(len(dead_list)):
-            robot_list.remove(dead_list[i])
-            n_robots = len(robot_list)
+            try:
+                robot_list.remove(dead_list[i])
+                n_robots = len(robot_list)
+            except:
+                pass
         # append frames and set next round
         if is_sim:
             frame = {"robots": robot_frame_list.copy(), "missiles": missile_frame_list.copy(), "explotions": explotion_frame_list.copy()}
@@ -214,4 +235,5 @@ def set_position_by_index(gameRobot):
         y = random.randint(10, 990)
         gameRobot.set_position(x, y)
 
-
+def timeout_handler(num, stack):
+    raise Exception("robot_timeout")
