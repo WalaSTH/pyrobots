@@ -282,6 +282,7 @@ async def match_listing(list_params: MatchListParams = Depends()):
 
 
 # --- User Endpoints ---
+# Register
 @app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(
     username: str = Form(),
@@ -330,6 +331,26 @@ async def user_register(
         await send_verification_email(email, username , token)
 
         return {"detail": "User created successfully"}
+
+
+# Resend validation email
+@app.post("/resend_validation", tags=["Validation"], status_code=200)
+async def resend_email(resend: ResendValidationEmail):
+    user = get_user(resend.username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invalid username"
+        )
+
+    token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+    token = generate_token(data={"username": resend.username}, expires_delta=token_expiration)
+
+    await send_verification_email(user.email, resend.username , token)
+
+    return {"detail": "Verification email sent"}
+
 
 # Validate Account
 @app.get("/validate_account", tags=["Validation"], status_code=200)

@@ -25,6 +25,10 @@ class ValidationData(BaseModel):
     id: int
 
 
+class ResendValidationEmail(BaseModel):
+    username: str
+
+
 class User(BaseModel):
     username: str
     email: Optional[str] = None
