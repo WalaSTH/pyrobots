@@ -94,7 +94,7 @@ def test_user_register_invalid_username():
     }
     response = client.post("/user/signup", data=user_to_reg)
     assert response.status_code == 401
-    assert response.json() == {"detail": "field size is invalid"}
+    assert response.json() == {"detail": "Invalid field size"}
 
 
 #Creation new user with invalid password
@@ -143,7 +143,7 @@ def test_password_short_size():
     }
     response = client.post("/user/signup", data=user_to_reg)
     assert response.status_code == 401
-    assert response.json() == {"detail": "field size is invalid"}
+    assert response.json() == {"detail": "Invalid field size"}
 
 
 def test_upload_photo():
