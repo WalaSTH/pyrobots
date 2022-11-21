@@ -17,9 +17,7 @@ export default function FileUploadButton({ name, children, ...otherProps }) {
   return (
     <>
       <Button {...configButton}> {children} </Button>
-      {isError ? (
-        <FormHelperText error={true}> {meta.error} </FormHelperText>
-      ) : null}
+      {isError && <FormHelperText error={true}> {meta.error} </FormHelperText>}
     </>
   );
 }
