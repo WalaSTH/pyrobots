@@ -182,9 +182,8 @@ def test_user_not_verified():
     assert response.status_code == 200
     assert response.json() == {"detail": "User created successfully"}
     response = client.post("/token", data={"username": username, "password": user_to_reg["password"]})
-    print(response.reason)
     assert response.status_code == 401
-    assert response.json() == {"detail": "This account is not verified"}
+    assert response.json() == {"detail": {"email": user_to_reg["email"], "message": "This account is not verified"}}
     delete_user(username)
 
 def test_resend_validation_with_none_username():
@@ -225,7 +224,7 @@ def test_resend_validation_with_existant_user_resends_email(mocker):
 
 def test_validate_account_with_invalid_token_responds_404():
     invalid_token = "invalid-token"
-    response = client.get("/validate_account", params={"token": invalid_token})
+    response = client.post("/validate_account", json={"token": invalid_token})
 
     assert response.status_code == 404
 
@@ -233,7 +232,7 @@ def test_validate_account_with_invalid_token_responds_404():
 def test_validate_account_with_invalid_jwt_token_responds_404():
     invalid_token = "invalid-token"
 
-    response = client.get("/validate_account", params={"token": invalid_token})
+    response = client.post("/validate_account", json={"token": invalid_token})
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Link expired"}
@@ -241,14 +240,14 @@ def test_validate_account_with_invalid_jwt_token_responds_404():
 
 def test_validate_account_with_expired_token_responds_404():
     expired_token = generate_token({"username": "testUser"}, timedelta(minutes=-1))
-    response = client.get("/validate_account", params={"token": expired_token})
+    response = client.post("/validate_account", json={"token": expired_token})
     assert response.status_code == 404
     assert response.json() == {"detail": "Link expired"}
 
 
 def test_validate_account_with_token_without_username_responds_404():
     invalid_token = generate_token({"foo": "bar"}, timedelta(minutes=5))
-    response = client.get("/validate_account", params={"token": invalid_token})
+    response = client.post("/validate_account", json={"token": invalid_token})
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Username can't be empty"}
@@ -260,7 +259,7 @@ def test_validate_account_with_token_with_username_not_registered_responds_404()
         timedelta(minutes=5)
     )
 
-    response = client.get("/validate_account", params={"token": valid_token})
+    response = client.post("/validate_account", json={"token": valid_token})
 
     assert response.status_code == 404
     assert response.json() == {"detail": "User not registered"}
@@ -280,7 +279,7 @@ def test_validate_account_with_token_with_user_registered_successful_response():
         timedelta(minutes=5)
     )
 
-    response = client.get("/validate_account", params={"token": valid_token})
+    response = client.post("/validate_account", json={"token": valid_token})
 
     assert response.status_code == 200
     assert response.json() == {"detail": f"Account {user['username']} validated"}
@@ -300,7 +299,7 @@ def test_validate_account_with_token_with_user_registered_verifies_user():
         timedelta(minutes=5)
     )
 
-    client.get("/validate_account", params={"token": valid_token})
+    client.post("/validate_account", json={"token": valid_token})
 
     db_user = get_user(user["username"])
 

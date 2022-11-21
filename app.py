@@ -352,10 +352,10 @@ async def resend_email(resend: ResendValidationEmail):
 
 
 # Validate Account
-@app.get("/validate_account", tags=["Validation"], status_code=200)
-async def validate_account(token: str):
+@app.post("/validate_account", tags=["Validation"], status_code=200)
+async def validate_account(validation: ValidationData):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(validation.token, SECRET_KEY, algorithms=[ALGORITHM])
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

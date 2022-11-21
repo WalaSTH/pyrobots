@@ -22,7 +22,7 @@ class TokenData(BaseModel):
 
 
 class ValidationData(BaseModel):
-    id: int
+    token: str
 
 
 class ResendValidationEmail(BaseModel):
