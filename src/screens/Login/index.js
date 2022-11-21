@@ -48,7 +48,7 @@ export default function Login({ navigate }) {
         setSeverity("success");
         setBody(response.data["detail"]);
         setOpen(true);
-        openValidationDialog(false);
+        setOpenValidationDialog(false);
       })
       .catch(function (error) {
         setLoading(false);
