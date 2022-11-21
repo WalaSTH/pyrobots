@@ -5,7 +5,7 @@ from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from pydantic import EmailStr
 
 from Database.Database import User
-from security_functions import VALIDATE_TOKEN_EXPIRE_MINUTES
+from utils.auth import VALIDATE_TOKEN_EXPIRE_MINUTES
 
 conf = ConnectionConfig(
     MAIL_USERNAME = "noreplypyrobots@gmail.com",

@@ -7,7 +7,7 @@ from Test.auxiliar_functions import *
 from starlette.middleware.cors import CORSMiddleware
 from base64 import b64encode
 from app import app
-from security_functions import generate_token
+from utils.auth import generate_token
 import random
 import string
 

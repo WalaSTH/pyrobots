@@ -10,15 +10,14 @@ from fastapi import (
 )
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Union, Optional
-from fastapi.responses import FileResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from typing import Optional
+from fastapi.security import OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
-from security_functions import *
+from utils.auth import *
+from jose import JWTError
 from pydantic_models import *
-from connections import *
-import json
-from random import *
+from connections import WebSocket, ConnectionManager
+from random import randint
 from utils.mails import send_verification_email
 from game_loop import *
 
@@ -409,7 +408,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     elif not user.verified:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="This account is not verified",
+            detail={"message": "This account is not verified", "email": user.email},
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
