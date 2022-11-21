@@ -2,7 +2,7 @@ import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import CreateMatchForm from "./";
 import { BrowserRouter } from "react-router-dom";
 
