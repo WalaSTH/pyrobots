@@ -17,7 +17,6 @@ import {
 import {
   PlayArrow as PlayArrowIcon,
   Pause as PauseIcon,
-  Refresh as RefreshIcon,
 } from "@mui/icons-material";
 import { purple, pink, deepOrange, teal } from "@mui/material/colors";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
@@ -231,16 +230,13 @@ export default function Board() {
           >
             <IconButton
               children={paused ? <PlayArrowIcon /> : <PauseIcon />}
-              onClick={() => setPaused(!paused)}
-            />
-            <IconButton
-              sx={{ marginLeft: "-.5rem" }}
-              children={<RefreshIcon />}
               onClick={() => {
-                setFinished(false);
-                setPosition(0);
-                setPaused(false);
-                setDialogOpen(false);
+                if (position === frames.frames.length - 1) {
+                  setPosition(0);
+                  setPaused(false);
+                } else {
+                  setPaused(!paused);
+                }
               }}
             />
             <Slider
