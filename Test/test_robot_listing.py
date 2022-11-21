@@ -50,19 +50,6 @@ user_to_reg = {
 u2_res = client.post("/user/signup", data=user_to_reg)
 assert u2_res.status_code == 200
 
-# List robots of user without them /// We have added default bots, this test is no longer valid.
-#def test_robot_listing_empty():
-#    rob_owner = {
-#        "user_name" : user2,
-#        "detailed" : False
-#    }
-#
-#    res_list = get_robot_list(rob_owner["user_name"], rob_owner["detailed"])
-#    response = client.get("/robot/list", params=rob_owner)
-#
-#    assert response.json() == {"detail" : "No Robots available"}
-#    assert response.status_code == 404
-
 # List robots without code.
 def test_robot_listing_with_items_no_code():
     rob_owner = {
