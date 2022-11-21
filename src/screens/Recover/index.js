@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Container,
   Dialog,
@@ -8,70 +9,61 @@ import {
   Box,
   DialogActions,
 } from "@mui/material";
-import { useState } from "react";
+import RecoverForm from "../../components/FormsUI/RecoverForm";
 import axios from "axios";
 import Snackbar from "../../components/FormsUI/Snackbar";
-import RegisterUserForm from "../../components/FormsUI/RegisterForm";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
-const endpoint = "http://127.0.0.1:8000/user/signup";
+const endpoint = "http://127.0.0.1:8000/user/recover";
 
-export default function RegisterForm() {
+export default function Recover() {
   const navigate = useNavigate();
+
+  // Fetch query params
+  const [searchParams] = useSearchParams();
+  const recoverType = searchParams.get("type");
 
   // Loading bar after submitting the form
   const [loading, setLoading] = useState(false);
 
-  // Verify account dialog
+  // Email sent dialog
   const [dialogOpen, setDialogOpen] = useState(false);
 
   // Snackbar utilities
-  const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
 
-  const handleClose = (reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
+  function handleSnackbarClose(reason) {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
+  }
 
-  // Convert file to base64
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-
+  // Connection with endpoint
   async function handleSubmit(values) {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("username", values.username);
-    formData.append("password", values.password);
-    formData.append("email", values.email);
-    if (values.avatar) {
-      formData.append("avatar", await toBase64(values.avatar));
-    }
-
-    await axios
-      .post(endpoint, formData)
+    return await axios
+      .post(endpoint, {
+        email: values.email,
+        type: recoverType,
+      })
       .then(function () {
-        setLoading(false);
         setDialogOpen(true);
+        setLoading(false);
       })
       .catch(function (error) {
         setLoading(false);
         setSeverity("error");
-        if (error.response) {
+        if (
+          error.response &&
+          typeof error.response.data["detail"] != "object"
+        ) {
           setBody(error.response.data["detail"]);
         } else {
           setBody("Unknown error");
         }
-        setOpen(true);
+        setSnackbarOpen(true);
       });
   }
 
@@ -79,9 +71,20 @@ export default function RegisterForm() {
     <Container
       component="main"
       maxWidth="xs"
-      sx={{ display: "flex", alignItems: "center", marginTop: 3 }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: 10,
+      }}
     >
-      <RegisterUserForm handleSubmit={handleSubmit} loading={loading} />
+      <RecoverForm
+        handleSubmit={handleSubmit}
+        type={recoverType}
+        loading={loading}
+        setLoading={setLoading}
+      />
       {dialogOpen && (
         <Dialog open={dialogOpen}>
           <DialogTitle>Email sent</DialogTitle>
@@ -89,8 +92,8 @@ export default function RegisterForm() {
             <Box display="flex">
               <MarkEmailReadIcon />
               <DialogContentText sx={{ marginLeft: "10px" }}>
-                We sent you an email with the validation link, please check it
-                out!
+                We sent you an email with the recovery information, please check
+                it out!
               </DialogContentText>
             </Box>
           </DialogContent>
@@ -113,18 +116,18 @@ export default function RegisterForm() {
                   navigate("/login");
                 }}
               >
-                Go to login
+                Back to login
               </Button>
             </Box>
           </DialogActions>
         </Dialog>
       )}
-      {open && (
+      {snackbarOpen && (
         <Snackbar
-          open={open}
+          open={snackbarOpen}
           body={body}
           severity={severity}
-          handleClose={handleClose}
+          handleClose={handleSnackbarClose}
         />
       )}
     </Container>

@@ -111,7 +111,9 @@ export default function Login({ navigate }) {
       component="main"
       maxWidth="xs"
       sx={{
-        marginTop: 20,
+        display: "flex",
+        alignItems: "center",
+        marginBottom: 5,
       }}
     >
       <LoginForm handleSubmit={handleSubmit} />
