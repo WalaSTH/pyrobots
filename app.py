@@ -10,15 +10,15 @@ from fastapi import (
 )
 from Database.Database import *
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Union, Optional
-from fastapi.responses import FileResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from typing import Optional
+from fastapi.security import OAuth2PasswordRequestForm
 from field_validations import create_match_field_validation
-from security_functions import *
+from utils.auth import *
+from jose import JWTError
 from pydantic_models import *
-from connections import *
-import json
-from random import *
+from connections import WebSocket, ConnectionManager
+from random import randint
+from utils.mails import send_verification_email
 from game_loop import *
 
 MAX_LEN_ALIAS = 16
@@ -29,7 +29,6 @@ MAX_LEN_EMAIL = 30
 MIN_LEN_EMAIL = 10
 MAX_LEN_NAME_GAME = 10
 MIN_LEN_NAME_GAME = 3
-
 
 description = """
     PyRobots 🤖
@@ -282,6 +281,7 @@ async def match_listing(list_params: MatchListParams = Depends()):
 
 
 # --- User Endpoints ---
+# Register
 @app.post("/user/signup", tags=["Users"], status_code=200)
 async def user_register(
     username: str = Form(),
@@ -323,7 +323,63 @@ async def user_register(
         )
     else:
         create_user(username, email, get_password_hash(password), avatar)
+
+        token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+        token = generate_token(data={"username": username}, expires_delta=token_expiration)
+
+        await send_verification_email(email, username, token)
+
         return {"detail": "User created successfully"}
+
+
+# Resend validation email
+@app.post("/resend_validation", tags=["Validation"], status_code=200)
+async def resend_email(resend: ResendValidationEmail):
+    user = get_user(resend.username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invalid username"
+        )
+
+    token_expiration = timedelta(minutes=VALIDATE_TOKEN_EXPIRE_MINUTES)
+    token = generate_token(data={"username": resend.username}, expires_delta=token_expiration)
+
+    await send_verification_email(user.email, resend.username , token)
+
+    return {"detail": "Verification email sent"}
+
+
+# Validate Account
+@app.post("/validate_account", tags=["Validation"], status_code=200)
+async def validate_account(validation: ValidationData):
+    try:
+        payload = jwt.decode(validation.token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Link expired"
+        )
+
+    username = payload.get("username")
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Username can't be empty"
+        )
+
+    user = get_user(username)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not registered"
+        )
+    else:
+        set_user_verified(username)
+
+    return {"detail": f"Account {username} validated"}
 
 
 # Upload image
@@ -339,24 +395,6 @@ async def upload_photo(
         return {"detail": "Photo uploaded successfully"}
 
 
-@app.delete("/user/delete_user", tags=["Users"])
-async def user_delete(user_name: str):
-    """Deletes an user.
-    Args: \n
-        user_name (str): Name of the user to delete. \n
-    Raises: \n
-        HTTPException: The user does not exist. \n
-    Returns: \n
-        str: Verification text.
-    """
-    if not user_exists(user_name):
-        raise HTTPException(status_code=404, detail="user doesn't exist")
-
-    else:
-        delete_user(user_name)
-        return {"user successfully deleted"}
-
-
 # login
 @app.post("/token", tags=["Token"], response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -364,11 +402,17 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail={"message": "Incorrect username or password"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    elif not user.verified:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"message": "This account is not verified", "email": user.email},
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
+    access_token = generate_token(
         data={"sub": user.user_name}, expires_delta=access_token_expires
     )
 
@@ -383,16 +427,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         "id": user.id,
         "avatar": avatar,
     }
-
-
-@app.get("/user/me/")
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
-    return {"username": current_user.user_name}
-
-
-@app.get("/user/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.user_name}]
 
 
 # Modify user
@@ -428,7 +462,7 @@ async def modify_logged_user(update_info: UpdateParams):
             return {"detail": "Password updated succesfully."}
 
         case "avatar":
-            avatar = update_user_avatar(update_info.username, update_info.new_pic)         
+            avatar = update_user_avatar(update_info.username, update_info.new_pic)
             return {"detail": "User updated succesfully.", "new_avatar": avatar}
 
 
