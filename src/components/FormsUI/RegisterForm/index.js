@@ -4,13 +4,12 @@ import { Form, Formik } from "formik";
 
 // Custom components for form input with formik and MUI
 import AvatarPreview from "../../FormsUI/AvatarPreview";
-import FileUploadInput from "../../FormsUI/FileUploadInput";
 import FileUploadButton from "../../FormsUI/FileUploadButton";
 import SubmitFormButton from "../../FormsUI/SubmitFormButton";
 import TextField from "../../FormsUI/TextField";
 
 // MUI components
-import { Card, Grid, Typography } from "@mui/material";
+import { Card, Grid, Typography, Box, LinearProgress } from "@mui/material";
 
 // MUI icons
 import PersonIcon from "@mui/icons-material/Person";
@@ -41,15 +40,11 @@ const formValidation = Yup.object().shape({
   ),
 });
 
-export default function RegisterUserForm({ handleSubmit }) {
+export default function RegisterUserForm({ handleSubmit, loading }) {
   return (
     <Formik
       initialValues={{
         ...initialFormState,
-      }}
-      initialTouched={{
-        code: true,
-        avatar: true,
       }}
       validationSchema={formValidation}
       onSubmit={handleSubmit}
@@ -104,13 +99,14 @@ export default function RegisterUserForm({ handleSubmit }) {
                 marginBottom: -0.5,
               }}
             >
-              <FileUploadInput
+              <FileUploadButton
+                id="userAvatarInput"
                 name="avatar"
                 accept="image/png,image/jpg,image/jpeg"
                 data-testid="userAvatar"
-              />
-
-              <FileUploadButton name="avatar" startIcon={<AddAPhotoIcon />}>
+                inputProps={{ accept: "image/png,image/jpg,image/jpeg" }}
+                buttonProps={{ startIcon: <AddAPhotoIcon /> }}
+              >
                 Select avatar
               </FileUploadButton>
             </Grid>
@@ -155,6 +151,11 @@ export default function RegisterUserForm({ handleSubmit }) {
 
             <Grid item xs={12}>
               <SubmitFormButton>Register</SubmitFormButton>
+              {loading && (
+                <Box sx={{ width: "100%" }}>
+                  <LinearProgress color="secondary" />
+                </Box>
+              )}
             </Grid>
           </Grid>
         </Form>

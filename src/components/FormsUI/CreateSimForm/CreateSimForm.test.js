@@ -6,7 +6,7 @@ import renderer from "react-test-renderer";
 
 describe("CreateSimForm", () => {
   it("Render component", () => {
-    act(() => <CreateSimForm />);
+    act(() => render(<CreateSimForm />));
     screen.getByText(/Create Simulation/i);
     screen.getByText(/Number of rounds/i);
     screen.getByLabelText(/Rounds/i);

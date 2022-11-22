@@ -10,11 +10,20 @@ import CreateMatch from "../screens/CreateMatch/";
 import Lobby from "../screens/Lobby";
 import BrowseMatches from "../screens/BrowseMatches";
 import Board from "../screens/Board";
+import ResetPassword from "../screens/ResetPassword";
+import UserProfile from "../screens/UserProfile";
+import Recover from "../screens/Recover";
+import ValidateAccount from "../screens/ValidateAccount";
 
-export default function RoutesWrapper({ navigate }) {
+export default function RoutesWrapper({ navigate, avatar, setAvatar }) {
   const token = localStorage.getItem("token");
   const userID = localStorage.getItem("userID");
   const username = localStorage.getItem("username");
+  const simID = localStorage.getItem("simID");
+  if (simID && window.location.pathname !== "/board/" + simID) {
+    localStorage.removeItem(simID);
+    localStorage.removeItem("simID");
+  }
 
   return (
     <Routes>
@@ -30,7 +39,9 @@ export default function RoutesWrapper({ navigate }) {
         path="/login"
         element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
       />
-      <Route path="/recover" element={<></>} />
+      <Route path="/recover" element={<Recover />} />
+      <Route path="/reset-password/" element={<ResetPassword />} />
+      <Route path="/validate-account" element={<ValidateAccount />} />
       <Route element={<PrivateRoute />}>
         <Route path="/list-robot" element={<ListRobot />} />
         <Route path="/browse-matches" element={<BrowseMatches />} />
@@ -43,6 +54,10 @@ export default function RoutesWrapper({ navigate }) {
         <Route path="/board/:simID" element={<Board />} />
         <Route path="/match-history" element={<></>} />
         <Route path="/lobby/:matchID" element={<Lobby />} />
+        <Route
+          path="/profile"
+          element={<UserProfile avatar={avatar} setAvatar={setAvatar} />}
+        />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
