@@ -61,6 +61,11 @@ export default function MatchHistoryList({ matches }) {
     <DataGrid
       rows={rows}
       columns={columns}
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "id", sort: "desc" }],
+        },
+      }}
       pageSize={pageSize}
       rowsPerPageOptions={[3, 5, 7]}
       onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
