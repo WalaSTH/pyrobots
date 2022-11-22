@@ -1,25 +1,27 @@
 import { TextField } from "@mui/material";
 import { useField } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function FilePreview({ name, ...otherProps }) {
   const [field, meta] = useField(name);
   const file = field.value;
-  const isError = !file || !meta.touched || meta.error;
-  const label = isError ? "" : file.name;
+  const isError = !meta.touched || meta.error;
 
   const [fileData, setFileData] = useState("");
-  const reader = new FileReader();
-  if (!isError) {
-    reader.onloadend = () => {
-      setFileData(reader.result);
-    };
-    reader.readAsBinaryString(file);
-  }
+
+  useEffect(() => {
+    if (file && !isError) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFileData(reader.result);
+      };
+      reader.readAsBinaryString(file);
+    }
+  }, [isError, file]);
 
   const configFilePreview = {
     ...field,
-    label: label,
+    label: !isError && file && file.name,
     value: fileData,
     margin: "dense",
     variant: "filled",
@@ -31,5 +33,5 @@ export default function FilePreview({ name, ...otherProps }) {
     ...otherProps,
   };
 
-  return <>{isError ? null : <TextField {...configFilePreview} />}</>;
+  return <>{file && !isError && <TextField {...configFilePreview} />}</>;
 }

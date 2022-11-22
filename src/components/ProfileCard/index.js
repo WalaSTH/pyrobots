@@ -23,6 +23,8 @@ import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PercentIcon from "@mui/icons-material/Percent";
 import { useState } from "react";
+import ChangeAvatarDialog from "../ChangeAvatarDialog";
+import ChangePasswordDialog from "../ChangePasswordDialog";
 
 function StatsCard({ stats }) {
   return (
@@ -72,7 +74,7 @@ function StatsCard({ stats }) {
             <PercentIcon />
           </ListItemAvatar>
           <ListItemText
-            primary="Victory rate"
+            primary="Win rate"
             secondary={
               stats ? (
                 stats.played_matches === 0 ? (
@@ -92,8 +94,17 @@ function StatsCard({ stats }) {
   );
 }
 
-export default function ProfileCard({ username, avatar, stats }) {
+export default function ProfileCard({
+  username,
+  avatar,
+  setAvatar,
+  stats,
+  snackbarProps,
+}) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showAvatarDialog, setShowAvatarDialog] = useState(false);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const menuOpen = Boolean(anchorEl);
 
   function handleClick(event) {
     setAnchorEl(event.currentTarget);
@@ -103,7 +114,21 @@ export default function ProfileCard({ username, avatar, stats }) {
     setAnchorEl(null);
   }
 
-  const menuOpen = Boolean(anchorEl);
+  function handleAvatarDialogOpen() {
+    setShowAvatarDialog(true);
+  }
+
+  function handleAvatarDialogClose() {
+    setShowAvatarDialog(false);
+  }
+
+  function handlePasswordDialogOpen() {
+    setShowPasswordDialog(true);
+  }
+
+  function handlePasswordDialogClose() {
+    setShowPasswordDialog(false);
+  }
 
   return (
     <Card
@@ -154,14 +179,42 @@ export default function ProfileCard({ username, avatar, stats }) {
               horizontal: "center",
             }}
           >
-            <MenuItem data-testid="menuItem" onClick={handleClose}>
-              Change user avatar
+            <MenuItem
+              data-testid="menuItem"
+              onClick={() => {
+                handleClose();
+                handleAvatarDialogOpen();
+              }}
+            >
+              Change avatar
             </MenuItem>
-            <MenuItem data-testid="menuItem" onClick={handleClose}>
+            <MenuItem
+              data-testid="menuItem"
+              onClick={() => {
+                handleClose();
+                handlePasswordDialogOpen();
+              }}
+            >
               Change password
             </MenuItem>
           </Menu>
         </Grid>
+
+        <ChangeAvatarDialog
+          open={showAvatarDialog}
+          onClose={handleAvatarDialogClose}
+          username={username}
+          avatar={avatar}
+          setAvatar={setAvatar}
+          snackbarProps={snackbarProps}
+        />
+
+        <ChangePasswordDialog
+          open={showPasswordDialog}
+          onClose={handlePasswordDialogClose}
+          username={username}
+          snackbarProps={snackbarProps}
+        />
 
         <Grid
           item
@@ -172,7 +225,7 @@ export default function ProfileCard({ username, avatar, stats }) {
             marginBottom: -1.5,
           }}
         >
-          <IconButton>
+          <IconButton onClick={handleAvatarDialogOpen}>
             <Badge
               overlap="circular"
               badgeContent={

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Snackbar from "../../components/FormsUI/Snackbar";
 import ProfileCard from "../../components/ProfileCard";
 
-export default function UserProfile() {
+export default function UserProfile({ avatar, setAvatar }) {
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
@@ -18,7 +18,6 @@ export default function UserProfile() {
   }
 
   const username = localStorage.getItem("username");
-  const avatar = localStorage.getItem("avatar");
   const [stats, setStats] = useState(null);
 
   async function fetchStats(username) {
@@ -56,7 +55,17 @@ export default function UserProfile() {
         marginTop: 10,
       }}
     >
-      <ProfileCard username={username} avatar={avatar} stats={stats} />
+      <ProfileCard
+        username={username}
+        avatar={avatar}
+        setAvatar={setAvatar}
+        stats={stats}
+        snackbarProps={{
+          setOpen: setOpen,
+          setBody: setBody,
+          setSeverity: setSeverity,
+        }}
+      />
 
       {open && (
         <Snackbar
