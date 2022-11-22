@@ -28,21 +28,21 @@ export default function RobotStatsDialog({ open, onClose, name, stats }) {
           }}
         >
           <List>
-            <ListItem>
+            <ListItem data-testid="statsItem">
               <ListItemAvatar>
                 <SportsEsportsIcon />
               </ListItemAvatar>
               <ListItemText primary="Matches played" secondary={stats.played} />
             </ListItem>
 
-            <ListItem>
+            <ListItem data-testid="statsItem">
               <ListItemAvatar>
                 <EmojiEventsIcon />
               </ListItemAvatar>
               <ListItemText primary="Matches won" secondary={stats.won} />
             </ListItem>
 
-            <ListItem>
+            <ListItem data-testid="statsItem">
               <ListItemAvatar>
                 <PercentIcon />
               </ListItemAvatar>
