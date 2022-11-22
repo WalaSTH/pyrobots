@@ -17,6 +17,7 @@ describe("<LoginForm", () => {
   });
 
   it("component renders with all the components", () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => render(<LoginForm />));
     screen.getByText(/Sign in/i);
     screen.getByLabelText(/Username/i);

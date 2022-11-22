@@ -6,6 +6,7 @@ import { act } from "react-test-renderer";
 
 describe("<MainPage", () => {
   it("component rendering", () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => render(<MainPage />));
     screen.getByText(/Py Robots/i);
     screen.getByText(/Build your own robot and compete!/i);

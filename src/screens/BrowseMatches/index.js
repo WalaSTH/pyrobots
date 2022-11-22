@@ -41,7 +41,6 @@ export default function BrowseMatches() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   }
 

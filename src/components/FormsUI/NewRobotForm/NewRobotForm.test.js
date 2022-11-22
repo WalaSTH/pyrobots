@@ -14,6 +14,7 @@ describe("NewRobotForm", () => {
   });
 
   it("Render component", () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => render(<NewRobotForm />));
     screen.getByRole("heading", { name: /New Robot/i });
     screen.getByLabelText(/Name/i);
