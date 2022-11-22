@@ -54,7 +54,9 @@ describe("UserProfile", () => {
       expect(statsItems[0]).toHaveTextContent(mockedStats.played_matches);
       expect(statsItems[1]).toBeInTheDocument(mockedStats.victories);
       expect(statsItems[2]).toBeInTheDocument(
-        mockedStats.victories / mockedStats.played_matches + "%"
+        ((mockedStats.victories / mockedStats.played_matches) * 100).toFixed(
+          2
+        ) + "%"
       );
     });
   });

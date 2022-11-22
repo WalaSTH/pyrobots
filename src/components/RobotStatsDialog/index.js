@@ -47,9 +47,11 @@ export default function RobotStatsDialog({ open, onClose, name, stats }) {
                 <PercentIcon />
               </ListItemAvatar>
               <ListItemText
-                primary="Victory rate"
+                primary="Win rate"
                 secondary={
-                  stats.played === 0 ? "0%" : stats.won / stats.played + "%"
+                  stats.played === 0
+                    ? "0.00%"
+                    : ((stats.won / stats.played) * 100).toFixed(2) + "%"
                 }
               />
             </ListItem>

@@ -78,9 +78,10 @@ function StatsCard({ stats }) {
             secondary={
               stats ? (
                 stats.played_matches === 0 ? (
-                  "0%"
+                  "0.00%"
                 ) : (
-                  stats.victories / stats.played_matches + "%"
+                  ((stats.victories / stats.played_matches) * 100).toFixed(2) +
+                  "%"
                 )
               ) : (
                 <Skeleton width="40%" data-testid="statsSkeleton" />
