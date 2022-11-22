@@ -41,14 +41,13 @@ const formValidation = Yup.object().shape({
 });
 
 export default function ChangePasswordDialog({
-  open,
+  open = true,
   onClose,
   username,
   snackbarProps,
 }) {
-  const { setOpen, setSeverity, setBody } = snackbarProps;
-
   async function handleSubmit(values, { setErrors }) {
+    const { setOpen, setSeverity, setBody } = snackbarProps;
     return await axios
       .put("http://127.0.0.1:8000/user/update", {
         username: username,
@@ -61,7 +60,6 @@ export default function ChangePasswordDialog({
         setOpen(true);
         setSeverity("success");
         setBody(response.data.detail);
-        console.log(response.data);
       })
       .catch(function (error) {
         if (error.response && error.response.status === 401) {

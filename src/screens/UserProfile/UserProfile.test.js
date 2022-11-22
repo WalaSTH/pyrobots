@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import renderer, { act } from "react-test-renderer";
 import UserProfile from ".";
@@ -88,7 +88,7 @@ describe("UserProfile", () => {
 
     expect(screen.getByTestId("userSettingsMenu")).toBeInTheDocument();
     expect(screen.queryAllByTestId("menuItem")).toHaveLength(2);
-    expect(screen.getByText(/Change user avatar/i)).toBeInTheDocument();
+    expect(screen.getByText(/Change avatar/i)).toBeInTheDocument();
     expect(screen.getByText(/Change password/i)).toBeInTheDocument();
   });
 
@@ -97,13 +97,13 @@ describe("UserProfile", () => {
     await act(async () => render(<UserProfile />));
 
     await user.click(screen.getByTestId("userSettingsButton"));
-    user.click(screen.getByText(/Change user avatar/i));
+    await user.click(screen.getByText(/Change avatar/i));
     await waitFor(() =>
       expect(screen.queryByTestId("userSettingsMenu")).toBeNull()
     );
 
     await user.click(screen.getByTestId("userSettingsButton"));
-    user.click(screen.getByText(/Change password/i));
+    await user.click(screen.getByText(/Change password/i));
     await waitFor(() =>
       expect(screen.queryByTestId("userSettingsMenu")).toBeNull()
     );

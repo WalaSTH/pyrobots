@@ -53,6 +53,7 @@ exports[`UserProfile matches Snapshot 1`] = `
           className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
           disabled={false}
           onBlur={[Function]}
+          onClick={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
           onFocus={[Function]}
