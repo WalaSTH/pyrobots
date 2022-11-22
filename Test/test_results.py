@@ -108,7 +108,7 @@ def test_user_does_not_participate():
     }
 
     response = client.get("/match/result", params=test_params)
-    assert response.json() == {"detail": "You are not part of this match"}
+    assert response.json() == {"detail": "You were not part of this match"}
     assert response.status_code == 409
 
 # Good request.

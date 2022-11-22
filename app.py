@@ -290,7 +290,7 @@ async def get_results(info: ChosenMatch = Depends()):
         raise HTTPException(status_code=404, detail=f"User {info.username} is not a user")
 
     if not check_user_connected(info.match_id, info.username):
-        raise HTTPException(status_code=409, detail="You are not part of this match")
+        raise HTTPException(status_code=409, detail="You were not part of this match")
 
     return{"detail": "Results succesfully retrieved.", "data": get_match_results(info.match_id)}
 
