@@ -59,8 +59,6 @@ def test_scan1():
     robot1.point_scanner(1,10)
     robot1.scan(other_robots)
     res_scan = robot1.scan_result
-    print(robot1.scan_direction)
-    print(res_scan)
     assert res_scan == 200
 
 """
@@ -79,9 +77,6 @@ def test_scan_360():
         robot1.scan(other_robots)
         res_scan = robot1.scan_result
         i=i+1
-    print(i)
-    print(robot1.scan_direction)
-    print(res_scan)
     assert res_scan < 1000
 
 ##### Test move
@@ -157,8 +152,6 @@ def test_missile():
     robot1.cannon(0,100)
     robot1.shoot_cannon()
     robot1.missile_advance(explotions)
-    print(robot1.cannon_cooldown)
-    print(robot1.missiles[0].x_position)
     assert len(robot1.missiles) == 1
     assert robot1.missiles[0].x_position > 50 and robot1.missiles[0].y_position == 50
     explotions.clear()
@@ -178,7 +171,7 @@ def test_missile_damage1():
     robot1.game_id_robot = 0
     robot1.cannon(0, MISSILE_SPEED)
     robot1.shoot_cannon()
-    #print("Missile is in:" + str(robot1.missiles[0].x_position) + ", " + str(robot1.missiles[0].y_position) + ")" )
+
     robot1.missile_advance(explotions)
     deal_damage(explotions, 2, [robot1,robot2])
     assert robot2.health == 90
@@ -192,18 +185,14 @@ def test_missile_damage2():
     robot1.missiles.clear()
     robot1.set_position(50,50)
     robot2.set_position(50 + MISSILE_SPEED + EXPLOTION_RANGE_MID + ROBOT_HITBOX_OFFSET , 50)
-    print("Robot 2 is on " + str(50 + MISSILE_SPEED + 30) + ", " + str (50))
     robot2.health = 100
     robot1.cannon_cooldown = 0
     robot1.game_id_robot = 0
     robot1.cannon(0, MISSILE_SPEED)
     robot1.shoot_cannon()
-    print("Missile is in:" + str(robot1.missiles[0].x_position) + ", " + str(robot1.missiles[0].y_position) + ")" )
     robot1.missile_advance(explotions)
-    #print("Missile is in:" + str(robot1.missiles[0].x_position) + ", " + str(robot1.missiles[0].y_position) + ")" )
-    print(explotions[0].x_position)
+
     distance = deal_damage(explotions, 2, [robot1,robot2])
-    print("distance is " + str(distance))
     assert robot2.health == 95
     robot1.missiles.clear()
 
@@ -215,18 +204,14 @@ def test_missile_damage3():
     robot1.missiles.clear()
     robot1.set_position(50,50)
     robot2.set_position(50 + MISSILE_SPEED + EXPLOTION_RANGE_FAR + ROBOT_HITBOX_OFFSET , 50)
-    print("Robot 2 is on " + str(50 + MISSILE_SPEED + 30) + ", " + str (50))
     robot2.health = 100
     robot1.cannon_cooldown = 0
     robot1.game_id_robot = 0
     robot1.cannon(0, MISSILE_SPEED)
     robot1.shoot_cannon()
-    print("Missile is in:" + str(robot1.missiles[0].x_position) + ", " + str(robot1.missiles[0].y_position) + ")" )
     robot1.missile_advance(explotions)
-    #print("Missile is in:" + str(robot1.missiles[0].x_position) + ", " + str(robot1.missiles[0].y_position) + ")" )
-    print(explotions[0].x_position)
+
     distance = deal_damage(explotions, 2, [robot1,robot2])
-    print("distance is " + str(distance))
     assert robot2.health == 97
     robot1.missiles.clear()
 
