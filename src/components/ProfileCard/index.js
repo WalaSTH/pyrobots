@@ -74,7 +74,7 @@ function StatsCard({ stats }) {
             <PercentIcon />
           </ListItemAvatar>
           <ListItemText
-            primary="Victory rate"
+            primary="Win rate"
             secondary={
               stats ? (
                 stats.played_matches === 0 ? (

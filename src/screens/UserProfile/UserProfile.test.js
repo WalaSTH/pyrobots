@@ -25,7 +25,7 @@ describe("UserProfile", () => {
     expect(screen.getByText(/User stats/i)).toBeInTheDocument();
     expect(screen.getByText(/Matches played/i)).toBeInTheDocument();
     expect(screen.getByText(/Matches won/i)).toBeInTheDocument();
-    expect(screen.getByText(/Victory rate/i)).toBeInTheDocument();
+    expect(screen.getByText(/Win rate/i)).toBeInTheDocument();
     expect(screen.queryAllByTestId("statsSkeleton")).toHaveLength(3);
 
     // Settings menu should be closed

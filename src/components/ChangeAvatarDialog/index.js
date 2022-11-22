@@ -57,7 +57,6 @@ export default function ChangeAvatarDialog({
   const { setOpen, setBody, setSeverity } = snackbarProps;
 
   async function handleSubmit(values) {
-    onClose();
     return await axios
       .put("http://127.0.0.1:8000/user/update", {
         username: username,
@@ -65,6 +64,7 @@ export default function ChangeAvatarDialog({
         new_pic: values.avatar ? await toBase64(values.avatar) : "",
       })
       .then(function (response) {
+        onClose();
         setOpen(true);
         setSeverity("success");
         setBody(response.data.detail);
@@ -72,6 +72,7 @@ export default function ChangeAvatarDialog({
         setAvatar(response.data.new_avatar);
       })
       .catch(function (error) {
+        onClose();
         setSeverity("error");
         if (
           error.response &&
