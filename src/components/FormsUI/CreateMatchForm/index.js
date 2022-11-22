@@ -1,13 +1,9 @@
 import { Card, Grid, Typography, Box } from "@mui/material";
 import TextField from "../TextField";
 import SubmitFormButton from "../SubmitFormButton";
-import Snackbar from "../Snackbar";
 import SelectRobot from "../SelectRobot";
-import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const formValidation = Yup.object().shape({
   name: Yup.string()
@@ -28,8 +24,8 @@ const formValidation = Yup.object().shape({
     .integer()
     .typeError("Insert a number")
     .positive()
-    .min(2)
-    .max(4),
+    .min(2, "Min players must be greater or equal than 2")
+    .max(4, "Min players must be lower or equal than 4"),
   max_players: Yup.number()
     .integer()
     .typeError("Insert a number")
@@ -52,8 +48,7 @@ const formValidation = Yup.object().shape({
   robot_id: Yup.number().integer().positive().required(),
 });
 
-export default function CreateMatchForm({ userID }) {
-  const navigate = useNavigate();
+export default function CreateMatchForm({ userID, handleSubmit }) {
   const initialFormState = {
     name: "",
     password: "",
@@ -64,36 +59,6 @@ export default function CreateMatchForm({ userID }) {
     robot_id: "",
     creator: userID,
   };
-  const [open, setOpen] = useState(false);
-  const [body, setBody] = useState("");
-  const [severity, setSeverity] = useState("");
-
-  const handleClose = (reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
-
-  async function handleSubmit(values) {
-    await axios
-      .post("http://127.0.0.1:8000/match/create", values)
-      .then(function (response) {
-        navigate(`/lobby/${response.data["id"]}`);
-      })
-      .catch(function (error) {
-        if (
-          error.response &&
-          typeof error.response.data["detail"] != "object"
-        ) {
-          setBody(error.response.data["detail"]);
-        } else {
-          setBody("Unknown error");
-        }
-        setOpen(true);
-        setSeverity("error");
-      });
-  }
 
   return (
     <Box
@@ -187,7 +152,7 @@ export default function CreateMatchForm({ userID }) {
               </Grid>
 
               <Grid item xs={12}>
-                <SubmitFormButton aria-label="Create-match">
+                <SubmitFormButton data-testid="createMatchButton">
                   Create match
                 </SubmitFormButton>
               </Grid>
@@ -195,14 +160,6 @@ export default function CreateMatchForm({ userID }) {
           </Card>
         </Form>
       </Formik>
-      {open && (
-        <Snackbar
-          open={open}
-          body={body}
-          severity={severity}
-          handleClose={handleClose}
-        />
-      )}
     </Box>
   );
 }
