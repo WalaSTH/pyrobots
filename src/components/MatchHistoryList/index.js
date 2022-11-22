@@ -1,19 +1,14 @@
 import { DataGrid, gridClasses } from "@mui/x-data-grid";
 import { grey } from "@mui/material/colors";
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import SeeResults from "../SeeResultsButton";
 
-export default function MatchHistoryList({ matches, getData, filter }) {
+export default function MatchHistoryList({ matches }) {
   const [pageSize, setPageSize] = useState(7);
-
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
 
   const columns = [
     { field: "id", hide: true, filterable: false },
-    { field: "playersList", hide: true, filterable: false },
+    { field: "date", headerName: "Date", minWidth: 100, flex: 1 },
     { field: "name", headerName: "Name", minWidth: 200, flex: 1 },
     {
       field: "players",
@@ -40,22 +35,6 @@ export default function MatchHistoryList({ matches, getData, filter }) {
       flex: 1,
     },
     {
-      field: "minPlayers",
-      headerName: "Min players",
-      type: "number",
-      filterable: false,
-      minWidth: 90,
-      flex: 1,
-    },
-    {
-      field: "maxPlayers",
-      headerName: "Max players",
-      type: "number",
-      filterable: false,
-      minWidth: 95,
-      flex: 1,
-    },
-    {
       field: "results",
       headerName: "See results",
       type: "actions",
@@ -69,14 +48,11 @@ export default function MatchHistoryList({ matches, getData, filter }) {
     ? matches["Matches"].map((value) => {
         return {
           id: value[0],
-          playersList: value[8],
-          password: value[1],
+          date: value[9].slice(0, 10),
           name: value[2],
           players: value[3],
           games: value[4],
           rounds: value[5],
-          minPlayers: value[6],
-          maxPlayers: value[7],
         };
       })
     : [];
@@ -97,7 +73,7 @@ export default function MatchHistoryList({ matches, getData, filter }) {
       disableSelectionOnClick
       density="comfortable"
       localeText={{
-        noRowsLabel: "No matches available",
+        noRowsLabel: "You didn't play any game yet!",
       }}
       componentsProps={{
         panel: {

@@ -109,6 +109,14 @@ export default function DrawerWrapper({
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/match-history")}>
+                <ListItemIcon>
+                  <HistoryIcon sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Match history" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/browse-matches")}>
                 <ListItemIcon>
                   <FormatListBulleted sx={{ color: "#fff" }} />
@@ -130,14 +138,6 @@ export default function DrawerWrapper({
                   <ScienceIcon sx={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Create simulation" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => navigate("/match-history")}>
-                <ListItemIcon>
-                  <HistoryIcon sx={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Match history" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
