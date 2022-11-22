@@ -33,6 +33,7 @@ export default function NavigationLayout({ navigate, avatar }) {
           <Drawer
             setMobileOpen={setMobileOpen}
             navigate={navigate}
+            avatar={avatar}
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}

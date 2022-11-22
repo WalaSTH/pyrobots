@@ -38,7 +38,13 @@ export default function RoutesWrapper({ navigate, avatar, setAvatar }) {
       />
       <Route
         path="/login"
-        element={token ? <Navigate to="/" /> : <Login navigate={navigate} />}
+        element={
+          token ? (
+            <Navigate to="/" />
+          ) : (
+            <Login navigate={navigate} setAvatar={setAvatar} />
+          )
+        }
       />
       <Route path="/recover" element={<Recover />} />
       <Route path="/reset-password/" element={<ResetPassword />} />

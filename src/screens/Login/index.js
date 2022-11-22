@@ -17,7 +17,7 @@ import axios from "axios";
 const loginEndpoint = "http://127.0.0.1:8000/token";
 const resendEmailEndpoint = "http://127.0.0.1:8000/resend_validation";
 
-export default function Login({ navigate }) {
+export default function Login({ navigate, setAvatar }) {
   // Snackbar utilities
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
@@ -69,6 +69,7 @@ export default function Login({ navigate }) {
     localStorage.setItem("userID", t.id);
     localStorage.setItem("username", t.username);
     localStorage.setItem("avatar", t.avatar);
+    setAvatar(t.avatar);
     navigate("/");
   }
 
