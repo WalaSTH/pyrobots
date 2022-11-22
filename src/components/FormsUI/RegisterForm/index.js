@@ -4,7 +4,6 @@ import { Form, Formik } from "formik";
 
 // Custom components for form input with formik and MUI
 import AvatarPreview from "../../FormsUI/AvatarPreview";
-import FileUploadInput from "../../FormsUI/FileUploadInput";
 import FileUploadButton from "../../FormsUI/FileUploadButton";
 import SubmitFormButton from "../../FormsUI/SubmitFormButton";
 import TextField from "../../FormsUI/TextField";
@@ -46,10 +45,6 @@ export default function RegisterUserForm({ handleSubmit, loading }) {
     <Formik
       initialValues={{
         ...initialFormState,
-      }}
-      initialTouched={{
-        code: true,
-        avatar: true,
       }}
       validationSchema={formValidation}
       onSubmit={handleSubmit}
@@ -104,13 +99,14 @@ export default function RegisterUserForm({ handleSubmit, loading }) {
                 marginBottom: -0.5,
               }}
             >
-              <FileUploadInput
+              <FileUploadButton
+                id="userAvatarInput"
                 name="avatar"
                 accept="image/png,image/jpg,image/jpeg"
                 data-testid="userAvatar"
-              />
-
-              <FileUploadButton name="avatar" startIcon={<AddAPhotoIcon />}>
+                inputProps={{ accept: "image/png,image/jpg,image/jpeg" }}
+                buttonProps={{ startIcon: <AddAPhotoIcon /> }}
+              >
                 Select avatar
               </FileUploadButton>
             </Grid>

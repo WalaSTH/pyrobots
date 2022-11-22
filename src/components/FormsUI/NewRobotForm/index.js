@@ -5,7 +5,6 @@ import { Form, Formik } from "formik";
 // Custom components for form input with formik and MUI
 import AvatarPreview from "../AvatarPreview";
 import FilePreview from "../FilePreview";
-import FileUploadInput from "../FileUploadInput";
 import FileUploadButton from "../FileUploadButton";
 import SubmitFormButton from "../SubmitFormButton";
 import TextField from "../TextField";
@@ -55,11 +54,9 @@ export default function NewRobotForm({ onSubmit }) {
   return (
     <Formik
       initialValues={{ ...initialFormState }}
-      initialTouched={{
-        code: true,
-        avatar: true,
-      }}
       validationSchema={formValidation}
+      validateOnChange={false}
+      validateOnBlur={false}
       onSubmit={onSubmit}
     >
       {(values) => (
@@ -154,13 +151,13 @@ export default function NewRobotForm({ onSubmit }) {
               >
                 <FilePreview name="code" />
 
-                <FileUploadInput
+                <FileUploadButton
+                  id="robotCodeInput"
                   name="code"
-                  accept=".py"
                   data-testid="robotCodeInput"
-                />
-
-                <FileUploadButton name="code" startIcon={<FileUploadIcon />}>
+                  inputProps={{ accept: ".py" }}
+                  buttonProps={{ startIcon: <FileUploadIcon /> }}
+                >
                   Select file
                 </FileUploadButton>
               </Grid>
@@ -176,13 +173,13 @@ export default function NewRobotForm({ onSubmit }) {
                   marginBottom: -0.5,
                 }}
               >
-                <FileUploadInput
+                <FileUploadButton
+                  id="robotAvatarInput"
                   name="avatar"
-                  accept="image/png,image/jpg,image/jpeg"
                   data-testid="robotAvatar"
-                />
-
-                <FileUploadButton name="avatar" startIcon={<AddAPhotoIcon />}>
+                  inputProps={{ accept: "image/png,image/jpg,image/jpeg" }}
+                  buttonProps={{ startIcon: <AddAPhotoIcon /> }}
+                >
                   Select avatar
                 </FileUploadButton>
               </Grid>

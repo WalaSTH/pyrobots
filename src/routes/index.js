@@ -15,7 +15,7 @@ import UserProfile from "../screens/UserProfile";
 import Recover from "../screens/Recover";
 import ValidateAccount from "../screens/ValidateAccount";
 
-export default function RoutesWrapper({ navigate }) {
+export default function RoutesWrapper({ navigate, avatar, setAvatar }) {
   const token = localStorage.getItem("token");
   const userID = localStorage.getItem("userID");
   const username = localStorage.getItem("username");
@@ -54,7 +54,10 @@ export default function RoutesWrapper({ navigate }) {
         <Route path="/board/:simID" element={<Board />} />
         <Route path="/match-history" element={<></>} />
         <Route path="/lobby/:matchID" element={<Lobby />} />
-        <Route path="/profile" element={<UserProfile />} />
+        <Route
+          path="/profile"
+          element={<UserProfile avatar={avatar} setAvatar={setAvatar} />}
+        />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
