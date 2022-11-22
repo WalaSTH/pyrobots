@@ -1,6 +1,7 @@
 from pony.orm import *
 import sys
 from datetime import *
+import scipy.stats as ss
 from pathlib import Path
 
 db = pony.orm.Database()
@@ -201,19 +202,35 @@ def get_match_list(name, filter):
         for u in m.participants:
             participants_list.append(u.user_name)
 
-        res_list.append(
-            (
-                m.id,
-                m.password != "",
-                m.name,
-                m.current_players,
-                m.game_quantity,
-                m.round_quantity,
-                m.min_players,
-                m.max_players,
-                participants_list,
+        if (filter == "finished"):
+            res_list.append(
+                (
+                    m.id,
+                    m.password != "",
+                    m.name,
+                    m.current_players,
+                    m.game_quantity,
+                    m.round_quantity,
+                    m.min_players,
+                    m.max_players,
+                    participants_list,
+                    m.match_results.date
+                )
             )
-        )
+        else:
+            res_list.append(
+                (
+                    m.id,
+                    m.password != "",
+                    m.name,
+                    m.current_players,
+                    m.game_quantity,
+                    m.round_quantity,
+                    m.min_players,
+                    m.max_players,
+                    participants_list
+                )
+            )
 
     return res_list
 
@@ -296,6 +313,40 @@ def create_result(ranking, won_games, match):
         Robot[ranking[0]].matches_won += 1
         Robot[ranking[0]].owner.matches_won += 1
 
+@db_session
+def get_match_results(match_id):
+    match_result = Match[match_id].match_results
+    res = []
+
+    positions = ss.rankdata(a=match_result.won_games, method='max').astype(int)
+    for i in range(len(positions)):
+        positions[i] = len(positions) - positions[i] + 1
+
+
+    for r_id in range(len(match_result.ranking)):
+        robot_i = Robot[match_result.ranking[r_id]]
+
+        r_avatar = None
+        if robot_i.avatar is not None:
+            r_avatar = robot_i.avatar.decode()
+
+        robot_dict = {
+            "name": robot_i.robot_name,
+            "avatar": r_avatar,
+            "username": robot_i.owner.user_name,
+            "victories": match_result.won_games[r_id],
+            "loses": Match[match_id].game_quantity - match_result.won_games[r_id],
+            "position": r_id
+        }
+
+        res.append(robot_dict)
+
+    result = {
+        "robot_list": res,
+        "date": match_result.date
+    }
+
+    return result
 
 # --- Robot functions ---
 
