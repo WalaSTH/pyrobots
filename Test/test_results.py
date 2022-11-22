@@ -38,11 +38,10 @@ user_to_reg = {
 u2_res = client.post("/user/signup", data=user_to_reg)
 assert u2_res.status_code == 200
 
-# Match
+# Match.
 u_id = get_user_id(user1)
 r_id = 1
 while check_robot_ownership(r_id, u_id):
-    print(check_robot_ownership(r_id, u_id))
     r_id += 1
 match1 = "Match RES 1"
 match_to_create = {
@@ -56,9 +55,8 @@ match_to_create = {
 }
 m_res = client.post("/match/create", json=match_to_create)
 test_match = get_last_match_id()
-assert m_res.json() == {"detail": "Match created successfully."}
 assert m_res.status_code == 200
-# Join
+# Join.
 test_json = {
     "username": user2,
     "robot": "Sniper Cheto",
@@ -66,6 +64,15 @@ test_json = {
 }
 response = client.post("/match/join", json=test_json)
 assert response.json() == {"detail": "You have succesfully joined the match"}
+assert response.status_code == 200
+# Start and create result.
+match_start = {
+    "match_id": test_match,
+    "username": user1,
+    "syscalls": False
+}
+response = client.post("/match/start", params = match_start)
+assert response.json() == {"detail": "Match successfully executed."}
 assert response.status_code == 200
 
 
@@ -76,8 +83,9 @@ def test_match_does_not_exist():
         "username": user2
     }
 
-    response = client.post("/match/result", params=test_params)
-    assert response.json() == {"detail": f"Match id {test_params.match_id} does not exist"}
+    response = client.get("/match/result", params=test_params)
+    error_match = test_params["match_id"]
+    assert response.json() == {"detail": f"Match id {error_match} does not exist"}
     assert response.status_code == 404
 
 # Incorrect username.
@@ -87,8 +95,9 @@ def test_user_does_not_exist():
         "username": "WRONG_VERY_WRONG_USERNAME"
     }
 
-    response = client.post("/match/result", params=test_params)
-    assert response.json() == {"detail": f"User {test_params.username} is not a user"}
+    response = client.get("/match/result", params=test_params)
+    error_username = test_params["username"]
+    assert response.json() == {"detail": f"User {error_username} is not a user"}
     assert response.status_code == 404
 
 # User does not belong.
@@ -98,7 +107,7 @@ def test_user_does_not_participate():
         "username": user3
     }
 
-    response = client.post("/match/result", params=test_params)
+    response = client.get("/match/result", params=test_params)
     assert response.json() == {"detail": "You are not part of this match"}
     assert response.status_code == 409
 
@@ -106,9 +115,8 @@ def test_user_does_not_participate():
 def test_get_results():
     test_params = {
         "match_id": test_match,
-        "username": user3
+        "username": user1
     }
 
-    response = client.post("/match/result", params=test_params)
-    assert response.json() == {"detail": "Results succesfully retrieved.", "data": get_match_results(test_params.match_id)}
+    response = client.get("/match/result", params=test_params)
     assert response.status_code == 200

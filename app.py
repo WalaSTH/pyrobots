@@ -289,7 +289,7 @@ async def get_results(info: ChosenMatch = Depends()):
     if not user_exists(info.username):
         raise HTTPException(status_code=404, detail=f"User {info.username} is not a user")
 
-    if not check_user_connected(info.match_id, info.username) != []:
+    if not check_user_connected(info.match_id, info.username):
         raise HTTPException(status_code=409, detail="You are not part of this match")
 
     return{"detail": "Results succesfully retrieved.", "data": get_match_results(info.match_id)}
@@ -616,8 +616,6 @@ async def start_match(match_id: int, username: str, syscalls:Optional[bool] = Tr
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found.")
     if not (get_match_creator(match_id) == get_user_id(username)):
-        print(str(get_user_id(username)))
-        print(str(get_match_creator(match_id)))
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User did not create the match.")
@@ -636,4 +634,12 @@ async def start_match(match_id: int, username: str, syscalls:Optional[bool] = Tr
             detail="Match already started.")
     #Run
     run_match(match_id, syscalls)
+
+    start_alert = {
+        "message_type": 4,
+        "message_content": "THE BATTLE HAS BEGUN!"
+    }
+
+    await manager.broadcast(start_alert, match_id)
+
     return {"detail" : "Match successfully executed."}
