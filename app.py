@@ -606,40 +606,40 @@ async def create_sim(sim: SimData):
     return run_game(robots, sim.n_rounds, True)
 
 @app.post("/match/start",tags=["Matches"], status_code=200)
-async def start_match(match_id: int, username: str, syscalls:Optional[bool] = True):
-    if not check_match_existance(match_id):
+async def start_match(match_to_start: StartingMatch):
+    if not check_match_existance(match_to_start.match_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Match not found.")
-    if not user_exists(username):
+    if not user_exists(match_to_start.username):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found.")
-    if not (get_match_creator(match_id) == get_user_id(username)):
+    if not (get_match_creator(match_to_start.match_id) == get_user_id(match_to_start.username)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User did not create the match.")
-    robots = get_match_robots_ids(match_id)
-    if len(robots) > get_match_max_players(match_id):
+    robots = get_match_robots_ids(match_to_start.match_id)
+    if len(robots) > get_match_max_players(match_to_start.match_id):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Number of players is higher than maximum allowed.")
-    if len(robots) < get_match_min_players(match_id):
+    if len(robots) < get_match_min_players(match_to_start.match_id):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Number of players is lower than minimum allowed.")
-    if get_match_started(match_id):
+    if get_match_started(match_to_start.match_id):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Match already started.")
     #Run
-    run_match(match_id, syscalls)
+    run_match(match_to_start.match_id, match_to_start.syscalls)
 
     start_alert = {
         "message_type": 4,
         "message_content": "THE BATTLE HAS BEGUN!"
     }
 
-    await manager.broadcast(start_alert, match_id)
+    await manager.broadcast(start_alert, match_to_start.match_id)
 
     return {"detail" : "Match successfully executed."}

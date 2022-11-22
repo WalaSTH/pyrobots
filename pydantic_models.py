@@ -90,6 +90,11 @@ class LeavingMatch(BaseModel):
     username: str
     match: int
 
+class StartingMatch(BaseModel):
+    match_id: int
+    username: str
+    syscalls:Optional[bool] = True
+
 class ChosenMatch(BaseModel):
     match_id: int
     username: str
