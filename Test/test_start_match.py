@@ -138,7 +138,7 @@ def test_match_start_unexisting():
         "username": "TestingMatch1",
         "syscalls": False
     }
-    response = client.post("/match/start", params = match_start)
+    response = client.post("/match/start", json = match_start)
     assert response.json() == {"detail": "Match not found."}
     assert response.status_code == 404
 
@@ -149,7 +149,7 @@ def test_match_start_unexisting():
         "username": "ThisUserDoesntExist",
         "syscalls": False
     }
-    response = client.post("/match/start", params = match_start)
+    response = client.post("/match/start", json = match_start)
     assert response.json() == {"detail": "User not found."}
     assert response.status_code == 404
 
@@ -160,7 +160,7 @@ def test_match_start_not_creator():
         "username": "TestingMatch2",
         "syscalls": False
     }
-    response = client.post("/match/start", params = match_start)
+    response = client.post("/match/start", json = match_start)
     assert response.json() == {"detail": "User did not create the match."}
     assert response.status_code == 400
 
@@ -171,7 +171,7 @@ def test_match_start_less_min():
         "username": "TestingMatch1",
         "syscalls": False
     }
-    response = client.post("/match/start", params = match_start)
+    response = client.post("/match/start", json = match_start)
     assert response.json() == {"detail": "Number of players is lower than minimum allowed."}
     assert response.status_code == 400
 
@@ -187,7 +187,7 @@ def test_match_start_ok():
         "username": "TestingMatch1",
         "syscalls": False
     }
-    response = client.post("/match/start", params = match_start)
+    response = client.post("/match/start", json = match_start)
     assert response.json() == {"detail": "Match successfully executed."}
     assert response.status_code == 200
 
@@ -198,6 +198,6 @@ def test_match_start_already():
         "username": "TestingMatch1",
         "syscalls": False
     }
-    response = client.post("/match/start", params = match_start)
+    response = client.post("/match/start", json = match_start)
     assert response.json() == {"detail": "Match already started."}
     assert response.status_code == 400

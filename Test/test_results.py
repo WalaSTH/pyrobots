@@ -71,7 +71,7 @@ match_start = {
     "username": user1,
     "syscalls": False
 }
-response = client.post("/match/start", params = match_start)
+response = client.post("/match/start", json = match_start)
 assert response.json() == {"detail": "Match successfully executed."}
 assert response.status_code == 200
 

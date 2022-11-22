@@ -200,21 +200,20 @@ class gameRobot:
             ## Get target x y
             y_target = get_y_add(self.cannon_distance, self.cannon_direction)
             x_target = get_x_add(self.cannon_distance, self.cannon_direction)
-            x_target = (
-                self.x_position + x_target
-                if self.x_position + x_target < TABLE_HORIZONTAL_LENGHT
-                else TABLE_HORIZONTAL_LENGHT
-            )
-            if x_target < 0:
-                x_target = 0
+            
+            if self.x_position + x_target < 1:
+                x_target = 1
+            else:
+                x_target = self.x_position + x_target
+            if x_target > TABLE_HORIZONTAL_LENGHT -1:
+                x_target = TABLE_HORIZONTAL_LENGHT -1
 
-            y_target  = (
-                self.y_position + y_target
-                if self.y_position + y_target  < TABLE_VERTICAL_LENGHT
-                else TABLE_VERTICAL_LENGHT
-            )
-            if y_target  < 0:
-                y_target  = 0
+            if self.y_position + y_target < 1:
+                y_target = 1
+            else:
+                y_target = self.y_position + y_target
+            if y_target > TABLE_VERTICAL_LENGHT - 2:
+                y_target = TABLE_VERTICAL_LENGHT - 2
 
             new_missile = Missile(
                 self.x_position,
@@ -226,12 +225,14 @@ class gameRobot:
                 rounds_to_explote(self.cannon_distance, MISSILE_SPEED)
             )
             self.missiles.append(new_missile)
+            res= [x_target, y_target, new_missile.x_target, new_missile.y_target]
         else:
+            res = []
             self.cannon_cooldown = (
                 self.cannon_cooldown - 1 if self.cannon_cooldown - 1 > 0 else 0
             )
         self.cannon_setted = False
-
+        return res
     def missile_advance(self, explotion_list):
         n_missiles = len(self.missiles)
         for i in range(n_missiles):
@@ -244,24 +245,32 @@ class gameRobot:
             #self.missiles[i].x_position = self.missiles[i].x_position + x_add
             if self.missiles[i].x_position + x_add < 1:
                 self.missiles[i].x_position = 1
+                self.missiles[i].remains = -1
             else:
                 self.missiles[i].x_position = self.missiles[i].x_position + x_add
             if self.missiles[i].x_position > TABLE_HORIZONTAL_LENGHT -1:
                 self.missiles[i].x_position = TABLE_HORIZONTAL_LENGHT -1
-
+                self.missiles[i].remains = -1
 
             if self.missiles[i].y_position + y_add < 1:
                 self.missiles[i].y_position = 1
+                self.missiles[i].remains = -1
             else:
                 self.missiles[i].y_position = self.missiles[i].y_position + y_add
             if self.missiles[i].y_position > TABLE_VERTICAL_LENGHT -2:
                 self.missiles[i].y_position = TABLE_VERTICAL_LENGHT -2
-
+                self.missiles[i].remains = -1
             # Check if it has to explote
             self.missiles[i].remains = self.missiles[i].remains - 1 if self.missiles[i].remains - 1 > 0 else 0
             if self.missiles[i].remains == 0:
                 # Explote missile
                 new_explotion = Explotion(self.robot_id, self.game_id_robot, self.missiles[i].x_target, self.missiles[i].y_target)
+                explotion_list.append(new_explotion)
+                self.missiles.remove(self.missiles[i])
+            elif self.missiles[i].remains == -1:
+                # Explote missile
+                new_explotion = Explotion(self.robot_id, self.game_id_robot, self.missiles[i].x_position,
+                                            self.missiles[i].y_position)
                 explotion_list.append(new_explotion)
                 self.missiles.remove(self.missiles[i])
 
