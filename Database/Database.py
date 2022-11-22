@@ -3,6 +3,7 @@ import sys
 from datetime import *
 import scipy.stats as ss
 from pathlib import Path
+import numpy as np
 
 db = pony.orm.Database()
 
@@ -319,8 +320,9 @@ def get_match_results(match_id):
     res = []
 
     positions = ss.rankdata(a=match_result.won_games, method='max').astype(int)
+    position = np.empty(len(positions))
     for i in range(len(positions)):
-        positions[i] = len(positions) - positions[i] + 1
+        position[i] = len(positions) - positions[i] + 1
 
 
     for r_id in range(len(match_result.ranking)):
@@ -336,7 +338,7 @@ def get_match_results(match_id):
             "username": robot_i.owner.user_name,
             "victories": match_result.won_games[r_id],
             "loses": Match[match_id].game_quantity - match_result.won_games[r_id],
-            "position": r_id
+            "position": position[r_id]
         }
 
         res.append(robot_dict)
