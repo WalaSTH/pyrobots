@@ -4,17 +4,16 @@ import renderer from "react-test-renderer";
 import RobotStatsDialog from ".";
 
 describe("RobotStatsDialog", () => {
-  const testDialogProps = {
-    open: true,
-    onClose: jest.fn(),
-    name: "dummyName",
-    stats: {
-      played: 1,
-      won: 1,
-    },
-  };
-
   it("should render the component", async () => {
+    const testDialogProps = {
+      open: true,
+      name: "dummyName",
+      stats: {
+        played: 1,
+        won: 1,
+      },
+    };
+
     render(<RobotStatsDialog {...testDialogProps} />);
 
     // Typographies
@@ -39,9 +38,37 @@ describe("RobotStatsDialog", () => {
     screen.getByText("Close");
   });
 
+  it("should render win rate of 0.00% when matches played is 0", async () => {
+    const testDialogProps = {
+      open: true,
+      name: "dummyName",
+      stats: {
+        played: 0,
+        won: 0,
+      },
+    };
+
+    render(<RobotStatsDialog {...testDialogProps} />);
+
+    const statsItems = screen.queryAllByTestId("statsItem");
+    expect(statsItems).toHaveLength(3);
+    expect(statsItems[2]).toHaveTextContent("0.00%");
+
+    // Buttons
+    screen.getByText("Close");
+  });
+
   it("should match Snapshot", () => {
     const tree = renderer
-      .create(<RobotStatsDialog open={false} stats={testDialogProps.stats} />)
+      .create(
+        <RobotStatsDialog
+          open={false}
+          stats={{
+            played: 1,
+            won: 1,
+          }}
+        />
+      )
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
