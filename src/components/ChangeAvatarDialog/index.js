@@ -90,6 +90,8 @@ export default function ChangeAvatarDialog({
       <Formik
         initialValues={{ ...initialFormState }}
         validationSchema={formValidation}
+        validateOnChange={false}
+        validateOnBlur={false}
         onSubmit={handleSubmit}
       >
         {(formProps) => (
@@ -104,6 +106,7 @@ export default function ChangeAvatarDialog({
                 }}
               >
                 <AvatarPreview
+                  data-testid="avatarDisplay"
                   name="avatar"
                   alt={username}
                   src={avatar}
@@ -127,7 +130,10 @@ export default function ChangeAvatarDialog({
                       name="avatar"
                       id="userAvatarInput"
                       inputProps={{ accept: "image/png,image/jpg,image/jpeg" }}
-                      buttonProps={{ startIcon: <AddAPhotoIcon /> }}
+                      buttonProps={{
+                        startIcon: <AddAPhotoIcon />,
+                        "data-testid": "avatarInputButton",
+                      }}
                     >
                       Select an image
                     </FileUploadButton>

@@ -7,9 +7,9 @@ import axios from "axios";
 jest.mock("axios");
 
 describe("ChangePasswordDialog", () => {
-  const dialogProps = {
+  const testDialogProps = {
     open: true,
-    username: "user",
+    username: "dummyUser",
     onClose: jest.fn(),
     snackbarProps: {
       setOpen: jest.fn(),
@@ -23,7 +23,7 @@ describe("ChangePasswordDialog", () => {
   });
 
   it("should render the component", async () => {
-    render(<ChangePasswordDialog {...dialogProps} />);
+    render(<ChangePasswordDialog {...testDialogProps} />);
 
     // Textfields
     expect(screen.queryAllByLabelText(/Password/)).toHaveLength(2);
@@ -45,7 +45,7 @@ describe("ChangePasswordDialog", () => {
       data: { detail: "dummy message" },
     });
 
-    render(<ChangePasswordDialog {...dialogProps} />);
+    render(<ChangePasswordDialog {...testDialogProps} />);
     const user = userEvent.setup();
 
     const passwordFields = screen.queryAllByLabelText(/Password/);
@@ -67,7 +67,7 @@ describe("ChangePasswordDialog", () => {
       expect(axios.put).toHaveBeenCalledWith(
         "http://127.0.0.1:8000/user/update",
         {
-          username: "user",
+          username: testDialogProps.username,
           param: "password",
           new_pwd: "NewPassword1234",
           current_pwd: "OldPassword1234",
@@ -77,7 +77,7 @@ describe("ChangePasswordDialog", () => {
   });
 
   it("should show an error message when password is invalid", async () => {
-    render(<ChangePasswordDialog {...dialogProps} />);
+    render(<ChangePasswordDialog {...testDialogProps} />);
     const user = userEvent.setup();
 
     const passwordFields = screen.queryAllByLabelText(/Password/);
@@ -101,7 +101,7 @@ describe("ChangePasswordDialog", () => {
   });
 
   it("should show an error message when new password is invalid", async () => {
-    render(<ChangePasswordDialog {...dialogProps} />);
+    render(<ChangePasswordDialog {...testDialogProps} />);
     const user = userEvent.setup();
 
     const passwordFields = screen.queryAllByLabelText(/Password/);
@@ -127,7 +127,7 @@ describe("ChangePasswordDialog", () => {
   });
 
   it("should show an error message when new password and confirmation don't match", async () => {
-    render(<ChangePasswordDialog {...dialogProps} />);
+    render(<ChangePasswordDialog {...testDialogProps} />);
     const user = userEvent.setup();
 
     const passwordFields = screen.queryAllByLabelText(/Password/);

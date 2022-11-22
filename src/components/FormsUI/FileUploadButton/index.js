@@ -1,4 +1,4 @@
-import { Button, FormHelperText, Input } from "@mui/material";
+import { Box, Button, FormHelperText, Input } from "@mui/material";
 import { useField, useFormikContext } from "formik";
 
 export default function FileUploadButton({
@@ -38,10 +38,10 @@ export default function FileUploadButton({
   };
 
   return (
-    <>
+    <Box width="100%">
       <Input {...configInput} />
       <Button {...configButton} />
       {isError && <FormHelperText error={true}> {meta.error} </FormHelperText>}
-    </>
+    </Box>
   );
 }
