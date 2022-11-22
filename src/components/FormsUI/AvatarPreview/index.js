@@ -1,29 +1,40 @@
 import { Avatar } from "@mui/material";
 import { useField } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function AvatarPreview({ name, children, ...otherProps }) {
+export default function AvatarPreview({
+  name,
+  alt,
+  src,
+  children,
+  ...otherProps
+}) {
   const [field, meta] = useField(name);
   const file = field.value;
-  const isError = !file || !meta.touched || meta.error;
+  const isError = !meta.touched || meta.error;
 
-  const [avatarPreview, setAvatarPreview] = useState("");
-  const reader = new FileReader();
-  if (!isError) {
-    reader.onloadend = () => {
-      setAvatarPreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-  }
-  const src = isError ? "" : avatarPreview;
+  const [avatarPreview, setAvatarPreview] = useState("none");
+
+  useEffect(() => {
+    if (file && !isError) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setAvatarPreview("");
+    }
+  }, [file, isError]);
 
   const configAvatarPreview = {
     ...field,
-    src: src,
-    alt: "Avatar preview",
+    src: (!isError ? avatarPreview : src) || "none",
+    alt: alt,
     color: "secondary",
+    children: children,
     ...otherProps,
   };
 
-  return <Avatar {...configAvatarPreview}> {children} </Avatar>;
+  return <Avatar {...configAvatarPreview} />;
 }
