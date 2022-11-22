@@ -21,6 +21,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 import ScienceIcon from "@mui/icons-material/Science";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import HistoryIcon from "@mui/icons-material/History";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 const theme = createTheme({
@@ -105,6 +106,14 @@ export default function DrawerWrapper({
                   <AccountBoxIcon sx={{ color: "#fff " }} />
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/match-history")}>
+                <ListItemIcon>
+                  <HistoryIcon sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Match history" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>

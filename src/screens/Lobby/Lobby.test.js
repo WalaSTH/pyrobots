@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 
 describe("Lobby", () => {
   it("renders correctly", () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() =>
       render(
         <BrowserRouter>
