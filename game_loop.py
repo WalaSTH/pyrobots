@@ -92,8 +92,9 @@ def run_game(robots, n_rounds, is_sim: bool, syscalls = True):
                     robot_list[j].deal_damage(EXPLOTION_DAMAGE_CLOSE)
                 elif distance_to_explotion <= EXPLOTION_RANGE_MID + ROBOT_HITBOX_OFFSET:
                     robot_list[j].deal_damage(EXPLOTION_DAMAGE_MID)
-                elif distance_to_explotion <= EXPLOTION_DAMAGE_FAR + ROBOT_HITBOX_OFFSET:
-                    robot_list[j].deal_damage(EXPLOTION_DAMAGE_MID)
+                elif distance_to_explotion <= EXPLOTION_RANGE_FAR + ROBOT_HITBOX_OFFSET:
+                    robot_list[j].deal_damage(EXPLOTION_DAMAGE_FAR)
+                else: distance_to_explotion = distance_to_explotion
             if is_sim:
                 add_explotion_to_frames(explotion_list[i], explotion_frame_list)
 
