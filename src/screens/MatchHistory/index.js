@@ -7,7 +7,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 
 const endpoint = "http://127.0.0.1:8000/match/list";
 
-export default function BrowseMatches() {
+export default function MatchHistory() {
   const [matches, setMatches] = useState([]);
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
