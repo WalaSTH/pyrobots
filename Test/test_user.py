@@ -22,7 +22,6 @@ def test_user_register():
     response = client.post("/user/signup", data=user_to_reg)
     assert response.json() == {"detail": "User created successfully"}
     assert response.status_code == 200
-    delete_user(user_to_reg["username"])
 
 
 #Creation new user with invalid username

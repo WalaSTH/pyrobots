@@ -86,7 +86,5 @@ def test_robot_listing_with_items_and_code():
     res_list = get_robot_list(rob_owner["user_name"], rob_owner["detailed"])
     response = client.get("/robot/list", params = rob_owner)
 
-    delete_user(user1)
-    delete_user(user2)
     assert response.status_code == 200
 

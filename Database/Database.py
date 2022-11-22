@@ -1,6 +1,7 @@
 from pony.orm import *
 import sys
 from datetime import *
+import scipy.stats as ss
 
 db = pony.orm.Database()
 
@@ -275,6 +276,10 @@ def get_match_results(match_id):
     match_result = Match[match_id].match_results
     res = []
 
+    positions = ss.rankdata([match_result.won_games], method='max')
+    for i in range(len(positions)):
+        positions[i] = len(positions) - positions[i] + 1
+
     for r_id in range(len(match_result.ranking)):
         robot_i = Robot[match_result.ranking[r_id]]
 
@@ -286,7 +291,9 @@ def get_match_results(match_id):
             "name": robot_i.robot_name,
             "avatar": r_avatar,
             "username": robot_i.owner.user_name,
-            "victories": match_result.won_games[r_id]
+            "victories": match_result.won_games[r_id],
+            "loses": Match[match_id].game_quantity - match_result.won_games[r_id],
+            "position": positions[r_id]
         }
 
         res.append(robot_dict)
@@ -356,6 +363,7 @@ def check_robot_existance(robot_id):
 
 @db_session
 def check_robot_ownership(robot_id, creator):
+    print(Robot[max(1, robot_id-1)].owner.user_name)
     return Robot[robot_id].owner != User[creator]
 
 

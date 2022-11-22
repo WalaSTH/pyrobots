@@ -37,3 +37,5 @@ uvicorn==0.18.3
 uvloop==0.17.0
 watchfiles==0.17.0
 websockets==10.3
+numpy==1.23.5
+scipy==1.9.3
