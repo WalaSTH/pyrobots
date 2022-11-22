@@ -10,6 +10,7 @@ import CreateMatch from "../screens/CreateMatch/";
 import Lobby from "../screens/Lobby";
 import BrowseMatches from "../screens/BrowseMatches";
 import Board from "../screens/Board";
+import MatchHistory from "../screens/MatchHistory";
 import ResetPassword from "../screens/ResetPassword";
 import UserProfile from "../screens/UserProfile";
 import Recover from "../screens/Recover";
@@ -44,16 +45,16 @@ export default function RoutesWrapper({ navigate, avatar, setAvatar }) {
       <Route path="/validate-account" element={<ValidateAccount />} />
       <Route element={<PrivateRoute />}>
         <Route path="/list-robot" element={<ListRobot />} />
+        <Route path="/board/:simID" element={<Board />} />
         <Route path="/browse-matches" element={<BrowseMatches />} />
-        <Route path="/create-robot" element={<NewRobot userID={userID} />} />
         <Route path="/create-match" element={<CreateMatch userID={userID} />} />
+        <Route path="/create-robot" element={<NewRobot userID={userID} />} />
         <Route
           path="/create-simulation"
           element={<CreateSim username={username} navigate={navigate} />}
         />
-        <Route path="/board/:simID" element={<Board />} />
-        <Route path="/match-history" element={<></>} />
         <Route path="/lobby/:matchID" element={<Lobby />} />
+        <Route path="/match-history" element={<MatchHistory />} />
         <Route
           path="/profile"
           element={<UserProfile avatar={avatar} setAvatar={setAvatar} />}

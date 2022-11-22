@@ -1,34 +1,30 @@
 import { Container, Card, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Snackbar from "../../components/FormsUI/Snackbar";
 import axios from "axios";
-import LobbyList from "../../components/LobbyList";
-import FilterButton from "../../components/FilterButton";
+import MatchHistoryList from "../../components/MatchHistoryList";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import FilterListIcon from "@mui/icons-material/FilterList";
 
-export default function BrowseMatches() {
+const endpoint = "http://127.0.0.1:8000/match/list";
+
+export default function MatchHistory() {
   const [matches, setMatches] = useState([]);
-  const [filter, setFilter] = useState("available");
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [severity, setSeverity] = useState("");
 
   const username = localStorage.getItem("username");
 
-  const endpoint = "http://127.0.0.1:8000/match/list";
-
-  async function getData() {
+  async function getPlayedMatches() {
     await axios
       .get(endpoint, {
         params: {
           name: username,
-          filter: filter,
+          filter: "finished",
         },
       })
       .then((response) => {
-        const data = response.data;
-        setMatches(data);
+        setMatches(response.data);
       })
       .catch((error) => {
         setOpen(true);
@@ -37,10 +33,16 @@ export default function BrowseMatches() {
       });
   }
 
+  useEffect(() => {
+    getPlayedMatches();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleClose(reason) {
     if (reason === "clickaway") {
       return;
     }
+
     setOpen(false);
   }
 
@@ -55,12 +57,11 @@ export default function BrowseMatches() {
           backgroundColor: "#efefef",
         }}
       >
-        <Button onClick={getData} startIcon={<RefreshIcon />}>
+        <Button onClick={getPlayedMatches} startIcon={<RefreshIcon />}>
           Refresh
         </Button>
-        <FilterButton setFilter={setFilter} endIcon={<FilterListIcon />} />
       </Card>
-      <LobbyList matches={matches} getData={getData} filter={filter} />
+      <MatchHistoryList matches={matches} />
       {open && (
         <Snackbar
           open={open}
