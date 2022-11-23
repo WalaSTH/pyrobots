@@ -25,26 +25,17 @@ exports[`NewRobotForm rendering snapshot 1`] = `
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-l59uj0-MuiGrid-root"
       >
         <div
-          className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-378y4j-MuiAvatar-root"
+          className="MuiAvatar-root MuiAvatar-circular css-1u294kg-MuiAvatar-root"
           color="secondary"
           name="avatar"
           onBlur={[Function]}
           onChange={[Function]}
           value=""
         >
-           
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-7r6vt3-MuiSvgIcon-root"
-            data-testid="SmartToyIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"
-            />
-          </svg>
-           
+          <img
+            className="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+            src="none"
+          />
         </div>
       </div>
       <div
@@ -109,100 +100,122 @@ exports[`NewRobotForm rendering snapshot 1`] = `
       <div
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-hzys1r-MuiGrid-root"
       >
-        <input
-          accept=".py"
-          data-testid="robotCodeInput"
-          hidden={true}
-          id="code"
-          onChange={[Function]}
-          type="file"
-        />
-        <label
-          className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
-          htmlFor="code"
-          onBlur={[Function]}
-          onContextMenu={[Function]}
-          onDragLeave={[Function]}
-          onFocus={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onMouseLeave={[Function]}
-          onMouseUp={[Function]}
-          onTouchEnd={[Function]}
-          onTouchMove={[Function]}
-          onTouchStart={[Function]}
-          role="button"
-          tabIndex={0}
+        <div
+          className="MuiBox-root css-8atqhb"
         >
-          <span
-            className="MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"
+          <div
+            className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-1g6u8k6-MuiInputBase-root-MuiInput-root"
+            data-testid="robotCodeInput"
+            hidden={true}
+            onClick={[Function]}
           >
-            <svg
-              aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-              data-testid="FileUploadIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
+            <input
+              accept=".py"
+              className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+              id="robotCodeInput"
+              onAnimationStart={[Function]}
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              type="file"
+            />
+          </div>
+          <label
+            className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+            htmlFor="robotCodeInput"
+            onBlur={[Function]}
+            onContextMenu={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <span
+              className="MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"
             >
-              <path
-                d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"
-              />
-            </svg>
-          </span>
-           
-          Select file
-           
-        </label>
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                data-testid="FileUploadIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"
+                />
+              </svg>
+            </span>
+            Select file
+          </label>
+        </div>
       </div>
       <div
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-hzys1r-MuiGrid-root"
       >
-        <input
-          accept="image/png,image/jpg,image/jpeg"
-          data-testid="robotAvatar"
-          hidden={true}
-          id="avatar"
-          onChange={[Function]}
-          type="file"
-        />
-        <label
-          className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
-          htmlFor="avatar"
-          onBlur={[Function]}
-          onContextMenu={[Function]}
-          onDragLeave={[Function]}
-          onFocus={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onMouseLeave={[Function]}
-          onMouseUp={[Function]}
-          onTouchEnd={[Function]}
-          onTouchMove={[Function]}
-          onTouchStart={[Function]}
-          role="button"
-          tabIndex={0}
+        <div
+          className="MuiBox-root css-8atqhb"
         >
-          <span
-            className="MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"
+          <div
+            className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-1g6u8k6-MuiInputBase-root-MuiInput-root"
+            data-testid="robotAvatar"
+            hidden={true}
+            onClick={[Function]}
           >
-            <svg
-              aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-              data-testid="AddAPhotoIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
+            <input
+              accept="image/png,image/jpg,image/jpeg"
+              className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+              id="robotAvatarInput"
+              onAnimationStart={[Function]}
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              type="file"
+            />
+          </div>
+          <label
+            className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+            htmlFor="robotAvatarInput"
+            onBlur={[Function]}
+            onContextMenu={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <span
+              className="MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"
             >
-              <path
-                d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"
-              />
-            </svg>
-          </span>
-           
-          Select avatar
-           
-        </label>
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                data-testid="AddAPhotoIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"
+                />
+              </svg>
+            </span>
+            Select avatar
+          </label>
+        </div>
       </div>
       <div
         className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-srigxs-MuiGrid-root"

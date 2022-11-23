@@ -21,6 +21,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 import ScienceIcon from "@mui/icons-material/Science";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import HistoryIcon from "@mui/icons-material/History";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 const theme = createTheme({
   typography: {
@@ -33,15 +35,13 @@ const theme = createTheme({
 export default function DrawerWrapper({
   setMobileOpen,
   navigate,
+  avatar,
   ...otherProps
 }) {
   const username = localStorage.getItem("username");
-  const avatar = localStorage.getItem("avatar");
 
   function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userID");
-    localStorage.removeItem("username");
+    localStorage.clear();
     navigate("/");
   }
 
@@ -81,7 +81,7 @@ export default function DrawerWrapper({
               }}
             >
               <Avatar
-                src={avatar}
+                src={avatar || "none"}
                 alt={username}
                 sx={{
                   color: "#fff",
@@ -98,6 +98,22 @@ export default function DrawerWrapper({
                   <Home sx={{ color: "#fff " }} />
                 </ListItemIcon>
                 <ListItemText primary="Home" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/profile")}>
+                <ListItemIcon>
+                  <AccountBoxIcon sx={{ color: "#fff " }} />
+                </ListItemIcon>
+                <ListItemText primary="Profile" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("/match-history")}>
+                <ListItemIcon>
+                  <HistoryIcon sx={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Match history" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>

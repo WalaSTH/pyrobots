@@ -2,7 +2,7 @@ import { Container, Card, Button } from "@mui/material";
 import { useState } from "react";
 import Snackbar from "../../components/FormsUI/Snackbar";
 import axios from "axios";
-import TableBasic from "../../components/LobbyList";
+import LobbyList from "../../components/LobbyList";
 import FilterButton from "../../components/FilterButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -41,7 +41,6 @@ export default function BrowseMatches() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   }
 
@@ -61,7 +60,7 @@ export default function BrowseMatches() {
         </Button>
         <FilterButton setFilter={setFilter} endIcon={<FilterListIcon />} />
       </Card>
-      <TableBasic matches={matches} getData={getData} filter={filter} />
+      <LobbyList matches={matches} getData={getData} filter={filter} />
       {open && (
         <Snackbar
           open={open}

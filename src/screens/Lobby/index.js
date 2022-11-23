@@ -10,7 +10,6 @@ import {
   ListItemAvatar,
   ListItemText,
   Skeleton,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -91,6 +90,8 @@ export default function Lobby() {
           setBody(msgData.message_content);
         } else if (msgData.message_type === 3) {
           navigate("/");
+        } else if (msgData.message_type === 4) {
+          navigate("/match-history");
         }
       }
     };
@@ -99,6 +100,31 @@ export default function Lobby() {
       client.close();
     };
   }, [params.matchID, navigate, username]);
+
+  // Start match
+  async function handleStart() {
+    return await axios
+      .post("http://127.0.0.1:8000/match/start", {
+        match_id: params.matchID,
+        username: username,
+      })
+      .then(function () {
+        navigate("/match-history");
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        setSeverity("error");
+        if (
+          error.response &&
+          typeof error.response.data["detail"] != "object"
+        ) {
+          setBody(error.response.data["detail"]);
+        } else {
+          setBody("Unknown error");
+        }
+        setOpen(true);
+      });
+  }
 
   // Leave match
   async function handleLeave() {
@@ -132,42 +158,33 @@ export default function Lobby() {
             <ListItemAvatar>
               <Avatar
                 alt={p.robot_name}
-                src={p.robot_avatar ? p.robot_avatar : "null"}
+                src={p.robot_avatar || "none"}
                 sx={{
-                  height: "45px",
-                  width: "45px",
+                  height: "3rem",
+                  width: "3rem",
                   backgroundColor: p.robot_avatar ? "white" : "primary.main",
                 }}
               >
                 <SmartToyIcon
                   sx={{
-                    height: "25px",
-                    width: "25px",
+                    height: "1.75rem",
+                    width: "1.75rem",
                     textAlign: "center",
                   }}
                 />
               </Avatar>
             </ListItemAvatar>
 
-            <ListItemText>{p.robot_name}</ListItemText>
-
-            <Tooltip title={p.user_name} placement="right" arrow>
-              <Avatar
-                alt={p.user_name}
-                src={p.user_avatar ? p.user_avatar : "null"}
-                sx={{
-                  height: "40px",
-                  width: "40px",
-                  backgroundColor: p.user_avatar ? "white" : "",
-                  border: 2,
-                  borderColor: "primary.main",
-                  ml: 20,
-                }}
-              />
-            </Tooltip>
+            <ListItemText
+              primary={p.robot_name}
+              secondary={"@" + p.user_name}
+              secondaryTypographyProps={
+                p.user_name === match.creator ? { color: "primary.main" } : {}
+              }
+            />
           </ListItem>
 
-          {index === match.participants.length - 1 ? null : (
+          {index !== match.participants.length - 1 && (
             <Divider variant="inset" />
           )}
         </Fragment>
@@ -265,8 +282,24 @@ export default function Lobby() {
             </Card>
           </Card>
 
-          {match && match.creator ? (
-            username !== match.creator ? (
+          {match &&
+            match.creator &&
+            (username === match.creator ? (
+              <Button
+                size="large"
+                variant="contained"
+                color="primary"
+                onClick={handleStart}
+                sx={{
+                  width: 250,
+                  marginTop: 2,
+                  marginBottom: 2,
+                  display: { xs: "none", lg: "flex" },
+                }}
+              >
+                Start match
+              </Button>
+            ) : (
               <Button
                 size="large"
                 variant="outlined"
@@ -281,8 +314,7 @@ export default function Lobby() {
               >
                 Leave match
               </Button>
-            ) : null
-          ) : null}
+            ))}
         </Grid>
         <Grid item xs={12} md={10} lg={5}>
           <Card
@@ -330,7 +362,7 @@ export default function Lobby() {
           </Card>
         </Grid>
 
-        {match && match.creator && username !== match.creator ? (
+        {match && match.creator && (
           <Grid
             item
             xs={12}
@@ -342,20 +374,37 @@ export default function Lobby() {
               alignItems: "flex-start",
             }}
           >
-            <Button
-              size="large"
-              variant="outlined"
-              color="error"
-              onClick={handleLeave}
-              sx={{
-                width: 250,
-                marginBottom: 2,
-              }}
-            >
-              Leave match
-            </Button>
+            {username === match.creator ? (
+              <Button
+                size="large"
+                variant="contained"
+                color="primary"
+                onClick={handleStart}
+                sx={{
+                  width: 250,
+                  marginTop: 2,
+                  marginBottom: 2,
+                }}
+              >
+                Start match
+              </Button>
+            ) : (
+              <Button
+                size="large"
+                variant="outlined"
+                color="error"
+                onClick={handleLeave}
+                sx={{
+                  width: 250,
+                  marginTop: 2,
+                  marginBottom: 2,
+                }}
+              >
+                Leave match
+              </Button>
+            )}
           </Grid>
-        ) : null}
+        )}
       </Grid>
 
       {open && (

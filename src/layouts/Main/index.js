@@ -5,7 +5,7 @@ import Navbar from "../Navbar";
 
 const drawerWidth = 240;
 
-export default function NavigationLayout({ navigate }) {
+export default function NavigationLayout({ navigate, avatar }) {
   const token = localStorage.getItem("token");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -33,6 +33,7 @@ export default function NavigationLayout({ navigate }) {
           <Drawer
             setMobileOpen={setMobileOpen}
             navigate={navigate}
+            avatar={avatar}
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
@@ -46,6 +47,7 @@ export default function NavigationLayout({ navigate }) {
           <Drawer
             setMobileOpen={setMobileOpen}
             navigate={navigate}
+            avatar={avatar}
             variant="permanent"
             sx={{
               display: { xs: "none", md: "block" },

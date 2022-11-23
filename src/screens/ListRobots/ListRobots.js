@@ -31,11 +31,7 @@ export default function Elevation() {
 
   return (
     <Container>
-      <Grid
-        container
-        spacing={2}
-        sx={{ padding: "7%", marginTop: { xs: 5, md: -7, lg: -10 } }}
-      >
+      <Grid container spacing={2} padding="5%" mt={{ xs: 8, md: 0 }}>
         {dataRobot.map((robot) => (
           <Grid key={robot[0]} item xs={12} sm={6} md={4}>
             <CardList robot={robot} />
