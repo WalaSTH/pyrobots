@@ -1,0 +1,435 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Lobby matches Snapshot 1`] = `
+<main
+  className="MuiContainer-root MuiContainer-maxWidthLg css-1dj8qml-MuiContainer-root"
+>
+  <div
+    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-g76cfg-MuiGrid-root"
+  >
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-10 MuiGrid-grid-lg-12 css-1fkzvh6-MuiGrid-root"
+    >
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-37ww9q-MuiButtonBase-root-MuiButton-root"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"
+        >
+          <svg
+            aria-hidden={true}
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            data-testid="ArrowBackIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+            />
+          </svg>
+        </span>
+        Back
+      </button>
+      <span
+        className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-c2r2ve-MuiSkeleton-root"
+        ml={2}
+        mr={1}
+        mt={0}
+        style={
+          {
+            "height": undefined,
+            "width": "20ch",
+          }
+        }
+      />
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-10 MuiGrid-grid-lg-7 css-1wwpb3p-MuiGrid-root"
+    >
+      <div
+        className="MuiPaper-root MuiPaper-outlined MuiPaper-rounded MuiCard-root css-1y1oemd-MuiPaper-root-MuiCard-root"
+      >
+        <h6
+          className="MuiTypography-root MuiTypography-h6 css-6uu9lt-MuiTypography-root"
+        >
+          Participants
+        </h6>
+        <div
+          className="MuiPaper-root MuiPaper-filled MuiPaper-rounded MuiCard-root css-1e3ey9g-MuiPaper-root-MuiCard-root"
+        >
+          <ul
+            className="MuiList-root MuiList-padding css-h4y409-MuiList-root"
+          >
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-pmeha2-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemAvatar-root css-1e9lk82-MuiListItemAvatar-root"
+              >
+                <span
+                  className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                  style={
+                    {
+                      "height": "45px",
+                      "width": "45px",
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="MuiListItemText-root css-tlelie-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+              </div>
+              <span
+                className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                ml={20}
+                style={
+                  {
+                    "height": "40px",
+                    "width": "40px",
+                  }
+                }
+              />
+            </li>
+            <hr
+              className="MuiDivider-root MuiDivider-inset css-uls1yk-MuiDivider-root"
+            />
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-pmeha2-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemAvatar-root css-1e9lk82-MuiListItemAvatar-root"
+              >
+                <span
+                  className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                  style={
+                    {
+                      "height": "45px",
+                      "width": "45px",
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="MuiListItemText-root css-tlelie-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+              </div>
+              <span
+                className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                ml={20}
+                style={
+                  {
+                    "height": "40px",
+                    "width": "40px",
+                  }
+                }
+              />
+            </li>
+            <hr
+              className="MuiDivider-root MuiDivider-inset css-uls1yk-MuiDivider-root"
+            />
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-pmeha2-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemAvatar-root css-1e9lk82-MuiListItemAvatar-root"
+              >
+                <span
+                  className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                  style={
+                    {
+                      "height": "45px",
+                      "width": "45px",
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="MuiListItemText-root css-tlelie-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+              </div>
+              <span
+                className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                ml={20}
+                style={
+                  {
+                    "height": "40px",
+                    "width": "40px",
+                  }
+                }
+              />
+            </li>
+            <hr
+              className="MuiDivider-root MuiDivider-inset css-uls1yk-MuiDivider-root"
+            />
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-pmeha2-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemAvatar-root css-1e9lk82-MuiListItemAvatar-root"
+              >
+                <span
+                  className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                  style={
+                    {
+                      "height": "45px",
+                      "width": "45px",
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="MuiListItemText-root css-tlelie-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+              </div>
+              <span
+                className="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-fomgco-MuiSkeleton-root"
+                ml={20}
+                style={
+                  {
+                    "height": "40px",
+                    "width": "40px",
+                  }
+                }
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-10 MuiGrid-grid-lg-5 css-lyy0tx-MuiGrid-root"
+    >
+      <div
+        className="MuiPaper-root MuiPaper-outlined MuiPaper-rounded MuiCard-root css-1r50365-MuiPaper-root-MuiCard-root"
+      >
+        <h6
+          className="MuiTypography-root MuiTypography-h6 css-6uu9lt-MuiTypography-root"
+        >
+          Details
+        </h6>
+        <div
+          className="MuiPaper-root MuiPaper-filled MuiPaper-rounded MuiCard-root css-6j5v8e-MuiPaper-root-MuiCard-root"
+        >
+          <ul
+            className="MuiList-root MuiList-padding css-h4y409-MuiList-root"
+          >
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p823my-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+                <p
+                  className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "40%",
+                      }
+                    }
+                  />
+                </p>
+              </div>
+            </li>
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p823my-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+                <p
+                  className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "40%",
+                      }
+                    }
+                  />
+                </p>
+              </div>
+            </li>
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p823my-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+                <p
+                  className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "40%",
+                      }
+                    }
+                  />
+                </p>
+              </div>
+            </li>
+            <li
+              className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p823my-MuiListItem-root"
+              disabled={false}
+            >
+              <div
+                className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+              >
+                <span
+                  className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "60%",
+                      }
+                    }
+                  />
+                </span>
+                <p
+                  className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+                >
+                  <span
+                    className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1n7gpw1-MuiSkeleton-root"
+                    style={
+                      {
+                        "height": undefined,
+                        "width": "40%",
+                      }
+                    }
+                  />
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+`;
