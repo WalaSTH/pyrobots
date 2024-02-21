@@ -4,6 +4,40 @@ It's a web application that lets players create robots in Python code, upload th
 
 ![](https://github.com/WalaSTH/pyrobots/blob/master/images/home.png)
 
+## Instalation and usage
+This project is yet to be deployed so in order to run it you have to run the backend and frontend processes locally.
+
+For the backend you will need Python 3.10.12 and pip to install all the requirements.
+
+For the frontend, you will need Node.js v19.8.1 or higher
+
+### Backend
+First, move to the _backend_ directory:
+
+```cd backend```
+
+Install requirements:
+
+```pip install -r requirements.txt```
+
+And then run:
+
+```uvicorn app:app```
+
+### Frontend
+Move to _frontend_ directory:
+
+```cd frontend```
+
+Install node modules:
+
+```npm install```
+
+And finally run:
+
+```npm start```
+
+
 Users can create an account, and after validateing their email, they can fully start using the app.
 
 ## Main Features
