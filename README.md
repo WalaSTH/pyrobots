@@ -7,10 +7,10 @@ Each robot has functions to scan enemies, start and stop the engine, fire cannon
 
 ![](https://github.com/WalaSTH/pyrobots/blob/master/images/home.png)
 
-## Instalation
+## Installation
 This project is yet to be deployed so in order to run it you have to run the backend and frontend processes locally.
 
-For the backend you will need Python 3.10.12 and pip to install all the requirements.
+For the backend, you will need Python 3.10.12 and pip to install all the required dependencies.
 
 For the frontend, you will need Node.js v19.8.1 or higher.
 
@@ -28,7 +28,7 @@ And then run:
 ```uvicorn app:app```
 
 ### Frontend
-Move to _frontend_ directory:
+Move to the _frontend_ directory:
 
 ```cd frontend```
 
@@ -50,19 +50,18 @@ See the rules and how the game works, as well as how to create your robot [The G
 ## Main Features
 
 ### Robot Creation
-You can create a Robots by uploading the .py file containing their code. You can also give them a name and an avatar.\
+You can create Robots by uploading the .py file containing their code. You can also give them a name and an avatar.\
 The app comes with two default Robots that every user has: Spinner Cheto and Sniper Cheto\
 
 
 ### Robot Listing
-Every robot a user has can be viewd in the List Robots menu, you can visualize their code and also each robot's stats: matches played, won and win percentage.
-
+Every robot a user has can be viewed in the List Robots menu, you can visualize its code, and also each robot's stats: matches played, won, and win percentage.
 
 ### Match creation and Browseing
-You can create a Match, where you can its name, number of players, games and rounds.
+You can create a Match, where you can set its name, number of players, games, and rounds.
 After that, select your robot and wait for players to join.\
-You'll see players entereing your match in real time!\
-You can also search for available matches to join, and also filter the results.
+You'll see players entering your match in real time!\
+You can also search for available matches to join and filter the results.
 
 ![](https://github.com/WalaSTH/pyrobots/blob/master/images/RoomJoin2.gif?raw=true)
 
@@ -72,7 +71,7 @@ Select the number of rounds you want and play the simulation. You can pause, spe
 
 ![](https://github.com/WalaSTH/pyrobots/blob/master/images/fight.gif)
 ### See history and user stats
-You have access to your history of matches played, where you can see which robot won and in which position every robot ended, includeing how many games each of those robots won in that match.
+You have access to your history of matches played, where you can see which robot won and in which position every robot ended, including how many games each of those robots won in that match.
 You can also view your user stats, where you'll find your total matches played, your total matches won and your percentage of winrate.
 
 ### Profile customization
@@ -138,4 +137,6 @@ These methods can be called at any time:\
 get_direction()\
 get_velocity()\
 get_position()\
-get_damage()
+get_damage()\
+
+You can find both default robots in backend/default_bots to use as an example. For instance, the robot SniperCheto will start by scanning until he finds another robot. Once he does, he will get closer if needed and start firing the cannon in the direction he first saw that robot. Note that this robot is very simple and would fail at dealing damage if the enemy robot moves from that position because SniperCheto does not readjust its cannon or scan again. A more sophisticated robot would keep checking where the enemy is and try to catch it again. We encourage users to unleash their creativity and create the most intelligent robots they can in Pyrobots.
